@@ -1,536 +1,522 @@
 <html>
-<meta name="viewport" content="width=device-width initial-scale=0.6, user-scalable=yes">
-<head>
-	<style>
-	
-	@font-face {
-	  font-family: Wild-Words;
-	  src: url(Assets/WildWordsRoman.ttf);
-	}
-	
-	#title{
-	  font-family: Wild-Words;
-	  text-align: center;
-	  letter-spacing: 2px;
-	  margin:0;
-	  color: white;
-	  font-size: 72px;
-	}
-	
-	#desc{
-	  font-family: Wild-Words;
-	  text-align: center;
-	  margin:5;
-	  color: white;
-	  font-size: 24px;
-	}
-	
-	#infotitle{
-	  font-family: Wild-Words;
-	  letter-spacing: 3px;
-	  text-align: center;
-	  position: absolute;
-	  top:10%;
-	  margin-left: auto;
-	  margin-right: auto;
-	  left: 0;
-	  right: 0;
-	  color: white;
-	  font-size: 48px;
-	}
-	
-	.infotext{
-	  font-family: Sans-Serif;
-	  line-height: 110%;
-	  text-align: center;
-	  position: absolute;
-	  top:20%;
-	  margin-left: auto;
-	  margin-right: auto;
-	  left: 0;
-	  right: 0;
-	  color: white;
-	  font-size: 20px;
-	}
-	
-	#info{
-	  font-family: Wild-Words;
-	  position: fixed;
-	  left:10%;
-	  height: 90%;
-	  width: 80%;
-	  border-radius: 100px;
-	  justify-content: center;
-	  background-color: rgba(50, 50, 50, 0.98);
-	  z-index: 10;
-	  display:none;
-	}
-	
-	#info.fade{
-		transition: 1s;
-		opacity: 0;
-		visibility: hidden;
-	}
-	
-	body {
-	  justify-content: center;
-	  align-items: center;
-	}
-	
-	.sidesbox {
-	  position: fixed;
-	  display:inline-block;
-	  left: 0;
-	  right: 0;
-	  z-index: 2;
-	  margin-left: 20px;
-	  margin-right: 20px;
-	  justify-content: center;
-	  align-items: center;
-	}
-	
-	.wrapbox {
-	  position:absolute;
-	  top:50%;
-	  left: auto;
-	  transform: translateY(-50%);
-	  display: flex;
-	  flex-wrap: wrap;
-	  margin: 20 30 0 160;
-	  justify-content: center;
-	}
+  <meta
+    name="viewport"
+    content="width=device-width initial-scale=0.6, user-scalable=yes"
+  />
+  <head>
+    <link rel="stylesheet" href="./styles/index.css" />
+    <link rel="icon" type="image/x-icon" href="Assets/favicon.ico" />
+    <script src="./scripts/utils.js" defer></script>
+    <script src="./scripts/index/index.js"></script>
+  </head>
 
-	.imgbox {
-	  display: flex;
-	  position:relative;
-	  flex-wrap: wrap;
-	  width: 456px;
-	  height: 456px;
-	  margin: 30 20 0 20px;
-	  text-align: center;
-	  justify-content: center;
-	  border-radius: 10px;
-	}
+  <body
+    ondragstart="return false"
+    style="min-width: 770; background-color: #000000"
+  >
+    <div
+      id="counterbox"
+      style="
+        background-color: rgba(100, 100, 100, 0.5);
+        position: fixed;
+        padding: 0 15;
+        border-radius: 15px;
+        z-index: 10;
+        display: none;
+      "
+    >
+      <h1
+        id="counter"
+        style="
+          color: white;
+          font-family: Wild-Words;
+          letter-spacing: 1px;
+          font-size: 24;
+          z-index: 10;
+          display: inherit;
+        "
+      >
+        Counter 0
+      </h1>
+    </div>
 
-	img { object-fit: contain; }
-	
-	@keyframes crossin {
-		0%	{opacity: 1;}
-		100%{opacity: 0;}
-		100%{display:none;}
-	}
-	
-	.fade { animation-name: crossin; animation-duration:0.5s; animation-fill-mode: forwards; }
-	.show { display:block; opacity:1; transition:0.25s; }	
-	
-	.green:not(:hover) { opacity:0; transition: opacity 0.5s; }
-	.green:hover { opacity:1; transition: opacity 0.5s; }
-	
-	.imgdesc{
-		position:relative;
-		font-family: Wild-Words;
-		letter-spacing: 1px;
-		color:white;
-		font-size: 18;
-		top:-50;
-		margin:0 10;
-		z-index:0;
-	}
-	
-	.keypadbox {
-	  display: flex;
-	  justify-content: center;
-	  margin: 0;
-	}
-	
-	.line-break { width: 100%; margin: 0; }
+    <div class="wrapbox" style="min-width: 520">
+      <div class="imgbox" onclick="append('A');">
+        <img
+          id="imgA"
+          width="400"
+          height="400"
+          style="position: absolute; z-index: 1"
+        />
+        <img
+          id="fadeA"
+          class="fade"
+          width="400"
+          height="400"
+          style="position: absolute; z-index: 2"
+        />
+        <img
+          id="redA"
+          src="Assets/red.png"
+          height="456px"
+          width="456px"
+          style="top: -30; position: absolute; z-index: 3"
+        />
+        <img
+          id="greenA"
+          class="green"
+          src="Assets/green.png"
+          height="456px"
+          width="456px"
+          style="top: -30; position: absolute; z-index: 4"
+        />
+      </div>
+      <div class="imgbox" onclick="append('B');">
+        <img id="imgB" width="400" height="400" style="position: absolute" />
+        <img
+          id="fadeB"
+          class="fade"
+          width="400"
+          height="400"
+          style="position: absolute; z-index: 2"
+        />
+        <img
+          id="redB"
+          src="Assets/red.png"
+          height="456px"
+          width="456px"
+          style="top: -30; position: absolute; z-index: 3"
+        />
+        <img
+          id="greenB"
+          class="green"
+          src="Assets/green.png"
+          height="456px"
+          width="456px"
+          style="top: -30; position: absolute; z-index: 4"
+        />
+      </div>
+      <div class="line-break"></div>
+      <div
+        id="bothbox"
+        style="
+          width: 200;
+          height: 100;
+          margin: 0 15;
+          z-index: 10;
+          display: flex;
+          position: relative;
+        "
+      >
+        <img id="both" src="Assets/both.png" style="margin: 0 0; z-index: 10" />
+        <img
+          id="both2"
+          class="green"
+          onclick="both()"
+          src="Assets/both2.png"
+          style="margin: 0 0; z-index: 11; position: absolute; left: 0"
+        />
+      </div>
+      <div
+        id="skipbox"
+        style="
+          width: 200;
+          height: 100;
+          margin: 0 15;
+          z-index: 10;
+          display: flex;
+          position: relative;
+        "
+      >
+        <img id="skip" src="Assets/skip.png" style="margin: 0 0; z-index: 10" />
+        <img
+          id="skip2"
+          class="green"
+          onclick="next(); playPage(2);"
+          src="Assets/skip2.png"
+          style="margin: 0 0; z-index: 11; position: absolute; left: 0"
+        />
+      </div>
+    </div>
 
-	.sidebar { width:100; height:100; position:fixed; right:0; display: block; z-index:9; }
-	
-	#menucheck:checked~#menu2 { z-index:11; }
-	#menucheck:not(:checked)~#menu2 { z-index:9; }
-	#menucheck:checked~.scorelink { top:100; transition: 0.1s linear; }
-	#menucheck:checked~.achtoggle { top:200; transition: 0.2s linear; }
-	#menucheck:checked~.discord { top:300; transition: 0.3s linear; }
-	#menucheck:checked~.reddit { top:400; transition: 0.4s linear; }
-	#menucheck:checked~.info{ top:500; transition: 0.5s linear; }
-	#menucheck:not(:checked)~.scorelink { top:0; opacity: 0; transition: 0.15s linear; }
-	#menucheck:not(:checked)~.achtoggle { top:0; opacity: 0; transition: 0.3s linear; }
-	#menucheck:not(:checked)~.discord { top:0; opacity: 0; transition: 0.45s linear; }
-	#menucheck:not(:checked)~.reddit { top:0; opacity: 0; transition: 0.6s linear; }
-	#menucheck:not(:checked)~.info { top:0; opacity: 0; transition: 0.75s linear; }
-	
-	@keyframes slidein {
-		0%   {left: -200;}
-		100% {left: 0;}
-	}
-	
-	.A_now { opacity:0.5; position:relative; margin: 0 0 -76 0; top:0; z-index=10; animation-name: slidein; animation-duration:0.5s;}
-	.A_hid { display:none; position:relative; margin: 0 0 -76 0; top:0;}
-	.A_bar { display:block; opacity:1; position:relative; margin: 0 0 -76 0; top:0; animation-name: slidein; animation-duration:0.5s;}
-	.A_pop { display:block; opacity:0; position:relative; margin: 0 0 -76 0; top:0; animation-name: slidein; animation-duration:0.5s;}
-	.A_pop:hover { opacity:1;}
-	
-	</style>
-	
-	<link rel="icon" type="image/x-icon" href="Assets/favicon.ico">
-	
-	<script>
-	function makeid(length) {
-		var result = '';
-		var charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-		for ( var i = 0; i < length; i++ ) {
-			result += charset.charAt(Math.floor(Math.random() * charset.length));
-		}
-		return result
-	}
-	var uid = makeid(5);
-	console.log('Session ID:',uid);
-	
-	var noop = function(){};
-	var images = [];
-	var imgids = [];
-	var index = 0;
-	var ID2Elo = [0]; //Leading zero because IDs start at 1
-	var ID2Char = [0]
-	var Rank2ID = [];
-	var pairqueue = [];
-	var lasttime = Date.now();
-	
-	function getElo(){
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST", 'https://script.google.com/macros/s/AKfycbzqe2AK7p8Ku46cVYqBrsHlkjUWrxkEuJLZ-r_6DG5m-0UCOTVNVou1YG9BzgPH3HGdiw/exec', true);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.onreadystatechange = function() { // Call a function when the state changes.
-			if (this.readyState === XMLHttpRequest.DONE && this.status === 200) {
-					var ratings = JSON.parse("[" + xhr.response + "]")[0];
-					for (var i = 0; i < ratings.length; i++) {
-						ID2Elo.push(ratings[i][0]);
-						ID2Char.push(ratings[i][1]);
-						Rank2ID.push(ratings[i][2]);
-					}
-					genPairQ()
-				}
-			}
-			xhr.send("type=nsfw");
-	}
-	
-	getElo()
-	
-	function shuffleArray(array) {
-		for (let i = array.length - 1; i > 0; i--) {
-			const j = Math.floor(Math.random() * (i + 1));
-			[array[i], array[j]] = [array[j], array[i]];
-		}
-	}
-	
-	function genPairQ(){ //Must load elo before calling
-		pairqueue = [];
-		let search = 4
-		for (var i = 1; i < Rank2ID.length-1; i++) {
-			let d = Math.floor(2*search*Math.random()) - search;
-			if (d>=0){ d=d+1 } // Avoid zero, shift positive up
-			let b = i + d;
-			if (b<0){ b=0 };
-			if (b>Rank2ID.length-1) { b=Rank2ID.length-1 } // Clip lower end, note this increases prob of ends in pair
-			pairqueue.push([i,b])
-		}
-		shuffleArray(pairqueue)
-	}
-	
-	function getPairID(){
-		//return getRandomID(1,693,2)
-		if (Rank2ID.length==0) { return getRandomID(1,693,2)}
-		pair = pairqueue.pop();
-		a = pair[0]; b = pair[1];
-		if (pairqueue.length==0) { genPairQ() }
-		console.log('Count',count+1,'Load Rankings:',a,b,'IDs:',Rank2ID[a],Rank2ID[b])
-		return [Rank2ID[a],Rank2ID[b]]
-	}
-	
-	function getRandomID(min,max,len) {
-		let arr = [];
-		while(arr.length < len){
-			let r = Math.floor(Math.random() * (max - min + 1)) + min;
-			if(imgids.indexOf(r) === -1 && arr.indexOf(r) === -1) arr.push(r);
-		}
-		return arr
-	}
-	
-	imgids = imgids.concat(getPairID());
-	
-	function preloadImages(ids, imgs, callback) {
-		var img;
-		var remaining = ids.length;
-		for (var i = 0; i < ids.length; i++) {
-			img = new Image();
-			img.onload = function() {
-				--remaining;
-				if (remaining <= 0) {
-					callback();
-				}
-			};
-			
-			img.src = 'Images/'+ids[i].toString().padStart(3,'0')+'.jpg';
-			imgs.push(img);
-		}
-	}
-	
-	
-	preloadImages(imgids,images,noop)
-	
-	</script>
-</head>
+    <div class="sidesbox" style="min-width: 770">
+      <input type="checkbox" id="menucheck" style="display: none" />
+      <label for="menucheck" style="display: inline-block"
+        ><img
+          id="menu"
+          style="
+            width: 70;
+            height: 70;
+            margin: 15;
+            opacity: inherit;
+            position: fixed;
+            top: 0;
+            right: 0;
+            z-index: 10;
+          "
+          src="Assets/sidebar/b_menu.png"
+      /></label>
+      <img
+        id="menu2"
+        style="
+          width: 70;
+          height: 70;
+          margin: 15;
+          position: fixed;
+          top: 0;
+          right: 0;
+          pointer-events: none;
+        "
+        src="Assets/sidebar/b_menu2.png"
+      />
 
-<body ondragstart="return false" style="min-width:770; background-color:#000000;" >
-	
-	<div id='counterbox' style="background-color: rgba(100,100,100,0.5); position:fixed; padding:0 15; border-radius: 15px; z-index:10; display:none;"><h1 id='counter' style="color:white;font-family: Wild-Words; letter-spacing: 1px; font-size:24;z-index:10; display:inherit;">Counter 0</h1></div>
-	
-	<div class="wrapbox" style="min-width:520;">
-		  <div class="imgbox" onclick="append('A');" >
-			<img id="imgA" width=400 height=400 style="position:absolute;z-index:1;">
-			<img id="fadeA" class='fade' width=400 height=400 style="position:absolute; z-index:2">
-			<img id='redA' src='Assets/red.png' height=456px width=456px style='top:-30; position:absolute; z-index:3'>
-			<img id='greenA' class='green' src='Assets/green.png' height=456px width=456px style='top:-30; position:absolute; z-index:4'>
-		  </div>
-		  <div class="imgbox" onclick="append('B');" >
-			<img id="imgB" width=400 height=400 style="position:absolute;">
-			<img id="fadeB" class='fade' width=400 height=400 style="position:absolute; z-index:2">
-			<img id='redB' src='Assets/red.png' height=456px width=456px style='top:-30; position:absolute; z-index:3'>
-			<img id='greenB' class='green' src='Assets/green.png' height=456px width=456px style='top:-30; position:absolute; z-index:4'>
-		  </div>
-		  <div class="line-break"></div>
-		  <div id='bothbox' style='width=200; height=100; margin: 0 15; z-index=10; display: flex; position:relative;'>
-			<img id='both' src='Assets/both.png' style='margin: 0 0; z-index:10;'>
-			<img id='both2' class="green" onclick="both()" src='Assets/both2.png' style='margin: 0 0; z-index:11; position:absolute; left:0;'>
-		  </div>
-		  <div id='skipbox' style='width=200; height=100; margin: 0 15; z-index=10; display:flex; position:relative;'>
-			<img id='skip' src='Assets/skip.png' style='margin: 0 0; z-index:10;'>
-			<img id='skip2' class="green" onclick="next(); playPage(2);" src='Assets/skip2.png' style='margin: 0 0; z-index:11; position:absolute; left:0;'>
-		  </div>
-	</div>
-	
-	<div class="sidesbox" style="min-width:770;">
-		
-		<input type="checkbox" id="menucheck" style="display:none; "/>
-		<label for="menucheck" style='display:inline-block;'><img id='menu' style='width:70; height:70; margin:15; opacity:inherit; position:fixed;top:0; right:0; z-index:10;' src='Assets/sidebar/b_menu.png'></img></label>
-		<img id="menu2" style='width:70; height:70; margin:15; position:fixed; top:0; right:0; pointer-events:none;' src='Assets/sidebar/b_menu2.png'>
-		
-		<img class='sidebar info' src='Assets/sidebar/b_notes.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar info green' onclick="navTo('info.html')" src='Assets/sidebar/b_notes2.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar reddit' src='Assets/sidebar/b_reddit.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar reddit green' onclick="navTo('https://www.reddit.com/r/chloe/')" src='Assets/sidebar/b_reddit2.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar discord'src='Assets/sidebar/b_discord.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar discord green' onclick="navTo('https://discord.gg/TsBGYz4VTg')" src='Assets/sidebar/b_discord2.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar achtoggle' src='Assets/sidebar/b_achievements.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar achtoggle green' onclick="achToggle()" src='Assets/sidebar/b_achievements2.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar scorelink' src='Assets/sidebar/b_score.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar scorelink green' onclick="navTo('scores.html')" src='Assets/sidebar/b_score2.png' style="width:70; height:70; margin:15;"></img>
-		
-		<div id='a' style="position:fixed; left:0; top:0; width:200; z-index:10;">
-			<img id='a20' class='A_hid' style="z-index:30;" src="Assets/achievements/20.png">
-			<img id='a19' class='A_hid' style="z-index:29;" src="Assets/achievements/19.png">
-			<img id='a18' class='A_hid' style="z-index:28;" src="Assets/achievements/18.png">
-			<img id='a17' class='A_hid' style="z-index:27;" src="Assets/achievements/17.png">
-			<img id='a16' class='A_hid' style="z-index:26;" src="Assets/achievements/16.png">
-			<img id='a15' class='A_hid' style="z-index:25;" src="Assets/achievements/15.png">
-			<img id='a14' class='A_hid' style="z-index:24;" src="Assets/achievements/14.png">
-			<img id='a13' class='A_hid' style="z-index:23;" src="Assets/achievements/13.png">
-			<img id='a12' class='A_hid' style="z-index:22;" src="Assets/achievements/12.png">
-			<img id='a11' class='A_hid' style="z-index:21;" src="Assets/achievements/11.png">
-			<img id='a10' class='A_hid' style="z-index:20;" src="Assets/achievements/10.png">
-			<img id='a9' class='A_hid' style="z-index:19;" src="Assets/achievements/9.png">
-			<img id='a8' class='A_hid' style="z-index:18;" src="Assets/achievements/8.png">
-			<img id='a7' class='A_hid' style="z-index:17;" src="Assets/achievements/7.png">
-			<img id='a6' class='A_hid' style="z-index:16;" src="Assets/achievements/6.png">
-			<img id='a5' class='A_hid' style="z-index:15;" src="Assets/achievements/5.png">
-			<img id='a4' class='A_hid' style="z-index:14;" src="Assets/achievements/4.png">
-			<img id='a3' class='A_hid' style="z-index:13;" src="Assets/achievements/3.png">
-			<img id='a2' class='A_hid' style="z-index:12;" src="Assets/achievements/2.png">
-			<img id='a1' class='A_hid' style="z-index:11;" src="Assets/achievements/1.png">
-		</div>
-		
-		<div id='s' style="position:fixed; left:0; top:0; width:200; z-index:100;">
-			<img id='s20' class='A_hid' style="z-index:130;" src="Assets/achievements/20.png">
-			<img id='s19' class='A_hid' style="z-index:129;" src="Assets/achievements/19.png">
-			<img id='s18' class='A_hid' style="z-index:128;" src="Assets/achievements/18.png">
-			<img id='s17' class='A_hid' style="z-index:127;" src="Assets/achievements/17.png">
-			<img id='s16' class='A_hid' style="z-index:126;" src="Assets/achievements/16.png">
-			<img id='s15' class='A_hid' style="z-index:125;" src="Assets/achievements/15.png">
-			<img id='s14' class='A_hid' style="z-index:124;" src="Assets/achievements/14.png">
-			<img id='s13' class='A_hid' style="z-index:123;" src="Assets/achievements/13.png">
-			<img id='s12' class='A_hid' style="z-index:122;" src="Assets/achievements/12.png">
-			<img id='s11' class='A_hid' style="z-index:121;" src="Assets/achievements/11.png">
-			<img id='s10' class='A_hid' style="z-index:120;" src="Assets/achievements/10.png">
-			<img id='s9' class='A_hid' style="z-index:119;" src="Assets/achievements/9.png">
-			<img id='s8' class='A_hid' style="z-index:118;" src="Assets/achievements/8.png">
-			<img id='s7' class='A_hid' style="z-index:117;" src="Assets/achievements/7.png">
-			<img id='s6' class='A_hid' style="z-index:116;" src="Assets/achievements/6.png">
-			<img id='s5' class='A_hid' style="z-index:115;" src="Assets/achievements/5.png">
-			<img id='s4' class='A_hid' style="z-index:114;" src="Assets/achievements/4.png">
-			<img id='s3' class='A_hid' style="z-index:113;" src="Assets/achievements/3.png">
-			<img id='s2' class='A_hid' style="z-index:112;" src="Assets/achievements/2.png">
-			<img id='s1' class='A_hid' style="z-index:111;" src="Assets/achievements/1.png">
-		</div>
-	</div>
-	
-	<audio id='p1'> <source src="Sounds/page1.mp3" type="audio/mpeg"> </audio>
-	<audio id='p2'> <source src="Sounds/page2.mp3" type="audio/mpeg"> </audio>
-	<audio id='p3'> <source src="Sounds/page3.mp3" type="audio/mpeg"> </audio>
-	<audio id='p4'> <source src="Sounds/page4.mp3" type="audio/mpeg"> </audio>
-	<audio id='p5'> <source src="Sounds/page5.mp3" type="audio/mpeg"> </audio>
-	<audio id='p6'> <source src="Sounds/page6.mp3" type="audio/mpeg"> </audio>
-	<audio id='p7'> <source src="Sounds/page7.mp3" type="audio/mpeg"> </audio>
-	<audio id='p8'> <source src="Sounds/page8.mp3" type="audio/mpeg"> </audio>
-	<audio id='p9'> <source src="Sounds/page9.mp3" type="audio/mpeg"> </audio>
-	<audio id='p10'> <source src="Sounds/page10.mp3" type="audio/mpeg"> </audio>
-	<audio id='p11'> <source src="Sounds/page11.mp3" type="audio/mpeg"> </audio>
-	<audio id='p12'> <source src="Sounds/page12.mp3" type="audio/mpeg"> </audio>
-	<audio id='p13'> <source src="Sounds/page13.mp3" type="audio/mpeg"> </audio>
-	<audio id='p14'> <source src="Sounds/page14.mp3" type="audio/mpeg"> </audio>
-	<audio id='p15'> <source src="Sounds/page15.mp3" type="audio/mpeg"> </audio>
-	<audio id='p16'> <source src="Sounds/page16.mp3" type="audio/mpeg"> </audio>
-	<audio id='p17'> <source src="Sounds/page17.mp3" type="audio/mpeg"> </audio>
-	<audio id='p18'> <source src="Sounds/page18.mp3" type="audio/mpeg"> </audio>
-	<audio id='p19'> <source src="Sounds/page19.mp3" type="audio/mpeg"> </audio>
-	
-	<script type="text/javascript">
-		window.addEventListener("keyup", keylog)
-		function keylog(e){
-			//if (info) { document.getElementById("info").classList.toggle('fade'); return}
-			if (e.key=='a'||e.keyCode == '37'){ append('A'); document.getElementById("greenA").className = 'show'; setTimeout(function(){ document.getElementById("greenA").className='green';}, 250); }
-			if (e.key=='d'||e.keyCode == '39'){ append('B'); document.getElementById("greenB").className = 'show'; setTimeout(function(){ document.getElementById("greenB").className='green';}, 250); }
-			if (e.key=='w'||e.keyCode == '38'){ both(); }
-			if (e.key=='s'||e.keyCode == '40'){ next(); playPage(2); }
-		}
-		
-		function playPage(num) {
-			plays = getRandomID(1,19,num);
-			for (let i=0; i<plays.length; i++) { document.getElementById("p"+plays[i]).play(); }
-		}
-		
-		var achvis = false;
-		//achcount = [0,1,5,10,20,42,100,159,200,256,313,350,420,456,512,666,729,808,911,1000];
-		achcount = [0,1,5,10,16,21,42,69,81,100,121,144,200,256,313,350,420,456,512,666];
-		function achToggle() {
-			if (!achvis) {
-				for (let i=1; i<21; i++) {
-					if (achcount[i-1] > count) { break; }
-					document.getElementById("a"+i).className = 'A_bar';
-					document.getElementById("s"+i).className = 'A_pop';
-				}
-			}
-			else {
-				for (var i=1; i<21; i++) {
-					console.log(i)
-					if (achcount[i] > count) { break; }
-					document.getElementById("a"+i).className = 'A_hid';
-					document.getElementById("s"+i).className = 'A_hid';
-				}
-				if (i>20) { i=20; }
-				document.getElementById("a"+i).className = 'A_now';
-			}
-			achvis = !achvis;
-		}
-		
-		function navTo(uri) {window.open(uri);}
-		
-		function both() {
-			playPage(2);
-			document.getElementById("greenA").className = 'show'; document.getElementById("greenB").className = 'show';
-			setTimeout(function(){ document.getElementById("greenA").className='green'; document.getElementById("greenB").className='green'; }, 250);
-			append('T')
-		}
-		
-		var a = 100;
-		var b = 200;
-		var prepair;
-		var count = 0;
-		index = -2;
-		var info = 1 
-		var results = [];
-		var queue = [];
-		var batchsize = 10
-		
-		function next(){
-			ach = achcount.indexOf(count)+1;
-			if (ach) {
-				document.getElementById("a"+ach).className = 'A_now'
-				document.getElementById("s"+ach).className = 'A_pop'
-				try {
-					if (achvis) {document.getElementById("a"+(ach-1)).className = 'A_bar'; }
-					else {document.getElementById("a"+(ach-1)).className = 'A_hid';document.getElementById("s"+(ach-1)).className = 'A_hid'; }
-				} catch {}
-				if (achvis) { document.getElementById("a"+ach).style.opacity=1; }
-				if (ach==20) {
-					document.getElementById('counterbox').style.display = 'block';
-					document.getElementById('a').style.top = '75px';
-					document.getElementById('s').style.top = '75px';
-					if (!achvis) { setTimeout(function(){ achToggle();}, 500); }
-				}
-			}
-			
-			index = index + 2
-			if (imgids.length>50) {
-				imgids=imgids.slice(-2);
-				images=images.slice(-2);
-				index = 0
-			}
-			prepair=getPairID();
-			imgids=imgids.concat(prepair)
-			if (count) {
-				document.getElementById("fadeA").src = document.getElementById("imgA").src;
-				document.getElementById("fadeB").src = document.getElementById("imgB").src;
-				document.getElementById("fadeA").className = 'show'; document.getElementById("fadeB").className = 'show';
-				setTimeout(function(){ document.getElementById("fadeA").className='fade'; document.getElementById("fadeB").className='fade'; }, 10); }
-			document.getElementById("imgA").src = images[index].src;
-			document.getElementById("imgB").src = images[index+1].src;
-			document.getElementById("imgA").alt = images[index].src;
-			document.getElementById("imgB").alt = images[index+1].src;
-			preloadImages(prepair,images,noop);
-		}
-		
-		next()
-		
-		function append(r){
-			if (Date.now()-lasttime < 250) { alert('Slow down and take half a second to look before clicking...'); return}
-			if (r=='T') { playPage(2); } else { playPage(1) }
-			count = count + 1;
-			next()
-			lasttime=Date.now();
-			document.getElementById("counter").innerHTML = 'Counter '+count;
-			queue.push([imgids[index],imgids[index+1],r])
-			if (queue.length>=batchsize) { send(queue);}
-		}
-		
-		function send(squeue){
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST", 'https://script.google.com/macros/s/AKfycbzqe2AK7p8Ku46cVYqBrsHlkjUWrxkEuJLZ-r_6DG5m-0UCOTVNVou1YG9BzgPH3HGdiw/exec', true);
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.onreadystatechange = function() { // Call a function when the state changes.
-			if (this.readyState === XMLHttpRequest.DONE) {
-				if (this.status === 200) { console.log('Send success',squeue) }
-				else { console.log('Send failed',this.status,squeue); }
-			}}
-			xhr.send("uid="+uid+"&data="+JSON.stringify(squeue)+"&type=send");
-		}
-	</script>
-	</div>
-	
-	<script>
-	function clearinfo() {
-	  info = 0
-	  document.getElementById("info").classList.toggle('fade');
-	}
-	</script>
-	
-	
-	<div id="info" onclick="clearinfo()">
-	  <h1 id="infotitle"> Instructions </h1>
-	  <p class='infotext'> <br>Choose the image that you prefer / like better / want to see more of<br><br> Click on the image or use the keypad as shown below</p> 
-	  <div class="keypadbox"><img src="Assets/keypadNB.svg" style="position:absolute; top:40%; margin:20; vertical-align:middle;"></div>
-	</div>
-	
-	
-</body>
+      <img
+        class="sidebar info"
+        src="Assets/sidebar/b_notes.png"
+        style="width: 70; height: 70; margin: 15"
+      />
+      <img
+        class="sidebar info green"
+        onclick="navTo('info.html')"
+        src="Assets/sidebar/b_notes2.png"
+        style="width: 70; height: 70; margin: 15"
+      />
+      <img
+        class="sidebar reddit"
+        src="Assets/sidebar/b_reddit.png"
+        style="width: 70; height: 70; margin: 15"
+      />
+      <img
+        class="sidebar reddit green"
+        onclick="navTo('https://www.reddit.com/r/chloe/')"
+        src="Assets/sidebar/b_reddit2.png"
+        style="width: 70; height: 70; margin: 15"
+      />
+      <img
+        class="sidebar discord"
+        src="Assets/sidebar/b_discord.png"
+        style="width: 70; height: 70; margin: 15"
+      />
+      <img
+        class="sidebar discord green"
+        onclick="navTo('https://discord.gg/TsBGYz4VTg')"
+        src="Assets/sidebar/b_discord2.png"
+        style="width: 70; height: 70; margin: 15"
+      />
+      <img
+        class="sidebar achtoggle"
+        src="Assets/sidebar/b_achievements.png"
+        style="width: 70; height: 70; margin: 15"
+      />
+      <img
+        class="sidebar achtoggle green"
+        onclick="achToggle()"
+        src="Assets/sidebar/b_achievements2.png"
+        style="width: 70; height: 70; margin: 15"
+      />
+      <img
+        class="sidebar scorelink"
+        src="Assets/sidebar/b_score.png"
+        style="width: 70; height: 70; margin: 15"
+      />
+      <img
+        class="sidebar scorelink green"
+        onclick="navTo('scores.html')"
+        src="Assets/sidebar/b_score2.png"
+        style="width: 70; height: 70; margin: 15"
+      />
+
+      <div
+        id="a"
+        style="position: fixed; left: 0; top: 0; width: 200; z-index: 10"
+      >
+        <img
+          id="a20"
+          class="A_hid"
+          style="z-index: 30"
+          src="Assets/achievements/20.png"
+        />
+        <img
+          id="a19"
+          class="A_hid"
+          style="z-index: 29"
+          src="Assets/achievements/19.png"
+        />
+        <img
+          id="a18"
+          class="A_hid"
+          style="z-index: 28"
+          src="Assets/achievements/18.png"
+        />
+        <img
+          id="a17"
+          class="A_hid"
+          style="z-index: 27"
+          src="Assets/achievements/17.png"
+        />
+        <img
+          id="a16"
+          class="A_hid"
+          style="z-index: 26"
+          src="Assets/achievements/16.png"
+        />
+        <img
+          id="a15"
+          class="A_hid"
+          style="z-index: 25"
+          src="Assets/achievements/15.png"
+        />
+        <img
+          id="a14"
+          class="A_hid"
+          style="z-index: 24"
+          src="Assets/achievements/14.png"
+        />
+        <img
+          id="a13"
+          class="A_hid"
+          style="z-index: 23"
+          src="Assets/achievements/13.png"
+        />
+        <img
+          id="a12"
+          class="A_hid"
+          style="z-index: 22"
+          src="Assets/achievements/12.png"
+        />
+        <img
+          id="a11"
+          class="A_hid"
+          style="z-index: 21"
+          src="Assets/achievements/11.png"
+        />
+        <img
+          id="a10"
+          class="A_hid"
+          style="z-index: 20"
+          src="Assets/achievements/10.png"
+        />
+        <img
+          id="a9"
+          class="A_hid"
+          style="z-index: 19"
+          src="Assets/achievements/9.png"
+        />
+        <img
+          id="a8"
+          class="A_hid"
+          style="z-index: 18"
+          src="Assets/achievements/8.png"
+        />
+        <img
+          id="a7"
+          class="A_hid"
+          style="z-index: 17"
+          src="Assets/achievements/7.png"
+        />
+        <img
+          id="a6"
+          class="A_hid"
+          style="z-index: 16"
+          src="Assets/achievements/6.png"
+        />
+        <img
+          id="a5"
+          class="A_hid"
+          style="z-index: 15"
+          src="Assets/achievements/5.png"
+        />
+        <img
+          id="a4"
+          class="A_hid"
+          style="z-index: 14"
+          src="Assets/achievements/4.png"
+        />
+        <img
+          id="a3"
+          class="A_hid"
+          style="z-index: 13"
+          src="Assets/achievements/3.png"
+        />
+        <img
+          id="a2"
+          class="A_hid"
+          style="z-index: 12"
+          src="Assets/achievements/2.png"
+        />
+        <img
+          id="a1"
+          class="A_hid"
+          style="z-index: 11"
+          src="Assets/achievements/1.png"
+        />
+      </div>
+
+      <div
+        id="s"
+        style="position: fixed; left: 0; top: 0; width: 200; z-index: 100"
+      >
+        <img
+          id="s20"
+          class="A_hid"
+          style="z-index: 130"
+          src="Assets/achievements/20.png"
+        />
+        <img
+          id="s19"
+          class="A_hid"
+          style="z-index: 129"
+          src="Assets/achievements/19.png"
+        />
+        <img
+          id="s18"
+          class="A_hid"
+          style="z-index: 128"
+          src="Assets/achievements/18.png"
+        />
+        <img
+          id="s17"
+          class="A_hid"
+          style="z-index: 127"
+          src="Assets/achievements/17.png"
+        />
+        <img
+          id="s16"
+          class="A_hid"
+          style="z-index: 126"
+          src="Assets/achievements/16.png"
+        />
+        <img
+          id="s15"
+          class="A_hid"
+          style="z-index: 125"
+          src="Assets/achievements/15.png"
+        />
+        <img
+          id="s14"
+          class="A_hid"
+          style="z-index: 124"
+          src="Assets/achievements/14.png"
+        />
+        <img
+          id="s13"
+          class="A_hid"
+          style="z-index: 123"
+          src="Assets/achievements/13.png"
+        />
+        <img
+          id="s12"
+          class="A_hid"
+          style="z-index: 122"
+          src="Assets/achievements/12.png"
+        />
+        <img
+          id="s11"
+          class="A_hid"
+          style="z-index: 121"
+          src="Assets/achievements/11.png"
+        />
+        <img
+          id="s10"
+          class="A_hid"
+          style="z-index: 120"
+          src="Assets/achievements/10.png"
+        />
+        <img
+          id="s9"
+          class="A_hid"
+          style="z-index: 119"
+          src="Assets/achievements/9.png"
+        />
+        <img
+          id="s8"
+          class="A_hid"
+          style="z-index: 118"
+          src="Assets/achievements/8.png"
+        />
+        <img
+          id="s7"
+          class="A_hid"
+          style="z-index: 117"
+          src="Assets/achievements/7.png"
+        />
+        <img
+          id="s6"
+          class="A_hid"
+          style="z-index: 116"
+          src="Assets/achievements/6.png"
+        />
+        <img
+          id="s5"
+          class="A_hid"
+          style="z-index: 115"
+          src="Assets/achievements/5.png"
+        />
+        <img
+          id="s4"
+          class="A_hid"
+          style="z-index: 114"
+          src="Assets/achievements/4.png"
+        />
+        <img
+          id="s3"
+          class="A_hid"
+          style="z-index: 113"
+          src="Assets/achievements/3.png"
+        />
+        <img
+          id="s2"
+          class="A_hid"
+          style="z-index: 112"
+          src="Assets/achievements/2.png"
+        />
+        <img
+          id="s1"
+          class="A_hid"
+          style="z-index: 111"
+          src="Assets/achievements/1.png"
+        />
+      </div>
+    </div>
+
+    <audio id="p1"><source src="Sounds/page1.mp3" type="audio/mpeg" /></audio>
+    <audio id="p2"><source src="Sounds/page2.mp3" type="audio/mpeg" /></audio>
+    <audio id="p3"><source src="Sounds/page3.mp3" type="audio/mpeg" /></audio>
+    <audio id="p4"><source src="Sounds/page4.mp3" type="audio/mpeg" /></audio>
+    <audio id="p5"><source src="Sounds/page5.mp3" type="audio/mpeg" /></audio>
+    <audio id="p6"><source src="Sounds/page6.mp3" type="audio/mpeg" /></audio>
+    <audio id="p7"><source src="Sounds/page7.mp3" type="audio/mpeg" /></audio>
+    <audio id="p8"><source src="Sounds/page8.mp3" type="audio/mpeg" /></audio>
+    <audio id="p9"><source src="Sounds/page9.mp3" type="audio/mpeg" /></audio>
+    <audio id="p10"><source src="Sounds/page10.mp3" type="audio/mpeg" /></audio>
+    <audio id="p11"><source src="Sounds/page11.mp3" type="audio/mpeg" /></audio>
+    <audio id="p12"><source src="Sounds/page12.mp3" type="audio/mpeg" /></audio>
+    <audio id="p13"><source src="Sounds/page13.mp3" type="audio/mpeg" /></audio>
+    <audio id="p14"><source src="Sounds/page14.mp3" type="audio/mpeg" /></audio>
+    <audio id="p15"><source src="Sounds/page15.mp3" type="audio/mpeg" /></audio>
+    <audio id="p16"><source src="Sounds/page16.mp3" type="audio/mpeg" /></audio>
+    <audio id="p17"><source src="Sounds/page17.mp3" type="audio/mpeg" /></audio>
+    <audio id="p18"><source src="Sounds/page18.mp3" type="audio/mpeg" /></audio>
+    <audio id="p19"><source src="Sounds/page19.mp3" type="audio/mpeg" /></audio>
+
+    <div id="info" onclick="clearinfo()">
+      <h1 id="infotitle">Instructions</h1>
+      <p class="infotext">
+        <br />Choose the image that you prefer / like better / want to see more
+        of<br /><br />
+        Click on the image or use the keypad as shown below
+      </p>
+      <div class="keypadbox">
+        <img
+          src="Assets/keypadNB.svg"
+          style="
+            position: absolute;
+            top: 40%;
+            margin: 20;
+            vertical-align: middle;
+          "
+        />
+      </div>
+    </div>
+  </body>
 </html>
