@@ -61,7 +61,6 @@ sidesBox.addEventListener("click", (event) => {
     scorelink: () => window.open("scores.html"),
     discord: () => window.open("https://discord.com/invite/TsBGYz4VTg"),
     reddit: () => window.open("https://www.reddit.com/r/chloe/"),
-    achToggle: () => {},
     info: () => window.open("info.html"),
   };
 

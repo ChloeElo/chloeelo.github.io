@@ -11,7 +11,7 @@ img {
 
 @font-face {
   font-family: Wild-Words;
-  src: url(Assets/WildWordsRoman.ttf);
+  src: url("../Assets/WildWordsRoman.ttf");
 }
 
 #title {

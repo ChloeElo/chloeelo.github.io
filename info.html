@@ -1,97 +1,93 @@
 <html>
-<meta name="viewport" content="width=device-width initial-scale=0.6, user-scalable=yes">
-<head>
-	<style>
-	
-	@font-face {
-	  font-family: Wild-Words;
-	  src: url(Assets/WildWordsRoman.ttf);
-	}
-	
-	#title{
-	  font-family: Wild-Words;
-	  text-align: center;
-	  letter-spacing: 2px;
-	  margin:0;
-	  color: white;
-	  font-size: 48px;
-	}
-	
-	.subtitle{
-	  font-family: Sans-Serif;
-	  color: white;
-	  font-size: 28px;
-	}
-	
-	.desc{
-	  font-family: Sans-Serif;
-	  color: white;
-	  font-size: 18px;
-	}
-	
-	body {
-	  justify-content: center;
-	  align-items: center;
-	}
-	
-	.green:not(:hover) { opacity:0; transition: opacity 0.5s; }
-	.green:hover { opacity:1; transition: opacity 0.5s; }
-	
-	.sidebar { width:100; height:100; position:fixed; right:0; display: block; z-index:9; }
-	
-	#menucheck:checked~#menu2 { z-index:11; }
-	#menucheck:not(:checked)~#menu2 { z-index:9; }
-	#menucheck:checked~.ranklink { top:100; transition: 0.1s linear; }
-	#menucheck:checked~.scorelink{ top:200; transition: 0.2s linear; }
-	#menucheck:checked~.discord { top:300; transition: 0.3s linear; }
-	#menucheck:checked~.reddit { top:400; transition: 0.4s linear; }
-	#menucheck:not(:checked)~.ranklink { top:0; opacity: 0; transition: 0.15s linear; }
-	#menucheck:not(:checked)~.scorelink { top:0; opacity: 0; transition: 0.3s linear; }
-	#menucheck:not(:checked)~.discord { top:0; opacity: 0; transition: 0.45s linear; }
-	#menucheck:not(:checked)~.reddit { top:0; opacity: 0; transition: 0.6s linear; }
-	
-	.line-break { width: 100%; margin: 0; }
-	
-	</style>
-	
-	<link rel="icon" type="image/x-icon" href="Assets/favicon.ico">
-	
-</head>
+  <meta
+    name="viewport"
+    content="width=device-width initial-scale=0.6, user-scalable=yes"
+  />
+  <head>
+    <link rel="stylesheet" href="./styles/info.css" />
+    <link rel="icon" type="image/x-icon" href="Assets/favicon.ico" />
+    <script src="./scripts/info/info.js" defer></script>
+  </head>
 
-<body ondragstart="return false" style="min-width:770; background-color:#000000;" >
-	
-	<input type="checkbox" id="menucheck" style="display:none; "/>
-		<label for="menucheck" style='display:inline-block;'><img id='menu' style='width:70; height:70; margin:15; opacity:inherit; position:fixed;top:0; right:0; z-index:10;' src='Assets/sidebar/b_menu.png'></img></label>
-		<img id="menu2" style='width:70; height:70; margin:15; position:fixed; top:0; right:0; pointer-events:none;' src='Assets/sidebar/b_menu2.png'>
-		
-		<img class='sidebar reddit' src='Assets/sidebar/b_reddit.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar reddit green' onclick="navTo('https://www.reddit.com/r/chloe/')" src='Assets/sidebar/b_reddit2.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar discord'src='Assets/sidebar/b_discord.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar discord green' onclick="navTo('https://discord.gg/TsBGYz4VTg')" src='Assets/sidebar/b_discord2.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar scorelink' src='Assets/sidebar/b_score.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar scorelink green' onclick="navTo('search.html')" src='Assets/sidebar/b_score2.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar ranklink' src='Assets/sidebar/b_compare.png' style="width:70; height:70; margin:15;"></img>
-		<img class='sidebar ranklink green' onclick="navTo('index.html')" src='Assets/sidebar/b_compare2.png' style="width:70; height:70; margin:15;"></img>
-		
-	<h1 id="title"> Info and Updates </h1>
-	<div style="width:70%;margin:100">
-		<h2 class="subtitle"> June 3 - 4, 2022: First Release </h2>
-		<div class="line-break"></div>
-		<h2 class="desc"> Let's say you want to rank some images, about 650 of them at the time. Not just which images are better than others, but <u>how much</u> better each image is compared to all the others. We could go through and give each image a score by hand, but turns out people are pretty bad at being consistent with how they rate things on an arbitrary scale.</h2>
-		<h2 class="desc"> These images happen to have a reddit page with thousands of users voting on them. What if we use those scores to rank our images? </h2>
-		<img left=25% width=75% src='Assets/info/karmaplot.png'></img>
-		<h2 class="desc"> Turns out upvotes don't really tell us much about the quality of the image either. There are two problems; first, that older images have more time to collect upvotes than newer ones, and second, that the page traffic can change over time, also affecting the number of upvotes.</h2>
-		<h2 class="desc"> To try to build our own image ranking system that isn't biased toward older images, we can steal an idea from the chess world - Elo scores. We assume each player, or in this case each image, has a score that describes their innate performance. When we compare two images, the difference in their elo scores gives us an expected probability of winning for each image from 0 to 1. Subtracting this probability from the actual outcome of the match (win=1, tie=0.5, lose=0) tells us how much to adjust the elo score for each image. </h2>
-		<img width=50% src='Assets/info/EarlyRating.jpg'></img><img width=50% src='Assets/info/EarlyScores.jpg'></img>
-		<h2 class="desc"> Early versions of the rating and score pages looked like this. The website itself is obviously hosted on github, and all scripting is written in vanilla Javascript with no libraries, which makes the graphing and sorting functions pretty performant. User ratings are submitted to a Google Sheet via Apps Script, and then every hundred ratings a separate function calculates the changes in elo scores as a result of the comparisons.</h2>
-		<h2 class="desc"> Some miscellaneous details; the graph itself is actually a SVG being dynamically drawn by the page, because HTML canvas elements enforce antialiasing. Pairs are chosen such that each image appears once on the left side, and pairs are no more than 5 ranks apart by elo score. There are two other datasets that can be viewed at the "/search" page; reddit score, and NSFW Elo score which I did 6000 comparisons to create. The Char:Type coloring for the plot makes Cat subtypes darker, while Cosplay and Hoodie subtypes get lighter and lightest respectively.</h2>
-		<h2 class="desc"> Thanks to SrGrafo for providing assets and design feedback that gave the site the look it has now. </h2>
-		<h2 class="desc"> Please submit bug reports to me on the Discord (Astronavigator) or on Reddit (NetworkNavigator) </h2>
-	 </div>
-	
-	<script>
-		function navTo(uri) {window.open(uri);}
-	</script>
-	
-</body>
+  <body ondragstart="return false">
+    <div class="sidesbox">
+      <input type="checkbox" id="menucheck" />
+      <label for="menucheck"
+        ><img id="menu" src="Assets/sidebar/b_menu.png"
+      /></label>
+      <img id="menu2" src="Assets/sidebar/b_menu2.png" />
+
+      <img class="sidebar reddit" src="Assets/sidebar/b_reddit.png" />
+      <img class="sidebar reddit green" src="Assets/sidebar/b_reddit2.png" />
+      <img class="sidebar discord" src="Assets/sidebar/b_discord.png" />
+      <img class="sidebar discord green" src="Assets/sidebar/b_discord2.png" />
+      <img class="sidebar scorelink" src="Assets/sidebar/b_score.png" />
+      <img class="sidebar scorelink green" src="Assets/sidebar/b_score2.png" />
+      <img class="sidebar ranklink" src="Assets/sidebar/b_compare.png" />
+      <img class="sidebar ranklink green" src="Assets/sidebar/b_compare2.png" />
+    </div>
+
+    <h1 id="title">Info and Updates</h1>
+    <div>
+      <h2 class="subtitle">June 3 - 4, 2022: First Release</h2>
+      <div class="line-break"></div>
+      <h2 class="desc">
+        Let's say you want to rank some images, about 650 of them at the time.
+        Not just which images are better than others, but <u>how much</u> better
+        each image is compared to all the others. We could go through and give
+        each image a score by hand, but turns out people are pretty bad at being
+        consistent with how they rate things on an arbitrary scale.
+      </h2>
+      <h2 class="desc">
+        These images happen to have a reddit page with thousands of users voting
+        on them. What if we use those scores to rank our images?
+      </h2>
+      <img class="karma-plot" src="Assets/info/karmaplot.png" />
+      <h2 class="desc">
+        Turns out upvotes don't really tell us much about the quality of the
+        image either. There are two problems; first, that older images have more
+        time to collect upvotes than newer ones, and second, that the page
+        traffic can change over time, also affecting the number of upvotes.
+      </h2>
+      <h2 class="desc">
+        To try to build our own image ranking system that isn't biased toward
+        older images, we can steal an idea from the chess world - Elo scores. We
+        assume each player, or in this case each image, has a score that
+        describes their innate performance. When we compare two images, the
+        difference in their elo scores gives us an expected probability of
+        winning for each image from 0 to 1. Subtracting this probability from
+        the actual outcome of the match (win=1, tie=0.5, lose=0) tells us how
+        much to adjust the elo score for each image.
+      </h2>
+      <img class="early" src="Assets/info/EarlyRating.jpg" />
+      <img class="early" src="Assets/info/EarlyScores.jpg" />
+      <h2 class="desc">
+        Early versions of the rating and score pages looked like this. The
+        website itself is obviously hosted on github, and all scripting is
+        written in vanilla Javascript with no libraries, which makes the
+        graphing and sorting functions pretty performant. User ratings are
+        submitted to a Google Sheet via Apps Script, and then every hundred
+        ratings a separate function calculates the changes in elo scores as a
+        result of the comparisons.
+      </h2>
+      <h2 class="desc">
+        Some miscellaneous details; the graph itself is actually a SVG being
+        dynamically drawn by the page, because HTML canvas elements enforce
+        antialiasing. Pairs are chosen such that each image appears once on the
+        left side, and pairs are no more than 5 ranks apart by elo score. There
+        are two other datasets that can be viewed at the "/search" page; reddit
+        score, and NSFW Elo score which I did 6000 comparisons to create. The
+        Char:Type coloring for the plot makes Cat subtypes darker, while Cosplay
+        and Hoodie subtypes get lighter and lightest respectively.
+      </h2>
+      <h2 class="desc">
+        Thanks to SrGrafo for providing assets and design feedback that gave the
+        site the look it has now.
+      </h2>
+      <h2 class="desc">
+        Please submit bug reports to me on the Discord (Astronavigator) or on
+        Reddit (NetworkNavigator)
+      </h2>
+    </div>
+  </body>
 </html>
