@@ -9,12 +9,6 @@ img {
   object-fit: contain;
 }
 
-a {
-  margin: 0;
-  padding: 0;
-  display: inline;
-}
-
 @font-face {
   font-family: Wild-Words;
   src: url(Assets/WildWordsRoman.ttf);
@@ -320,8 +314,7 @@ a {
 #menucheck:not(:checked) ~ #menu2 {
   z-index: 9;
 }
-#menucheck:checked ~ .scorelink,
-img.scorelink.green {
+#menucheck:checked ~ .scorelink {
   top: 100;
   transition: 0.1s linear;
 }
@@ -329,18 +322,15 @@ img.scorelink.green {
   top: 200;
   transition: 0.2s linear;
 }
-#menucheck:checked ~ .discord,
-img.discord.green {
+#menucheck:checked ~ .discord {
   top: 300;
   transition: 0.3s linear;
 }
-#menucheck:checked ~ .reddit,
-img.reddit.green {
+#menucheck:checked ~ .reddit {
   top: 400;
   transition: 0.4s linear;
 }
-#menucheck:checked ~ .info,
-img.info.green {
+#menucheck:checked ~ .info {
   top: 500;
   transition: 0.5s linear;
 }

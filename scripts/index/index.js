@@ -29,6 +29,7 @@ const bothTwoButton = document.getElementById("both2");
 const skipTwobutton = document.getElementById("skip2");
 const infoButton = document.getElementById("info");
 const achievementToggle = document.querySelector(".sidebar.achtoggle.green");
+const sidesBox = document.querySelector(".sidesbox");
 
 wrapBox.addEventListener("click", (event) => {
   const appendOptions = {
@@ -54,6 +55,22 @@ skipTwobutton.addEventListener("click", () => {
 achievementToggle.addEventListener("click", achToggle);
 
 infoButton.addEventListener("click", clearinfo);
+
+sidesBox.addEventListener("click", (event) => {
+  const redirections = {
+    scorelink: () => window.open("scores.html"),
+    discord: () => window.open("https://discord.com/invite/TsBGYz4VTg"),
+    reddit: () => window.open("https://www.reddit.com/r/chloe/"),
+    achToggle: () => {},
+    info: () => window.open("info.html"),
+  };
+
+  const path = redirections[event.target.classList[1]];
+
+  if (path) {
+    path();
+  }
+});
 
 function playPage(num) {
   plays = getRandomID(1, 19, num);
