@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./styles/index.css" />
     <link rel="icon" type="image/x-icon" href="Assets/favicon.ico" />
     <script src="./scripts/utils.js" defer></script>
-    <script src="./scripts/index/index.js"></script>
+    <script src="./scripts/index/index.js" defer></script>
   </head>
 
   <body
@@ -41,7 +41,7 @@
     </div>
 
     <div class="wrapbox" style="min-width: 520">
-      <div class="imgbox" onclick="append('A');">
+      <div class="imgbox">
         <img
           id="imgA"
           width="400"
@@ -71,7 +71,7 @@
           style="top: -30; position: absolute; z-index: 4"
         />
       </div>
-      <div class="imgbox" onclick="append('B');">
+      <div class="imgbox">
         <img id="imgB" width="400" height="400" style="position: absolute" />
         <img
           id="fadeB"
@@ -112,7 +112,6 @@
         <img
           id="both2"
           class="green"
-          onclick="both()"
           src="Assets/both2.png"
           style="margin: 0 0; z-index: 11; position: absolute; left: 0"
         />
@@ -132,7 +131,6 @@
         <img
           id="skip2"
           class="green"
-          onclick="next(); playPage(2);"
           src="Assets/skip2.png"
           style="margin: 0 0; z-index: 11; position: absolute; left: 0"
         />
@@ -175,34 +173,37 @@
         src="Assets/sidebar/b_notes.png"
         style="width: 70; height: 70; margin: 15"
       />
-      <img
-        class="sidebar info green"
-        onclick="navTo('info.html')"
-        src="Assets/sidebar/b_notes2.png"
-        style="width: 70; height: 70; margin: 15"
-      />
+      <a href="info.html" target="_blank">
+        <img
+          class="sidebar info green"
+          src="Assets/sidebar/b_notes2.png"
+          style="width: 70; height: 70; margin: 15"
+        />
+      </a>
       <img
         class="sidebar reddit"
         src="Assets/sidebar/b_reddit.png"
         style="width: 70; height: 70; margin: 15"
       />
-      <img
-        class="sidebar reddit green"
-        onclick="navTo('https://www.reddit.com/r/chloe/')"
-        src="Assets/sidebar/b_reddit2.png"
-        style="width: 70; height: 70; margin: 15"
-      />
+      <a href="https://www.reddit.com/r/chloe" target="_blank">
+        <img
+          class="sidebar reddit green"
+          src="Assets/sidebar/b_reddit2.png"
+          style="width: 70; height: 70; margin: 15"
+        />
+      </a>
       <img
         class="sidebar discord"
         src="Assets/sidebar/b_discord.png"
         style="width: 70; height: 70; margin: 15"
       />
-      <img
-        class="sidebar discord green"
-        onclick="navTo('https://discord.gg/TsBGYz4VTg')"
-        src="Assets/sidebar/b_discord2.png"
-        style="width: 70; height: 70; margin: 15"
-      />
+      <a href="https://discord.gg/TsBGYz4VTg" target="_blank">
+        <img
+          class="sidebar discord green"
+          src="Assets/sidebar/b_discord2.png"
+          style="width: 70; height: 70; margin: 15"
+        />
+      </a>
       <img
         class="sidebar achtoggle"
         src="Assets/sidebar/b_achievements.png"
@@ -210,7 +211,6 @@
       />
       <img
         class="sidebar achtoggle green"
-        onclick="achToggle()"
         src="Assets/sidebar/b_achievements2.png"
         style="width: 70; height: 70; margin: 15"
       />
@@ -219,13 +219,13 @@
         src="Assets/sidebar/b_score.png"
         style="width: 70; height: 70; margin: 15"
       />
-      <img
-        class="sidebar scorelink green"
-        onclick="navTo('scores.html')"
-        src="Assets/sidebar/b_score2.png"
-        style="width: 70; height: 70; margin: 15"
-      />
-
+      <a href="scores.html" target="_blank">
+        <img
+          class="sidebar scorelink green"
+          src="Assets/sidebar/b_score2.png"
+          style="width: 70; height: 70; margin: 15"
+        />
+      </a>
       <div
         id="a"
         style="position: fixed; left: 0; top: 0; width: 200; z-index: 10"
@@ -499,7 +499,7 @@
     <audio id="p18"><source src="Sounds/page18.mp3" type="audio/mpeg" /></audio>
     <audio id="p19"><source src="Sounds/page19.mp3" type="audio/mpeg" /></audio>
 
-    <div id="info" onclick="clearinfo()">
+    <div id="info">
       <h1 id="infotitle">Instructions</h1>
       <p class="infotext">
         <br />Choose the image that you prefer / like better / want to see more

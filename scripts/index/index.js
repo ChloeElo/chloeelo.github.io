@@ -24,6 +24,37 @@ function keylog(e) {
   }
 }
 
+const wrapBox = document.querySelector(".wrapbox");
+const bothTwoButton = document.getElementById("both2");
+const skipTwobutton = document.getElementById("skip2");
+const infoButton = document.getElementById("info");
+const achievementToggle = document.querySelector(".sidebar.achtoggle.green");
+
+wrapBox.addEventListener("click", (event) => {
+  const appendOptions = {
+    greenA: () => append("A"),
+    greenB: () => append("B"),
+  };
+
+  const target = event.target;
+  const isImage = target.tagName === "IMG";
+
+  if (isImage) {
+    appendOptions[target.id]();
+  }
+});
+
+bothTwoButton.addEventListener("click", both);
+
+skipTwobutton.addEventListener("click", () => {
+  next();
+  playPage(2);
+});
+
+achievementToggle.addEventListener("click", achToggle);
+
+infoButton.addEventListener("click", clearinfo);
+
 function playPage(num) {
   plays = getRandomID(1, 19, num);
   for (let i = 0; i < plays.length; i++) {
@@ -37,6 +68,7 @@ achcount = [
   0, 1, 5, 10, 16, 21, 42, 69, 81, 100, 121, 144, 200, 256, 313, 350, 420, 456,
   512, 666,
 ];
+
 function achToggle() {
   if (!achvis) {
     for (let i = 1; i < 21; i++) {
