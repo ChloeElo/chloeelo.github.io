@@ -10,472 +10,111 @@
     <script src="./scripts/index/index.js" defer></script>
   </head>
 
-  <body
-    ondragstart="return false"
-    style="min-width: 770; background-color: #000000"
-  >
-    <div
-      id="counterbox"
-      style="
-        background-color: rgba(100, 100, 100, 0.5);
-        position: fixed;
-        padding: 0 15;
-        border-radius: 15px;
-        z-index: 10;
-        display: none;
-      "
-    >
-      <h1
-        id="counter"
-        style="
-          color: white;
-          font-family: Wild-Words;
-          letter-spacing: 1px;
-          font-size: 24;
-          z-index: 10;
-          display: inherit;
-        "
-      >
-        Counter 0
-      </h1>
+  <body ondragstart="return false">
+    <div id="counterbox">
+      <h1 id="counter">Counter 0</h1>
     </div>
 
-    <div class="wrapbox" style="min-width: 520">
+    <div class="wrapbox">
       <div class="imgbox">
-        <img
-          id="imgA"
-          width="400"
-          height="400"
-          style="position: absolute; z-index: 1"
-        />
-        <img
-          id="fadeA"
-          class="fade"
-          width="400"
-          height="400"
-          style="position: absolute; z-index: 2"
-        />
-        <img
-          id="redA"
-          src="Assets/red.png"
-          height="456px"
-          width="456px"
-          style="top: -30; position: absolute; z-index: 3"
-        />
-        <img
-          id="greenA"
-          class="green"
-          src="Assets/green.png"
-          height="456px"
-          width="456px"
-          style="top: -30; position: absolute; z-index: 4"
-        />
+        <img id="imgA" />
+        <img id="fadeA" class="fade" />
+        <img id="redA" src="Assets/red.png" />
+        <img id="greenA" class="green" src="Assets/green.png" />
       </div>
       <div class="imgbox">
-        <img id="imgB" width="400" height="400" style="position: absolute" />
-        <img
-          id="fadeB"
-          class="fade"
-          width="400"
-          height="400"
-          style="position: absolute; z-index: 2"
-        />
-        <img
-          id="redB"
-          src="Assets/red.png"
-          height="456px"
-          width="456px"
-          style="top: -30; position: absolute; z-index: 3"
-        />
-        <img
-          id="greenB"
-          class="green"
-          src="Assets/green.png"
-          height="456px"
-          width="456px"
-          style="top: -30; position: absolute; z-index: 4"
-        />
+        <img id="imgB" />
+        <img id="fadeB" class="fade" />
+        <img id="redB" src="Assets/red.png" />
+        <img id="greenB" class="green" src="Assets/green.png" />
       </div>
       <div class="line-break"></div>
-      <div
-        id="bothbox"
-        style="
-          width: 200;
-          height: 100;
-          margin: 0 15;
-          z-index: 10;
-          display: flex;
-          position: relative;
-        "
-      >
-        <img id="both" src="Assets/both.png" style="margin: 0 0; z-index: 10" />
-        <img
-          id="both2"
-          class="green"
-          src="Assets/both2.png"
-          style="margin: 0 0; z-index: 11; position: absolute; left: 0"
-        />
+      <div id="bothbox">
+        <img id="both" src="Assets/both.png" />
+        <img id="both2" class="green" src="Assets/both2.png" />
       </div>
-      <div
-        id="skipbox"
-        style="
-          width: 200;
-          height: 100;
-          margin: 0 15;
-          z-index: 10;
-          display: flex;
-          position: relative;
-        "
-      >
-        <img id="skip" src="Assets/skip.png" style="margin: 0 0; z-index: 10" />
-        <img
-          id="skip2"
-          class="green"
-          src="Assets/skip2.png"
-          style="margin: 0 0; z-index: 11; position: absolute; left: 0"
-        />
+      <div id="skipbox">
+        <img id="skip" src="Assets/skip.png" />
+        <img id="skip2" class="green" src="Assets/skip2.png" />
       </div>
     </div>
 
-    <div class="sidesbox" style="min-width: 770">
-      <input type="checkbox" id="menucheck" style="display: none" />
-      <label for="menucheck" style="display: inline-block"
-        ><img
-          id="menu"
-          style="
-            width: 70;
-            height: 70;
-            margin: 15;
-            opacity: inherit;
-            position: fixed;
-            top: 0;
-            right: 0;
-            z-index: 10;
-          "
-          src="Assets/sidebar/b_menu.png"
+    <div class="sidesbox">
+      <input type="checkbox" id="menucheck" />
+      <label for="menucheck"
+        ><img id="menu" src="Assets/sidebar/b_menu.png"
       /></label>
-      <img
-        id="menu2"
-        style="
-          width: 70;
-          height: 70;
-          margin: 15;
-          position: fixed;
-          top: 0;
-          right: 0;
-          pointer-events: none;
-        "
-        src="Assets/sidebar/b_menu2.png"
-      />
+      <img id="menu2" src="Assets/sidebar/b_menu2.png" />
 
-      <img
-        class="sidebar info"
-        src="Assets/sidebar/b_notes.png"
-        style="width: 70; height: 70; margin: 15"
-      />
-      <a href="info.html" target="_blank">
-        <img
-          class="sidebar info green"
-          src="Assets/sidebar/b_notes2.png"
-          style="width: 70; height: 70; margin: 15"
-        />
+      <img class="sidebar info" src="Assets/sidebar/b_notes.png" />
+      <a class="sidebar info green" href="info.html" target="_blank">
+        <img class="sidebar info green" src="Assets/sidebar/b_notes2.png" />
       </a>
-      <img
-        class="sidebar reddit"
-        src="Assets/sidebar/b_reddit.png"
-        style="width: 70; height: 70; margin: 15"
-      />
+      <img class="sidebar reddit" src="Assets/sidebar/b_reddit.png" />
       <a href="https://www.reddit.com/r/chloe" target="_blank">
-        <img
-          class="sidebar reddit green"
-          src="Assets/sidebar/b_reddit2.png"
-          style="width: 70; height: 70; margin: 15"
-        />
+        <img class="sidebar reddit green" src="Assets/sidebar/b_reddit2.png" />
       </a>
-      <img
-        class="sidebar discord"
-        src="Assets/sidebar/b_discord.png"
-        style="width: 70; height: 70; margin: 15"
-      />
+      <img class="sidebar discord" src="Assets/sidebar/b_discord.png" />
       <a href="https://discord.gg/TsBGYz4VTg" target="_blank">
         <img
           class="sidebar discord green"
           src="Assets/sidebar/b_discord2.png"
-          style="width: 70; height: 70; margin: 15"
         />
       </a>
-      <img
-        class="sidebar achtoggle"
-        src="Assets/sidebar/b_achievements.png"
-        style="width: 70; height: 70; margin: 15"
-      />
+      <img class="sidebar achtoggle" src="Assets/sidebar/b_achievements.png" />
       <img
         class="sidebar achtoggle green"
         src="Assets/sidebar/b_achievements2.png"
-        style="width: 70; height: 70; margin: 15"
       />
-      <img
-        class="sidebar scorelink"
-        src="Assets/sidebar/b_score.png"
-        style="width: 70; height: 70; margin: 15"
-      />
+      <img class="sidebar scorelink" src="Assets/sidebar/b_score.png" />
       <a href="scores.html" target="_blank">
         <img
           class="sidebar scorelink green"
           src="Assets/sidebar/b_score2.png"
-          style="width: 70; height: 70; margin: 15"
         />
       </a>
-      <div
-        id="a"
-        style="position: fixed; left: 0; top: 0; width: 200; z-index: 10"
-      >
-        <img
-          id="a20"
-          class="A_hid"
-          style="z-index: 30"
-          src="Assets/achievements/20.png"
-        />
-        <img
-          id="a19"
-          class="A_hid"
-          style="z-index: 29"
-          src="Assets/achievements/19.png"
-        />
-        <img
-          id="a18"
-          class="A_hid"
-          style="z-index: 28"
-          src="Assets/achievements/18.png"
-        />
-        <img
-          id="a17"
-          class="A_hid"
-          style="z-index: 27"
-          src="Assets/achievements/17.png"
-        />
-        <img
-          id="a16"
-          class="A_hid"
-          style="z-index: 26"
-          src="Assets/achievements/16.png"
-        />
-        <img
-          id="a15"
-          class="A_hid"
-          style="z-index: 25"
-          src="Assets/achievements/15.png"
-        />
-        <img
-          id="a14"
-          class="A_hid"
-          style="z-index: 24"
-          src="Assets/achievements/14.png"
-        />
-        <img
-          id="a13"
-          class="A_hid"
-          style="z-index: 23"
-          src="Assets/achievements/13.png"
-        />
-        <img
-          id="a12"
-          class="A_hid"
-          style="z-index: 22"
-          src="Assets/achievements/12.png"
-        />
-        <img
-          id="a11"
-          class="A_hid"
-          style="z-index: 21"
-          src="Assets/achievements/11.png"
-        />
-        <img
-          id="a10"
-          class="A_hid"
-          style="z-index: 20"
-          src="Assets/achievements/10.png"
-        />
-        <img
-          id="a9"
-          class="A_hid"
-          style="z-index: 19"
-          src="Assets/achievements/9.png"
-        />
-        <img
-          id="a8"
-          class="A_hid"
-          style="z-index: 18"
-          src="Assets/achievements/8.png"
-        />
-        <img
-          id="a7"
-          class="A_hid"
-          style="z-index: 17"
-          src="Assets/achievements/7.png"
-        />
-        <img
-          id="a6"
-          class="A_hid"
-          style="z-index: 16"
-          src="Assets/achievements/6.png"
-        />
-        <img
-          id="a5"
-          class="A_hid"
-          style="z-index: 15"
-          src="Assets/achievements/5.png"
-        />
-        <img
-          id="a4"
-          class="A_hid"
-          style="z-index: 14"
-          src="Assets/achievements/4.png"
-        />
-        <img
-          id="a3"
-          class="A_hid"
-          style="z-index: 13"
-          src="Assets/achievements/3.png"
-        />
-        <img
-          id="a2"
-          class="A_hid"
-          style="z-index: 12"
-          src="Assets/achievements/2.png"
-        />
-        <img
-          id="a1"
-          class="A_hid"
-          style="z-index: 11"
-          src="Assets/achievements/1.png"
-        />
+
+      <div id="a">
+        <img id="a20" class="A_hid" src="Assets/achievements/20.png" />
+        <img id="a19" class="A_hid" src="Assets/achievements/19.png" />
+        <img id="a18" class="A_hid" src="Assets/achievements/18.png" />
+        <img id="a17" class="A_hid" src="Assets/achievements/17.png" />
+        <img id="a16" class="A_hid" src="Assets/achievements/16.png" />
+        <img id="a15" class="A_hid" src="Assets/achievements/15.png" />
+        <img id="a14" class="A_hid" src="Assets/achievements/14.png" />
+        <img id="a13" class="A_hid" src="Assets/achievements/13.png" />
+        <img id="a12" class="A_hid" src="Assets/achievements/12.png" />
+        <img id="a11" class="A_hid" src="Assets/achievements/11.png" />
+        <img id="a10" class="A_hid" src="Assets/achievements/10.png" />
+        <img id="a9" class="A_hid" src="Assets/achievements/9.png" />
+        <img id="a8" class="A_hid" src="Assets/achievements/8.png" />
+        <img id="a7" class="A_hid" src="Assets/achievements/7.png" />
+        <img id="a6" class="A_hid" src="Assets/achievements/6.png" />
+        <img id="a5" class="A_hid" src="Assets/achievements/5.png" />
+        <img id="a4" class="A_hid" src="Assets/achievements/4.png" />
+        <img id="a3" class="A_hid" src="Assets/achievements/2.png" />
+        <img id="a1" class="A_hid" src="Assets/achievements/1.png" />
       </div>
 
-      <div
-        id="s"
-        style="position: fixed; left: 0; top: 0; width: 200; z-index: 100"
-      >
-        <img
-          id="s20"
-          class="A_hid"
-          style="z-index: 130"
-          src="Assets/achievements/20.png"
-        />
-        <img
-          id="s19"
-          class="A_hid"
-          style="z-index: 129"
-          src="Assets/achievements/19.png"
-        />
-        <img
-          id="s18"
-          class="A_hid"
-          style="z-index: 128"
-          src="Assets/achievements/18.png"
-        />
-        <img
-          id="s17"
-          class="A_hid"
-          style="z-index: 127"
-          src="Assets/achievements/17.png"
-        />
-        <img
-          id="s16"
-          class="A_hid"
-          style="z-index: 126"
-          src="Assets/achievements/16.png"
-        />
-        <img
-          id="s15"
-          class="A_hid"
-          style="z-index: 125"
-          src="Assets/achievements/15.png"
-        />
-        <img
-          id="s14"
-          class="A_hid"
-          style="z-index: 124"
-          src="Assets/achievements/14.png"
-        />
-        <img
-          id="s13"
-          class="A_hid"
-          style="z-index: 123"
-          src="Assets/achievements/13.png"
-        />
-        <img
-          id="s12"
-          class="A_hid"
-          style="z-index: 122"
-          src="Assets/achievements/12.png"
-        />
-        <img
-          id="s11"
-          class="A_hid"
-          style="z-index: 121"
-          src="Assets/achievements/11.png"
-        />
-        <img
-          id="s10"
-          class="A_hid"
-          style="z-index: 120"
-          src="Assets/achievements/10.png"
-        />
-        <img
-          id="s9"
-          class="A_hid"
-          style="z-index: 119"
-          src="Assets/achievements/9.png"
-        />
-        <img
-          id="s8"
-          class="A_hid"
-          style="z-index: 118"
-          src="Assets/achievements/8.png"
-        />
-        <img
-          id="s7"
-          class="A_hid"
-          style="z-index: 117"
-          src="Assets/achievements/7.png"
-        />
-        <img
-          id="s6"
-          class="A_hid"
-          style="z-index: 116"
-          src="Assets/achievements/6.png"
-        />
-        <img
-          id="s5"
-          class="A_hid"
-          style="z-index: 115"
-          src="Assets/achievements/5.png"
-        />
-        <img
-          id="s4"
-          class="A_hid"
-          style="z-index: 114"
-          src="Assets/achievements/4.png"
-        />
-        <img
-          id="s3"
-          class="A_hid"
-          style="z-index: 113"
-          src="Assets/achievements/3.png"
-        />
-        <img
-          id="s2"
-          class="A_hid"
-          style="z-index: 112"
-          src="Assets/achievements/2.png"
-        />
-        <img
-          id="s1"
-          class="A_hid"
-          style="z-index: 111"
-          src="Assets/achievements/1.png"
-        />
+      <div id="s">
+        <img id="s20" class="A_hid" src="Assets/achievements/20.png" />
+        <img id="s19" class="A_hid" src="Assets/achievements/19.png" />
+        <img id="s18" class="A_hid" src="Assets/achievements/18.png" />
+        <img id="s17" class="A_hid" src="Assets/achievements/17.png" />
+        <img id="s16" class="A_hid" src="Assets/achievements/16.png" />
+        <img id="s15" class="A_hid" src="Assets/achievements/15.png" />
+        <img id="s14" class="A_hid" src="Assets/achievements/14.png" />
+        <img id="s13" class="A_hid" src="Assets/achievements/11.png" />
+        <img id="s10" class="A_hid" src="Assets/achievements/10.png" />
+        <img id="s9" class="A_hid" src="Assets/achievements/9.png" />
+        <img id="s8" class="A_hid" src="Assets/achievements/8.png" />
+        <img id="s7" class="A_hid" src="Assets/achievements/7.png" />
+        <img id="s6" class="A_hid" src="Assets/achievements/6.png" />
+        <img id="s5" class="A_hid" src="Assets/achievements/5.png" />
+        <img id="s4" class="A_hid" src="Assets/achievements/4.png" />
+        <img id="s3" class="A_hid" src="Assets/achievements/3.png" />
+        <img id="s2" class="A_hid" src="Assets/achievements/2.png" />
+        <img id="s1" class="A_hid" src="Assets/achievements/1.png" />
       </div>
     </div>
 
@@ -507,15 +146,7 @@
         Click on the image or use the keypad as shown below
       </p>
       <div class="keypadbox">
-        <img
-          src="Assets/keypadNB.svg"
-          style="
-            position: absolute;
-            top: 40%;
-            margin: 20;
-            vertical-align: middle;
-          "
-        />
+        <img src="Assets/keypadNB.svg" />
       </div>
     </div>
   </body>

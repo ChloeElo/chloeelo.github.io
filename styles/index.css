@@ -1,3 +1,20 @@
+body {
+  justify-content: center;
+  align-items: center;
+  min-width: 770;
+  background-color: #000000;
+}
+
+img {
+  object-fit: contain;
+}
+
+a {
+  margin: 0;
+  padding: 0;
+  display: inline;
+}
+
 @font-face {
   font-family: Wild-Words;
   src: url(Assets/WildWordsRoman.ttf);
@@ -34,6 +51,24 @@
   font-size: 48px;
 }
 
+#counterbox {
+  background-color: rgba(100, 100, 100, 0.5);
+  position: fixed;
+  padding: 0 15;
+  border-radius: 15px;
+  z-index: 10;
+  display: none;
+}
+
+#counter {
+  color: white;
+  font-family: Wild-Words;
+  letter-spacing: 1px;
+  font-size: 24;
+  z-index: 10;
+  display: inherit;
+}
+
 .infotext {
   font-family: Sans-Serif;
   line-height: 110%;
@@ -67,11 +102,6 @@
   visibility: hidden;
 }
 
-body {
-  justify-content: center;
-  align-items: center;
-}
-
 .sidesbox {
   position: fixed;
   display: inline-block;
@@ -82,6 +112,11 @@ body {
   margin-right: 20px;
   justify-content: center;
   align-items: center;
+  min-width: 770;
+}
+
+.sidesbox label {
+  display: inline-block;
 }
 
 .wrapbox {
@@ -105,10 +140,81 @@ body {
   text-align: center;
   justify-content: center;
   border-radius: 10px;
+  min-width: 520;
 }
 
-img {
-  object-fit: contain;
+.imgbox img {
+  width: 400;
+  height: 400;
+}
+
+#imgA {
+  position: absolute;
+  z-index: 1;
+}
+
+#imgB {
+  position: absolute;
+}
+
+#fadeA,
+#fadeB {
+  position: absolute;
+  z-index: 2;
+}
+
+#redA,
+#greenA,
+#redB,
+#greenB {
+  height: 456px;
+  width: 456px;
+}
+
+#redA,
+#redB {
+  top: -30;
+  position: absolute;
+  z-index: 3;
+}
+
+#greenA,
+#greenB {
+  top: -30;
+  position: absolute;
+  z-index: 4;
+}
+
+#bothbox {
+  width: 200;
+  height: 100;
+  margin: 0 15;
+  z-index: 10;
+  display: flex;
+  position: relative;
+}
+
+#both,
+#skip {
+  margin: 0 0;
+  z-index: 10;
+}
+
+#both2,
+#skip2 {
+  margin: 0 0;
+  z-index: 11;
+  position: absolute;
+  left: 0;
+}
+
+#skipbox {
+  width: 200;
+  height: 100;
+  margin: 0 15;
+  z-index: 10;
+  display: flex;
+  position: relative;
 }
 
 @keyframes crossin {
@@ -128,6 +234,7 @@ img {
   animation-duration: 0.5s;
   animation-fill-mode: forwards;
 }
+
 .show {
   display: block;
   opacity: 1;
@@ -160,18 +267,51 @@ img {
   margin: 0;
 }
 
+.keypadbox img {
+  position: absolute;
+  top: 40%;
+  margin: 20;
+  vertical-align: middle;
+}
+
 .line-break {
   width: 100%;
   margin: 0;
 }
 
 .sidebar {
-  width: 100;
-  height: 100;
+  width: 70;
+  height: 70;
   position: fixed;
   right: 0;
   display: block;
   z-index: 9;
+  margin: 15;
+}
+
+#menu {
+  width: 70;
+  height: 70;
+  margin: 15;
+  opacity: inherit;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+#menu2 {
+  width: 70;
+  height: 70;
+  margin: 15;
+  position: fixed;
+  top: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+#menucheck {
+  display: none;
 }
 
 #menucheck:checked ~ #menu2 {
@@ -180,7 +320,8 @@ img {
 #menucheck:not(:checked) ~ #menu2 {
   z-index: 9;
 }
-#menucheck:checked ~ .scorelink {
+#menucheck:checked ~ .scorelink,
+img.scorelink.green {
   top: 100;
   transition: 0.1s linear;
 }
@@ -188,15 +329,18 @@ img {
   top: 200;
   transition: 0.2s linear;
 }
-#menucheck:checked ~ .discord {
+#menucheck:checked ~ .discord,
+img.discord.green {
   top: 300;
   transition: 0.3s linear;
 }
-#menucheck:checked ~ .reddit {
+#menucheck:checked ~ .reddit,
+img.reddit.green {
   top: 400;
   transition: 0.4s linear;
 }
-#menucheck:checked ~ .info {
+#menucheck:checked ~ .info,
+img.info.green {
   top: 500;
   transition: 0.5s linear;
 }
@@ -224,6 +368,182 @@ img {
   top: 0;
   opacity: 0;
   transition: 0.75s linear;
+}
+
+#a {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 200;
+  z-index: 10;
+}
+
+#a20 {
+  z-index: 30;
+}
+
+#a19 {
+  z-index: 29;
+}
+
+#a18 {
+  z-index: 28;
+}
+
+#a17 {
+  z-index: 27;
+}
+
+#a16 {
+  z-index: 26;
+}
+
+#a15 {
+  z-index: 25;
+}
+
+#a14 {
+  z-index: 24;
+}
+
+#a13 {
+  z-index: 23;
+}
+
+#a12 {
+  z-index: 22;
+}
+
+#a11 {
+  z-index: 21;
+}
+
+#a10 {
+  z-index: 20;
+}
+
+#a9 {
+  z-index: 19;
+}
+
+#a8 {
+  z-index: 18;
+}
+
+#a7 {
+  z-index: 17;
+}
+
+#a6 {
+  z-index: 16;
+}
+
+#a5 {
+  z-index: 15;
+}
+
+#a4 {
+  z-index: 14;
+}
+
+#a3 {
+  z-index: 13;
+}
+
+#a2 {
+  z-index: 12;
+}
+
+#a1 {
+  z-index: 11;
+}
+
+#s {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 200;
+  z-index: 100;
+}
+
+#s20 {
+  z-index: 130;
+}
+
+#s19 {
+  z-index: 129;
+}
+
+#s18 {
+  z-index: 128;
+}
+
+#s17 {
+  z-index: 127;
+}
+
+#s16 {
+  z-index: 126;
+}
+
+#s15 {
+  z-index: 125;
+}
+
+#s14 {
+  z-index: 124;
+}
+
+#s13 {
+  z-index: 123;
+}
+
+#s12 {
+  z-index: 122;
+}
+
+#s11 {
+  z-index: 121;
+}
+
+#s10 {
+  z-index: 120;
+}
+
+#s9 {
+  z-index: 119;
+}
+
+#s8 {
+  z-index: 118;
+}
+
+#s7 {
+  z-index: 117;
+}
+
+#s6 {
+  z-index: 116;
+}
+
+#s5 {
+  z-index: 115;
+}
+
+#s4 {
+  z-index: 114;
+}
+
+#s3 {
+  z-index: 113;
+}
+
+#s2 {
+  z-index: 112;
+}
+
+#s1 {
+  z-index: 111;
 }
 
 @keyframes slidein {
