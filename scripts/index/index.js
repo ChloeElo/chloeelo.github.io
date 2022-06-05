@@ -360,3 +360,8 @@ function send(squeue) {
   };
   xhr.send("uid=" + uid + "&data=" + JSON.stringify(squeue) + "&type=send");
 }
+
+function clearinfo() {
+  info = 0;
+  document.getElementById("info").classList.toggle("fade");
+}
