@@ -1,0 +1,142 @@
+body {
+  justify-content: center;
+  align-items: center;
+  min-width: 770;
+  background-color: #000000;
+}
+
+label {
+  display: inline-block;
+}
+
+@font-face {
+  font-family: Wild-Words;
+  src: url("../Assets/WildWordsRoman.ttf");
+}
+
+#title {
+  font-family: Wild-Words;
+  text-align: center;
+  letter-spacing: 2px;
+  margin: 0;
+  color: white;
+  font-size: 48px;
+}
+
+.subtitle {
+  font-family: Sans-Serif;
+  color: white;
+  font-size: 28px;
+}
+
+.desc {
+  font-family: Sans-Serif;
+  color: white;
+  font-size: 18px;
+}
+
+.karma-plot {
+  left: 25%;
+  width: 75%;
+}
+
+.early {
+  width: 50%;
+}
+
+.green:not(:hover) {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.green:hover {
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+.sidebar {
+  width: 70;
+  height: 70;
+  position: fixed;
+  right: 0;
+  display: block;
+  z-index: 9;
+  margin: 15;
+}
+
+#menu {
+  width: 70;
+  height: 70;
+  margin: 15;
+  opacity: inherit;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+#menu2 {
+  width: 70;
+  height: 70;
+  margin: 15;
+  position: fixed;
+  top: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+#menucheck {
+  display: none;
+}
+
+#menucheck:checked ~ #menu2 {
+  z-index: 11;
+}
+#menucheck:not(:checked) ~ #menu2 {
+  z-index: 9;
+}
+#menucheck:checked ~ .ranklink {
+  top: 100;
+  transition: 0.1s linear;
+}
+#menucheck:checked ~ .scorelink {
+  top: 200;
+  transition: 0.2s linear;
+}
+#menucheck:checked ~ .discord {
+  top: 300;
+  transition: 0.3s linear;
+}
+#menucheck:checked ~ .reddit {
+  top: 400;
+  transition: 0.4s linear;
+}
+#menucheck:not(:checked) ~ .ranklink {
+  top: 0;
+  opacity: 0;
+  transition: 0.15s linear;
+}
+#menucheck:not(:checked) ~ .scorelink {
+  top: 0;
+  opacity: 0;
+  transition: 0.3s linear;
+}
+#menucheck:not(:checked) ~ .discord {
+  top: 0;
+  opacity: 0;
+  transition: 0.45s linear;
+}
+#menucheck:not(:checked) ~ .reddit {
+  top: 0;
+  opacity: 0;
+  transition: 0.6s linear;
+}
+
+#title + div {
+  width: 70%;
+  margin: 100;
+}
+
+.line-break {
+  width: 100%;
+  margin: 0;
+}
