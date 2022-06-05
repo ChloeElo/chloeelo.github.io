@@ -12,7 +12,7 @@
   <body>
     <div class="sidesbox">
       <input type="checkbox" id="menucheck" />
-      <label for="menucheck" style="display: inline-block"
+      <label for="menucheck"
         ><img id="menu" src="Assets/sidebar/b_menu.png"
       /></label>
       <img id="menu2" src="Assets/sidebar/b_menu2.png" />
@@ -29,18 +29,18 @@
       />
     </div>
     <div>
-      <select id="dataset" onchange="handleChange();">
+      <select id="dataset">
         <option value="user">User Elo</option>
         <option value="nsfw">NSFW Elo</option>
         <option value="reddit">Reddit Karma</option>
       </select>
       <h1 id="title">
-        <select id="display" onchange="changeDisplay()">
+        <select id="display">
           <option value="plot">Graph</option>
           <option value="sort">Show</option>
         </select>
         Global User Elo in
-        <select id="order" onchange="handleChange();">
+        <select id="order">
           <option value="score">Score</option>
           <option value="image">Image</option>
           <option value="char">Character</option>
@@ -50,23 +50,13 @@
     </div>
     <div class="line-break"></div>
 
-    <div id="wrapbox" min-width="770">
-      <h1 id="filter1txt" class="title2" style="display: block">Filter for</h1>
-      <select
-        id="filter1"
-        class="title2"
-        onchange="updateFilter()"
-        style="display: block"
-      >
+    <div id="wrapbox">
+      <h1 id="filter1txt" class="title2">Filter for</h1>
+      <select id="filter1" class="title2">
         <option value="All">All</option>
       </select>
-      <h1 class="title2" style="display: block">:</h1>
-      <select
-        id="filter2"
-        class="title2"
-        onchange="updateFilter()"
-        style="display: block"
-      >
+      <h1 class="title2">:</h1>
+      <select id="filter2" class="title2">
         <option value="All">Any</option>
         <option value="Cat">Cat</option>
         <option value="Cosplay">Cosplay</option>
@@ -75,27 +65,16 @@
       </select>
       <div class="line-break"></div>
       <div id="imgbox" class="plot">
-        <img
-          id="simg"
-          class="plot"
-          style="border: 2px solid #ffffff"
-          src="Assets/plotinfoblack.svg"
-        />
+        <img id="simg" class="plot" src="Assets/plotinfoblack.svg" />
       </div>
       <div id="plotBox" class="plot">
         <h1 id="legend" class="plot"></h1>
-        <svg
-          id="plot"
-          class="plot"
-          height="400"
-          style="border: 2px solid #ffffff"
-          onmousemove="updateImg(event)"
-        ></svg>
+        <svg id="plot" class="plot"></svg>
       </div>
       <div class="line-break plot"></div>
       <h1 class="title2 plot">
         With
-        <select id="paint" class="plot" onchange="handleChange()">
+        <select id="paint" class="plot">
           <option value="score">Score</option>
           <option value="char">Character</option>
           <option value="type">Char:Type</option>

@@ -21,8 +21,8 @@ var Rank2ID = [];
 var storage = { user: [], nsfw: [], reddit: [] };
 var xlim = 0;
 var display = "plot";
-var sort = "score";
-var dataset = "user";
+var sort = "image";
+var dataset = "nsfw";
 var paint = "score";
 var CharRank = [];
 var baseline = 200;
@@ -293,23 +293,25 @@ function changeDisplay() {
       part.style.display = "inherit";
     }
     let selectorder = document.getElementById("order");
-    if (selectorder.value != "score") {
-      selectorder.value = "score";
+    if (selectorder.value != "image") {
+      selectorder.value = "image";
       handleChange();
     }
+    selectorder.remove(4);
+    selectorder.remove(3);
     selectorder.remove(2);
     selectorder.remove(1);
     let optionchar = document.createElement("option");
-    optionchar.text = "Image";
-    optionchar.value = "image";
-    selectorder.add(optionchar);
-    optionchar = document.createElement("option");
-    optionchar.text = "- Score";
-    optionchar.value = "-score";
+    optionchar.text = "Score";
+    optionchar.value = "score";
     selectorder.add(optionchar);
     optionchar = document.createElement("option");
     optionchar.text = "- Image";
     optionchar.value = "-image";
+    selectorder.add(optionchar);
+    optionchar = document.createElement("option");
+    optionchar.text = "- Score";
+    optionchar.value = "-score";
     selectorder.add(optionchar);
   } else {
     for (let part of document.getElementsByClassName("plot")) {
@@ -330,8 +332,16 @@ function changeDisplay() {
     selectorder.remove(2);
     selectorder.remove(1);
     let optionchar = document.createElement("option");
-    optionchar.text = "Image";
-    optionchar.value = "image";
+    optionchar.text = "User Elo";
+    optionchar.value = "user";
+    selectorder.add(optionchar);
+    optionchar = document.createElement("option");
+    optionchar.text = "NSFW Elo";
+    optionchar.value = "nsfw";
+    selectorder.add(optionchar);
+    optionchar = document.createElement("option");
+    optionchar.text = "Reddit Karma";
+    optionchar.value = "reddit";
     selectorder.add(optionchar);
     optionchar = document.createElement("option");
     optionchar.text = "Character";
@@ -374,7 +384,14 @@ function updateLists() {
   display = document.getElementById("display").value;
   if (sort != document.getElementById("order").value) {
     sort = document.getElementById("order").value;
-    if (sort == "score") {
+    if (display == "plot" && ["user", "nsfw", "reddit"].includes(sort)) {
+      let t2,
+        t3 = ID2Char,
+        Rank2ID;
+      getData(sort, "order");
+      ID2Char, (Rank2ID = t2), t3;
+    }
+    if (["user", "nsfw", "reddit"].includes(sort)) {
       document.getElementById("paint").value = "score";
     }
     if (sort == "char") {
@@ -407,7 +424,7 @@ function updateImg(e) {
   if (plotXs.length < Rank2ID.length) {
     let minX = plotXs[0];
     let minVal = Math.abs(plotXs[0] - x);
-    for (var i = 0; i < plotXs.length; i++) {
+    for (var i = 0; i < plotXs.length - 1; i++) {
       if (Math.abs(plotXs[i] - x) < minVal) {
         minX = plotXs[i];
         minVal = Math.abs(plotXs[i] - x);
@@ -420,7 +437,7 @@ function updateImg(e) {
   }
   if (sort == "image") {
     id = x;
-  } else if (sort == "score") {
+  } else if (["user", "nsfw", "reddit"].includes(sort)) {
     var id = Rank2ID[x];
   } else {
     var id = CharRank[x];
@@ -446,7 +463,7 @@ function updateImg(e) {
     var legendText =
       "Image " + id + "<br>" + ID2Char[id] + "<br>Elo " + ID2Elo[id];
   }
-  if (sort == "score") {
+  if (["user", "nsfw", "reddit"].includes(sort)) {
     legendText = legendText + "<br>Rank " + x;
   }
   document.getElementById("legend").innerHTML = legendText;
@@ -650,6 +667,6 @@ function getData(type, update) {
   xhr.send("type=" + type);
 }
 
-getData("user", "both");
+getData("nsfw", "both"); // change before live
 getData("uris", "none");
 updateFilter();

@@ -24,10 +24,6 @@ svg {
   transform: translate(0, 0);
 }
 
-.sidesbox label {
-  display: inline-block;
-}
-
 #wrapbox {
   display: flex;
   flex-wrap: wrap;
@@ -60,12 +56,12 @@ svg {
 }
 
 .title2 {
+  display: block;
   font-family: Sans-Serif;
   margin: 10 2;
   text-align: center;
   color: white;
   font-size: 24px;
-  display: block;
 }
 
 .line-break {
@@ -106,6 +102,10 @@ svg {
   transition: opacity 0.5s;
 }
 
+.sidesbox label {
+  display: inline-block;
+}
+
 .sidebar {
   width: 70;
   height: 70;
@@ -114,10 +114,6 @@ svg {
   display: block;
   z-index: 9;
   margin: 15;
-}
-
-#dataset {
-  display: none;
 }
 
 #menu {
