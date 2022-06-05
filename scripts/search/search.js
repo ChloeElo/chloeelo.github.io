@@ -66,10 +66,6 @@ const paintSelect = document.getElementById("paint");
 
 paintSelect.addEventListener("change", handleChange);
 
-function navTo(uri) {
-  window.open(uri);
-}
-
 function handleChange() {
   if (dataset != document.getElementById("dataset").value) {
     updateLists();
@@ -125,6 +121,10 @@ function updateFilter() {
   document.getElementById("filter1txt").innerHTML =
     "Filter for " + filterchars.join(" + ");
   handleChange();
+}
+
+function navTo(uri) {
+  window.open(uri);
 }
 
 function navSel() {
