@@ -123,9 +123,6 @@ function updateFilter() {
   handleChange();
 }
 
-function navTo(uri) {
-  window.open(uri);
-}
 function navSel() {
   if (!selID) {
     return;
@@ -556,7 +553,7 @@ function drawCanvas() {
           "hsl(" +
           (300 / (1 + Math.exp((score - 9000) / 4000))).toString() +
           ",75%,50%)";
-      } // Sigmoid function rainbow
+      } // Shifted sigmoid function rainbow
       //if (dataset=='reddit') { color = 'hsl('+((120*Math.sqrt(score)/Math.sqrt(25000))+230).toString()+',100%,50%)' }
       else {
         color = "rgb(" + r.toString() + "," + g.toString() + ",0)";

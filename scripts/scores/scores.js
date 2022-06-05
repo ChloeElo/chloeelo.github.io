@@ -123,9 +123,6 @@ function updateFilter() {
   handleChange();
 }
 
-function navTo(uri) {
-  window.open(uri);
-}
 function navSel() {
   if (!selID) {
     return;
