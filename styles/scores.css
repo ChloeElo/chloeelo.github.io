@@ -97,6 +97,10 @@ svg {
   z-index: 10;
 }
 
+#loader {
+  width: 700;
+}
+
 .green:not(:hover) {
   opacity: 0;
   transition: opacity 0.5s;
