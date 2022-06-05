@@ -598,7 +598,9 @@ function getData(type, update) {
     handleChange();
     return;
   }
-  document.getElementById("legend").innerHTML = "Loading...";
+  const simg = document.getElementById("simg");
+  simg.removeAttribute("simg");
+  plotSvg.removeAttribute("id");
   var xhr = new XMLHttpRequest();
   xhr.open(
     "POST",
@@ -645,6 +647,9 @@ function getData(type, update) {
       }
       console.log(storage);
       handleChange();
+      document.getElementById("loader").remove();
+      simg.id = "simg";
+      plotSvg.id = "plot";
       document.getElementById("legend").innerHTML = "Loading Complete";
     }
   };
