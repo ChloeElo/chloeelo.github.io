@@ -66,6 +66,10 @@ const paintSelect = document.getElementById("paint");
 
 paintSelect.addEventListener("change", handleChange);
 
+function navTo(uri) {
+  window.open(uri);
+}
+
 function handleChange() {
   if (dataset != document.getElementById("dataset").value) {
     updateLists();
