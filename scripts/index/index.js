@@ -55,8 +55,8 @@ function shuffleArray(array) {
 function genPairQ() {
   //Must load elo before calling
   pairqueue = [];
-  let search = 4;
-  for (var i = 1; i < Rank2ID.length - 1; i++) {
+  let search = 10;
+  for (var i = 5; i < Rank2ID.length - 5; i++) {
     let d = Math.floor(2 * search * Math.random()) - search;
     if (d >= 0) {
       d = d + 1;
@@ -74,7 +74,7 @@ function genPairQ() {
 }
 
 function getPairID() {
-  //return getRandomID(1,693,2)
+  return getRandomID(1, 697, 2);
   if (Rank2ID.length == 0) {
     return getRandomID(1, 693, 2);
   }
@@ -213,7 +213,6 @@ achcount = [
   0, 1, 5, 10, 16, 21, 42, 69, 81, 100, 121, 144, 200, 256, 313, 350, 420, 456,
   512, 666,
 ];
-
 function achToggle() {
   if (!achvis) {
     for (let i = 1; i < 21; i++) {
@@ -353,15 +352,11 @@ function send(squeue) {
     if (this.readyState === XMLHttpRequest.DONE) {
       if (this.status === 200) {
         console.log("Send success", squeue);
+        queue = [];
       } else {
         console.log("Send failed", this.status, squeue);
       }
     }
   };
   xhr.send("uid=" + uid + "&data=" + JSON.stringify(squeue) + "&type=send");
-}
-
-function clearinfo() {
-  info = 0;
-  document.getElementById("info").classList.toggle("fade");
 }
