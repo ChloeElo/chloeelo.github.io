@@ -1,0 +1,231 @@
+body {
+  min-width: 700px;
+  background-color: #000000;
+}
+
+select {
+  background-color: rgb(75, 75, 75);
+  border-radius: 10px;
+  font-family: Sans-Serif;
+  text-align: center;
+  border: none;
+  font-weight: bold;
+  color: white;
+  font-size: inherit;
+}
+
+img {
+  width: 400px;
+  height: 400px;
+  object-fit: contain;
+}
+
+svg {
+  transform: translate(0, 0);
+}
+
+.sidesbox label {
+  display: inline-block;
+}
+
+#wrapbox {
+  display: flex;
+  flex-wrap: wrap;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  min-width: 770;
+  /*max-width: 1100px;
+	  min-height: 500px;
+	  background-color: rgba(100, 200, 255, 0.5);
+	  border-radius: 50px;*/
+}
+
+#filter1txt {
+  display: block;
+}
+
+#filter1,
+#filter2 {
+  display: block;
+}
+
+#title {
+  font-family: Sans-Serif;
+  line-height: 125%;
+  text-align: center;
+  margin: 10;
+  color: white;
+  font-size: 44px;
+}
+
+.title2 {
+  font-family: Sans-Serif;
+  margin: 10 2;
+  text-align: center;
+  color: white;
+  font-size: 24px;
+  display: block;
+}
+
+.line-break {
+  width: 100%;
+  margin: 0;
+}
+
+#simg,
+#plot {
+  border: 2px solid #ffffff;
+}
+
+#plot {
+  height: 400;
+}
+
+#plotBox {
+  position: relative;
+}
+
+#legend {
+  position: absolute;
+  top: -2%;
+  left: 3%;
+  color: black;
+  font-family: Sans-Serif;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 10;
+}
+
+#loader {
+  width: 700;
+}
+
+.green:not(:hover) {
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.green:hover {
+  opacity: 1;
+  transition: opacity 0.5s;
+}
+
+.sidebar {
+  width: 70;
+  height: 70;
+  position: fixed;
+  right: 0;
+  display: block;
+  z-index: 9;
+  margin: 15;
+}
+
+#dataset {
+  display: none;
+}
+
+#menu {
+  width: 70;
+  height: 70;
+  margin: 15;
+  opacity: inherit;
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 10;
+}
+
+#menu2 {
+  width: 70;
+  height: 70;
+  margin: 15;
+  position: fixed;
+  top: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+#menucheck {
+  display: none;
+}
+
+#menucheck:checked ~ #menu2 {
+  z-index: 11;
+}
+#menucheck:not(:checked) ~ #menu2 {
+  z-index: 9;
+}
+#menucheck:checked ~ .scorelink {
+  top: 100;
+  transition: 0.1s linear;
+}
+#menucheck:checked ~ .discord {
+  top: 200;
+  transition: 0.2s linear;
+}
+#menucheck:checked ~ .reddit {
+  top: 300;
+  transition: 0.3s linear;
+}
+#menucheck:checked ~ .info {
+  top: 400;
+  transition: 0.4s linear;
+}
+#menucheck:not(:checked) ~ .scorelink {
+  top: 0;
+  opacity: 0;
+  transition: 0.15s linear;
+}
+#menucheck:not(:checked) ~ .discord {
+  top: 0;
+  opacity: 0;
+  transition: 0.3s linear;
+}
+#menucheck:not(:checked) ~ .reddit {
+  top: 0;
+  opacity: 0;
+  transition: 0.45s linear;
+}
+#menucheck:not(:checked) ~ .info {
+  top: 0;
+  opacity: 0;
+  transition: 0.6s linear;
+}
+
+.gridimg {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+.griddiv {
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 150px;
+  height: 175px;
+}
+
+.gridtxt {
+  font-family: Sans-Serif;
+  color: white;
+  font-size: 12;
+  margin: 0 0;
+}
+
+#loadmore {
+  display: inherit;
+  justify-content: center;
+  align-items: center;
+}
+
+.loadmoretxt {
+  font-family: Sans-Serif;
+  color: white;
+  font-size: 20;
+  margin: 0 10;
+  z-index: 10;
+}
+
+u:hover {
+  color: #add8e6;
+}
