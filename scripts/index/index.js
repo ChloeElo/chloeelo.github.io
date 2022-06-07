@@ -74,10 +74,11 @@ function genPairQ() {
 }
 
 function getPairID() {
-  return getRandomID(1, 697, 2);
   if (Rank2ID.length == 0) {
-    return getRandomID(1, 693, 2);
+    return getRandomID(1, 700, 2);
   }
+  return getRandomID(1, Rank2ID.length, 2);
+  
   pair = pairqueue.pop();
   a = pair[0];
   b = pair[1];
