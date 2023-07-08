@@ -1,0 +1,88 @@
+<html>
+<meta
+	name="viewport"
+	content="width=device-width initial-scale=1 user-scalable=yes"
+	/>
+<head>
+<style>
+
+body {
+	min-width: 300px;
+	background-color: black;
+	margin: 0;
+    text-align: center;
+	//position: fixed; // Like voodoo magic this fixes the content-box width issue
+}
+
+#contentbox {
+	display: flex;
+	flex-wrap: wrap;
+	margin: auto;
+	width: 100%;
+	background-color: white;
+	padding: 0px;
+}
+
+.grid-container {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	width: 100vw;
+	max-width: 100%;
+	background-color: gray;
+	
+}
+
+.image {
+	max-width: 100%;
+	max-height: 100%;
+	object-fit: contain;
+	aspect-ratio: 1;
+}
+
+</style>
+<link rel="icon" type="image/x-icon" href="favicon.ico" />
+<!-- <script src="./index.js" defer></script> -->
+<title>Search</title>
+</head>
+
+<body>
+	<h1> Header </h1>
+	<div id="contentbox">
+		
+	</div>
+
+</body>
+
+<script>
+	
+	window.addEventListener("resize", () => {
+		const width = window.innerWidth;
+		const height = window.innerHeight;
+		console.log(`The viewport's width is ${width} and the height is ${height}.`);
+	});
+	
+	function mkElement(type, id, clas) {
+		let newel = document.createElement(type);
+		if (id) {
+			newel.setAttribute("id", id);
+		}
+		if (clas) {
+			newel.setAttribute("class", clas);
+		}
+		return newel;
+	}
+	
+	let newgroup =  mkElement("div", "group", "grid-container");
+	document.getElementById("contentbox").appendChild(newgroup);
+	
+	for (let i=200; i < 700; i++) {
+		let newimg = mkElement("img", "img"+String(i), "image");
+		newimg.src = 'Images/'+String(i).padStart(3,'0')+'.webp'
+		newimg.loading = 'lazy'
+		newgroup.appendChild(newimg);
+	}
+	
+	
+</script>
+
+</html>
