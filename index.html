@@ -1,16 +1,18 @@
+<!DOCTYPE html>
 <html>
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0', shrink-to-fit=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <head>
 <style>
 
 body {
-	min-width: 300px;
+	position:absolute;
 	background-color: #36393e;
 	margin: 0;
 	overflow:auto;
 	-ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
     text-align: center;
+	touch-action: pan-y;
 }
 
 body::-webkit-scrollbar { 
@@ -19,7 +21,7 @@ body::-webkit-scrollbar {
 
 #contentbox {
 	position: absolute;
-	width: 100%;
+	width: 100vw;
 }
 
 .grouptitle {
@@ -29,10 +31,8 @@ body::-webkit-scrollbar {
 
 .grid-container {
 	display: grid;
-	grid-template-columns: repeat(2, minmax(0, 1fr));
 	grid-gap: 5px;
 	width: 100vw;
-	max-width: 100%;
 	background-color: #36393e;
 	justify-content: center;
     align-items: center;
@@ -64,18 +64,32 @@ body::-webkit-scrollbar {
 
 #wideboy {
 	position:absolute;
-	width:200%;
-	overflow-x:auto;
 }
 
 </style>
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 <!-- <script src="./index.js" defer></script> -->
 <title>Search</title>
+
+<script>
+let width = window.innerWidth;
+var blocks = Math.floor((width-100)/100); // Set default block width based on screen res
+if (blocks < 1) { blocks = 1; }
+if (blocks > 10) { blocks = 10; }
+
+stylesheet = document.styleSheets[0]
+stylesheet.insertRule(".grid-container { grid-template-columns: repeat("+String(blocks)+", minmax(0, 1fr));}", 0);
+
+console.log(blocks);
+
+</script>
+
 </head>
 
-<body onload='setDefaultScroll()'>
+<body>
 	<div id='wideboy'> &nbsp </div> <!-- Makes page wider so it can scroll -->
+	<!--<h1 id='reporter' style='position:absolute;top:0px;'> Hello </h1>-->
+	<!--<h1 id='reporter2' style='position:absolute;top:30px;'> Hello2 </h1>-->
 	<div id="contentbox">
 		
 	</div>
@@ -86,15 +100,39 @@ body::-webkit-scrollbar {
 	
 	grid_xscale = [0,0.15,0.3,0.45,0.6,0.75,0.85,0.95,1.1]; // 1.1 is there for initial block scaling reference
 	
+	
+	var dragStartBlocks = 2;
+	var dragState = 0;
+	var dragStartX;
+	document.addEventListener("pointerdown", (event) => {
+		dragState = 1;
+		dragStartX = event.clientX;
+		dragStartBlocks = blocks;
+	});
+	
+	document.addEventListener("pointermove", (event) => {
+		if (dragState != 0) {
+			let currentX = event.clientX;
+			let newblocks = dragStartBlocks - Math.floor( (currentX-dragStartX+50)/100 )
+			if (newblocks>10) { newblocks = 10 };
+			if (newblocks<1) { newblocks = 1 };
+			//console.log(newblocks);
+			if (newblocks != blocks ) {
+				blocks = newblocks;
+				reblockGrid();
+			}
+		}
+	});
+	
+	document.addEventListener("pointerup", (event) => {
+		dragState = 0; // End dragging event
+	});
+	
 	var current_blocks = 2;
 	document.addEventListener("scroll", (event) => {
-		offset = window.pageXOffset;
-		document.getElementById("contentbox").style['left'] = offset;
-		percent = offset/window.innerWidth;
-		for (i = 0; i < grid_xscale.length; i++) { // Scan for highest grid_xscale index, then add 2 to get the grid width
-			if (grid_xscale[i]>=percent) { break; }
-		}
-		blocks = i+2;
+		//document.getElementById("reporter").innerHTML = window.pageXOffset;
+		//document.getElementById("reporter2").innerHTML = window.innerWidth;
+		console.log(blocks);
 		if (blocks != current_blocks) {
 			current_blocks = blocks;
 			setTimeout(reblockGrid(),1);
@@ -117,23 +155,13 @@ body::-webkit-scrollbar {
 		}
 		return newel;
 	}
-
-	function setDefaultScroll() {
-		let width = window.innerWidth;
-		blocks = Math.floor(width/100); // Set default block width based on screen res
-		if (blocks < 2) { blocks = 2; }
-		if (blocks > 10) { blocks = 10; }
-		let percent = grid_xscale[blocks-2];
-		let offset = width*percent;
-		setTimeout(function () {window.scrollTo(offset, 0)},1);
-	}
 	
 	for (let i=10; i > 0; i--) {
-		let newheader = mkElement("h1", "header"+String(i), "grouptitle");
+		let newheader = mkElement("h1", "header"+String(i), "grouptitle nodrag");
 		newheader.innerHTML = 'Season '+String(i)
 		document.getElementById("contentbox").appendChild(newheader);
 		
-		let newgroup =  mkElement("div", "group"+String(i), "grid-container");
+		let newgroup =  mkElement("div", "group"+String(i), "grid-container nodrag");
 		document.getElementById("contentbox").appendChild(newgroup);
 	}
 	
@@ -143,8 +171,6 @@ body::-webkit-scrollbar {
 		newimg.loading = 'lazy'
 		document.getElementById("group"+String(Math.floor((i-1)/100)+1)).appendChild(newimg);
 	}
-	
-
 	
 </script>
 
