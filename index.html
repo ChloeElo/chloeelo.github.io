@@ -1,42 +1,63 @@
 <html>
-<meta
-	name="viewport"
-	content="width=device-width initial-scale=1 user-scalable=yes"
-	/>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0', shrink-to-fit=no">
 <head>
 <style>
 
 body {
 	min-width: 300px;
-	background-color: black;
+	background-color: #36393e;
 	margin: 0;
+	overflow:auto;
+	-ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
     text-align: center;
 	//position: fixed; // Like voodoo magic this fixes the content-box width issue
 }
 
+body::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+}
+
 #contentbox {
 	display: flex;
+	position: absolute;
 	flex-wrap: wrap;
+	overflow: auto;
 	margin: auto;
 	width: 100%;
-	background-color: white;
-	padding: 0px;
+	padding-top: 5px;
 }
 
 .grid-container {
 	display: grid;
-	grid-template-columns: repeat(3, minmax(0, 1fr));
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-gap: 5px;
 	width: 100vw;
 	max-width: 100%;
-	background-color: gray;
-	
+	background-color: #36393e;
+	justify-content: center;
+    align-items: center;
+    overflow: hidden;
+	padding-top: 5px;
 }
 
 .image {
 	max-width: 100%;
 	max-height: 100%;
-	object-fit: contain;
+	object-fit: cover;
 	aspect-ratio: 1;
+	border-radius: 10px;
+}
+
+.image:hover {
+	outline: #9CFF00 solid 4px;
+	transition:100ms;
+}
+
+#wideboy {
+	position:absolute;
+	width:200%;
+	overflow-x:auto;
 }
 
 </style>
@@ -46,7 +67,9 @@ body {
 </head>
 
 <body>
-	<h1> Header </h1>
+	<div id='wideboy'> &nbsp </div> <!-- Makes page wider so it can scroll -->
+	
+	<h1 id='Header'> Header </h1>
 	<div id="contentbox">
 		
 	</div>
@@ -59,7 +82,25 @@ body {
 		const width = window.innerWidth;
 		const height = window.innerHeight;
 		console.log(`The viewport's width is ${width} and the height is ${height}.`);
+		header = document.getElementById("Header");
+		header.innerHTML = String(width)
 	});
+	
+	grid_xscale = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7];
+	
+	document.addEventListener("scroll", (event) => {
+		offset = window.pageXOffset;
+		document.getElementById("contentbox").style['left'] = offset;
+		percent = offset/window.innerWidth;
+		console.log(percent);
+		for (i = 0; i < grid_xscale.length; i++) { // Scan for highest grid_xscale index, then add 2 to get the grid width
+			if (grid_xscale[i]>=percent) { break; }
+		}
+		blocks = i+2;
+		console.log(blocks);
+		group = document.getElementById("group");
+		group.style["grid-template-columns"] = 'repeat('+String(blocks)+', minmax(0, 1fr))';
+	})
 	
 	function mkElement(type, id, clas) {
 		let newel = document.createElement(type);
@@ -75,13 +116,14 @@ body {
 	let newgroup =  mkElement("div", "group", "grid-container");
 	document.getElementById("contentbox").appendChild(newgroup);
 	
-	for (let i=200; i < 700; i++) {
+	for (let i=995; i > 900; i--) {
 		let newimg = mkElement("img", "img"+String(i), "image");
 		newimg.src = 'Images/'+String(i).padStart(3,'0')+'.webp'
 		newimg.loading = 'lazy'
 		newgroup.appendChild(newimg);
 	}
 	
+
 	
 </script>
 
