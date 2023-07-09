@@ -11,7 +11,6 @@ body {
 	-ms-overflow-style: none;  /* Internet Explorer 10+ */
     scrollbar-width: none;  /* Firefox */
     text-align: center;
-	//position: fixed; // Like voodoo magic this fixes the content-box width issue
 }
 
 body::-webkit-scrollbar { 
@@ -19,13 +18,13 @@ body::-webkit-scrollbar {
 }
 
 #contentbox {
-	display: flex;
 	position: absolute;
-	flex-wrap: wrap;
-	overflow: auto;
-	margin: auto;
 	width: 100%;
-	padding-top: 5px;
+}
+
+.grouptitle {
+	color: white;
+	font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif;
 }
 
 .grid-container {
@@ -49,6 +48,15 @@ body::-webkit-scrollbar {
 	border-radius: 10px;
 }
 
+.nodrag {
+	user-drag: none;
+    -webkit-user-drag: none;
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
 .image:hover {
 	outline: #9CFF00 solid 4px;
 	transition:100ms;
@@ -66,10 +74,8 @@ body::-webkit-scrollbar {
 <title>Search</title>
 </head>
 
-<body>
+<body onload='setDefaultScroll()'>
 	<div id='wideboy'> &nbsp </div> <!-- Makes page wider so it can scroll -->
-	
-	<h1 id='Header'> Header </h1>
 	<div id="contentbox">
 		
 	</div>
@@ -78,29 +84,28 @@ body::-webkit-scrollbar {
 
 <script>
 	
-	window.addEventListener("resize", () => {
-		const width = window.innerWidth;
-		const height = window.innerHeight;
-		console.log(`The viewport's width is ${width} and the height is ${height}.`);
-		header = document.getElementById("Header");
-		header.innerHTML = String(width)
-	});
+	grid_xscale = [0,0.15,0.3,0.45,0.6,0.75,0.85,0.95,1.1]; // 1.1 is there for initial block scaling reference
 	
-	grid_xscale = [0,0.1,0.2,0.3,0.4,0.5,0.6,0.7];
-	
+	var current_blocks = 2;
 	document.addEventListener("scroll", (event) => {
 		offset = window.pageXOffset;
 		document.getElementById("contentbox").style['left'] = offset;
 		percent = offset/window.innerWidth;
-		console.log(percent);
 		for (i = 0; i < grid_xscale.length; i++) { // Scan for highest grid_xscale index, then add 2 to get the grid width
 			if (grid_xscale[i]>=percent) { break; }
 		}
 		blocks = i+2;
-		console.log(blocks);
-		group = document.getElementById("group");
-		group.style["grid-template-columns"] = 'repeat('+String(blocks)+', minmax(0, 1fr))';
+		if (blocks != current_blocks) {
+			current_blocks = blocks;
+			setTimeout(reblockGrid(),1);
+		}
 	})
+	
+	function reblockGrid() {
+		document.querySelectorAll('.grid-container').forEach((group) => {
+			group.style["grid-template-columns"] = 'repeat('+String(blocks)+', minmax(0, 1fr))';
+		});
+	}
 	
 	function mkElement(type, id, clas) {
 		let newel = document.createElement(type);
@@ -112,15 +117,31 @@ body::-webkit-scrollbar {
 		}
 		return newel;
 	}
+
+	function setDefaultScroll() {
+		let width = window.innerWidth;
+		blocks = Math.floor(width/100); // Set default block width based on screen res
+		if (blocks < 2) { blocks = 2; }
+		if (blocks > 10) { blocks = 10; }
+		let percent = grid_xscale[blocks-2];
+		let offset = width*percent;
+		setTimeout(function () {window.scrollTo(offset, 0)},1);
+	}
 	
-	let newgroup =  mkElement("div", "group", "grid-container");
-	document.getElementById("contentbox").appendChild(newgroup);
+	for (let i=10; i > 0; i--) {
+		let newheader = mkElement("h1", "header"+String(i), "grouptitle");
+		newheader.innerHTML = 'Season '+String(i)
+		document.getElementById("contentbox").appendChild(newheader);
+		
+		let newgroup =  mkElement("div", "group"+String(i), "grid-container");
+		document.getElementById("contentbox").appendChild(newgroup);
+	}
 	
-	for (let i=995; i > 900; i--) {
-		let newimg = mkElement("img", "img"+String(i), "image");
-		newimg.src = 'Images/'+String(i).padStart(3,'0')+'.webp'
+	for (let i=996; i > 0; i--) {
+		let newimg = mkElement("img", "img"+String(i), "image nodrag");
+		newimg.src = 'Images/'+String(i)+'.webp'
 		newimg.loading = 'lazy'
-		newgroup.appendChild(newimg);
+		document.getElementById("group"+String(Math.floor((i-1)/100)+1)).appendChild(newimg);
 	}
 	
 
