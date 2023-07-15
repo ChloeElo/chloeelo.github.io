@@ -4,9 +4,15 @@
 <head>
 <style>
 
+@font-face {
+    font-family: WildWords;
+    src: url(wildwords.ttf);
+}
+
 body {
 	position:absolute;
-	background-color: #36393e;
+	background-color: black;
+	justify-content: center;
 	margin: 0;
 	overflow:auto;
 	-ms-overflow-style: none;  /* Internet Explorer 10+ */
@@ -22,18 +28,58 @@ body::-webkit-scrollbar {
 #contentbox {
 	position: absolute;
 	width: 100vw;
+	padding-top: 75px;
+}
+
+#searchbox {
+	position: fixed;
+	justify-content: center;
+    align-items: center;
+	text-align: center;
+	margin: 0,auto;
+	height: 75px;
+	width: 100vw;
+	display:flex;
+}
+
+#searchbar {
+	justify-content: center;
+    align-items: center;
+	text-align: center;
+	margin: auto;
+	background-color: #4a4c51;
+	width:90%;
+	height:fit-content;
+	min-height:24px;
+	color: #C0C0C0;
+	font-size: 16pt;
+	font-family: sans-serif;
+	border-radius: 20px;
+	opacity: 0.7;
+	padding-top:5px;
+	padding-bottom:5px;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+#searchbar:hover {
+	opacity:1;
+	transition:200ms;
 }
 
 .grouptitle {
 	color: white;
-	font-family: 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', sans-serif;
+	font-family: sans-serif;
+	color: #808080;
+	font-size: 24pt;
+	margin: 0;
 }
 
 .grid-container {
 	display: grid;
 	grid-gap: 5px;
 	width: 100vw;
-	background-color: #36393e;
+	background-color: #black;
 	justify-content: center;
     align-items: center;
     overflow: hidden;
@@ -62,8 +108,57 @@ body::-webkit-scrollbar {
 	transition:100ms;
 }
 
-#wideboy {
-	position:absolute;
+.hidden {
+	transition: opacity 0.75s ease-out !important;
+    opacity: 0 !important;
+    height: 0;
+    overflow: hidden !important;
+}
+
+#tagbox {
+	position:fixed;
+	width:100vw;
+	height:100vh;
+	overflow:hidden;
+	transition: opacity 0.5s ease-in;
+}
+
+#sunglasses {
+	position:fixed;
+	background-color: black;
+	opacity:0.8;
+	transition: opacity 0.5s ease-in;
+	width:100vw;
+	height:100vh;
+}
+
+#taglist {
+	width:100%;
+	height:fit-content;
+	max-height:calc(100vh - 75px);
+	display: inline-flex;
+	flex-flow: wrap;
+	justify-content: center;
+	margin-top: 75px;
+	overflow-y:auto;
+}
+
+.tag_bubble {
+	background-color: #808080;
+	color: white;
+	font-family: sans-serif;
+	font-size: 14pt;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:5px;
+	padding-bottom:5px;
+	margin-left:5px;
+	margin-right:5px;
+	margin-top:5px;
+	margin-bottom:5px;
+	border-radius: 10px;
+	height:fit-content;
+	opacity:0.9;
 }
 
 </style>
@@ -75,7 +170,7 @@ body::-webkit-scrollbar {
 let width = window.innerWidth;
 var blocks = Math.floor((width-100)/100); // Set default block width based on screen res
 if (blocks < 1) { blocks = 1; }
-if (blocks > 10) { blocks = 10; }
+if (blocks > 5) { blocks = 5; }
 
 stylesheet = document.styleSheets[0]
 stylesheet.insertRule(".grid-container { grid-template-columns: repeat("+String(blocks)+", minmax(0, 1fr));}", 0);
@@ -87,18 +182,37 @@ console.log(blocks);
 </head>
 
 <body>
-	<div id='wideboy'> &nbsp </div> <!-- Makes page wider so it can scroll -->
 	<!--<h1 id='reporter' style='position:absolute;top:0px;'> Hello </h1>-->
 	<!--<h1 id='reporter2' style='position:absolute;top:30px;'> Hello2 </h1>-->
-	<div id="contentbox">
-		
+	<div id="contentbox"></div>
+	<div id='sunglasses' class="hidden"> </div>
+	<div id='tagbox' class="hidden">
+		<div id='taglist' class="flex-container"></div>
 	</div>
+	<div id='searchbox'>
+		<h1 id="searchbar" class="nodrag" onclick="showTags()">Search...</h1>
+	</div>
+	
+	
 
 </body>
+
+<script src="data.js"></script>
 
 <script>
 	
 	grid_xscale = [0,0.15,0.3,0.45,0.6,0.75,0.85,0.95,1.1]; // 1.1 is there for initial block scaling reference
+	
+	var minblocks = Math.ceil(window.innerWidth/800); // Don't force upscale of images
+	
+	window.addEventListener("resize", (event) => { // If the browser expands, expand minblocks - TODO make sure minblocks and maxblocks don't nonintersect
+		console.log('resize');
+		minblocks = Math.ceil(window.innerWidth/800);
+		if (blocks < minblocks) {
+			blocks = minblocks;
+			reblockGrid()
+		}
+	});
 	
 	
 	var dragStartBlocks = 2;
@@ -114,9 +228,8 @@ console.log(blocks);
 		if (dragState != 0) {
 			let currentX = event.clientX;
 			let newblocks = dragStartBlocks - Math.floor( (currentX-dragStartX+50)/100 )
-			if (newblocks>10) { newblocks = 10 };
-			if (newblocks<1) { newblocks = 1 };
-			//console.log(newblocks);
+			if (newblocks>20) { newblocks = 20 }; // Cap block width to 20
+			if (newblocks<minblocks) { newblocks = minblocks };
 			if (newblocks != blocks ) {
 				blocks = newblocks;
 				reblockGrid();
@@ -130,9 +243,6 @@ console.log(blocks);
 	
 	var current_blocks = 2;
 	document.addEventListener("scroll", (event) => {
-		//document.getElementById("reporter").innerHTML = window.pageXOffset;
-		//document.getElementById("reporter2").innerHTML = window.innerWidth;
-		console.log(blocks);
 		if (blocks != current_blocks) {
 			current_blocks = blocks;
 			setTimeout(reblockGrid(),1);
@@ -156,21 +266,141 @@ console.log(blocks);
 		return newel;
 	}
 	
-	for (let i=10; i > 0; i--) {
-		let newheader = mkElement("h1", "header"+String(i), "grouptitle nodrag");
-		newheader.innerHTML = 'Season '+String(i)
-		document.getElementById("contentbox").appendChild(newheader);
-		
-		let newgroup =  mkElement("div", "group"+String(i), "grid-container nodrag");
-		document.getElementById("contentbox").appendChild(newgroup);
+	var valid_images = []
+	downselect()
+	
+	function redrawImages() {
+		console.log(valid_images);
+		const contentbox = document.getElementById("contentbox");
+		while (contentbox.lastElementChild) { // Clear contentbox
+			contentbox.removeChild(contentbox.lastElementChild);
+		}
+		for (let i=10; i > 0; i--) {
+			let newheader = mkElement("h2", "header"+String(i), "grouptitle nodrag");
+			newheader.innerHTML = 'Season '+String(i)
+			document.getElementById("contentbox").appendChild(newheader);
+			
+			let newgroup =  mkElement("div", "group"+String(i), "grid-container nodrag");
+			document.getElementById("contentbox").appendChild(newgroup);
+		}
+		for (let i=996; i > 0; i--) {
+			if ( valid_images.includes(i) ) {
+				let newimg = mkElement("img", "img"+String(i), "image nodrag");
+				newimg.src = 'Images/'+String(i)+'.webp'
+				newimg.loading = 'lazy'
+				document.getElementById("group"+String(Math.floor((i-1)/100)+1)).appendChild(newimg);
+			}
+		}
+	}
+	redrawImages()
+	
+	var showtags = 0;
+	function showTags() {
+		if (showtags==0) {
+			document.getElementById("tagbox").classList.remove("hidden");
+			document.getElementById("sunglasses").classList.remove("hidden");
+			showtags = 1;
+		}
+		else {
+			document.getElementById("tagbox").classList.add("hidden");
+			document.getElementById("sunglasses").classList.add("hidden");
+			showtags = 0;
+		}
 	}
 	
-	for (let i=996; i > 0; i--) {
-		let newimg = mkElement("img", "img"+String(i), "image nodrag");
-		newimg.src = 'Images/'+String(i)+'.webp'
-		newimg.loading = 'lazy'
-		document.getElementById("group"+String(Math.floor((i-1)/100)+1)).appendChild(newimg);
+	function modifySelection(tag,change) { // change can be "add" "sub" "rem" "set"
+		if ( tag.includes(" ") ) { tag = tag.substr(0,tag.indexOf(" ")); } // Get rid of num after the space
+		selection = document.getElementById("searchbar");
+		if (change=="set") {
+			selection.innerHTML = tag; downselect();
+		}
+		else if ( change=="add" ) {
+			selection.innerHTML = selection.innerHTML + " " + tag;
+		}
+		else if ( change=="rem" ) {
+			selection.innerHTML = selection.innerHTML.replace(tag,"").replace("  "," ");
+			if (selection.innerHTML[0] = " ") { selection.innerHTML = selection.innerHTML.substr(1); } // Remove space at start from removing first tag
+		}
+		else if ( change=='sub' ) {
+			let index = selection.innerHTML.indexOf(tag);
+			selection.innerHTML = selection.innerHTML.slice(0,index) + "-" + selection.innerHTML.slice(index);
+		}
+		if ( selection.innerHTML.includes("Search... ") ) { selection.innerHTML=selection.innerHTML.replace("Search... ",""); }
+		else if ( selection.innerHTML=="" || selection.innerHTML==" " ) { selection.innerHTML="Search..."; }
+		downselect()
+		redrawImages() 
 	}
+	
+	function contains(these,inthis){ if (these.length==0) { return 1 } else { return these.every(i => inthis.includes(i)); } } // Self explanatory
+	function excludes(these,inthis){ if (these.length==0) { return 1 } else { return !these.some(i => inthis.includes(i)); } } // Self explanatory
+	
+	function downselect() { // Regenerate tag selection options based on current search selection
+		let selection = document.getElementById("searchbar");
+		let include = []
+		let exclude = []
+		valid_images = []
+		
+		console.log(selection.innerHTML)
+		console.log(["Search...",""].includes(selection.innerHTML))
+		
+		if ( !["Search...",""].includes(selection.innerHTML) ) {
+			selection = selection.innerHTML.split(" ");
+			for (let i=0; i < selection.length; i++){
+				if (selection[i][0]=="-") { exclude.push(selection[i].substr(1)) }
+				else { include.push(selection[i]) }
+			}
+		}
+		
+		let counts = {}
+		for (let i=0; i < search_tags.length; i++){ counts[search_tags[i]] = 0 }
+		
+		for (let i=0; i < image_tags.length; i++){
+			img_tags = image_tags[i]
+			if ( contains(include,img_tags) && excludes(exclude,img_tags) ) {
+				valid_images.push(i+1);
+				for (let i=0; i < img_tags.length; i++){
+					if ( !include.includes(img_tags[i]) && !exclude.includes(img_tags[i]) ) {
+						counts[img_tags[i]] += 1;
+					}
+				}
+			}
+		}
+		
+		const taglist = document.getElementById("taglist");
+		while (taglist.lastElementChild) { // Clear taglist
+			taglist.removeChild(taglist.lastElementChild);
+		}
+		
+		for (let i=0; i < include.length; i++) { // Green bubbles for included tags
+			tag = include[i];
+			let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
+			tag_bubble.style.backgroundColor = "green";
+			tag_bubble.innerHTML = tag;
+			tag_bubble.onclick = function() { modifySelection(tag_bubble.innerHTML,'sub'); };
+			taglist.appendChild(tag_bubble)
+		}
+		
+		for (let i=0; i < exclude.length; i++) { // Red bubbles for excluded tags
+			tag = exclude[i];
+			let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
+			tag_bubble.style.backgroundColor = "red";
+			tag_bubble.innerHTML = tag;
+			tag_bubble.onclick = function() { modifySelection(tag_bubble.innerHTML,'rem'); };
+			taglist.appendChild(tag_bubble)
+		}
+		
+		
+		for (tag in counts) {
+			if (counts[tag]>0) {
+				let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
+				tag_bubble.innerHTML = tag + " (" + String(counts[tag]) + ")";
+				tag_bubble.onclick = function() { modifySelection(tag_bubble.innerHTML,'add'); };
+				taglist.appendChild(tag_bubble)
+			}
+		}
+	}
+	
+	
 	
 </script>
 
