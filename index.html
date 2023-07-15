@@ -113,6 +113,7 @@ body::-webkit-scrollbar {
     opacity: 0 !important;
     height: 0;
     overflow: hidden !important;
+	pointer-events: none;
 }
 
 #tagbox {
@@ -309,6 +310,7 @@ console.log(blocks);
 	}
 	
 	function modifySelection(tag,change) { // change can be "add" "sub" "rem" "set"
+		console.log(tag)
 		if ( tag.includes(" ") ) { tag = tag.substr(0,tag.indexOf(" ")); } // Get rid of num after the space
 		selection = document.getElementById("searchbar");
 		if (change=="set") {
@@ -318,8 +320,11 @@ console.log(blocks);
 			selection.innerHTML = selection.innerHTML + " " + tag;
 		}
 		else if ( change=="rem" ) {
-			selection.innerHTML = selection.innerHTML.replace(tag,"").replace("  "," ");
-			if (selection.innerHTML[0] = " ") { selection.innerHTML = selection.innerHTML.substr(1); } // Remove space at start from removing first tag
+			selection.innerHTML = selection.innerHTML.replace(tag,"")
+			let list_tags = selection.innerHTML.split(" ");
+			list_tags = list_tags.filter(function(el) { return el; }); // Get rid of empty spaces
+			selection.innerHTML = list_tags.join(" ");
+			
 		}
 		else if ( change=='sub' ) {
 			let index = selection.innerHTML.indexOf(tag);
@@ -385,7 +390,7 @@ console.log(blocks);
 			let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
 			tag_bubble.style.backgroundColor = "red";
 			tag_bubble.innerHTML = tag;
-			tag_bubble.onclick = function() { modifySelection(tag_bubble.innerHTML,'rem'); };
+			tag_bubble.onclick = function() { modifySelection('-'+tag_bubble.innerHTML,'rem'); };
 			taglist.appendChild(tag_bubble)
 		}
 		
