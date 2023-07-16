@@ -140,12 +140,24 @@ body::-webkit-scrollbar {
 #taglist {
 	width:100%;
 	height:fit-content;
-	max-height:calc(100vh - 75px);
+	max-height:calc(100vh - 90px);
 	display: inline-flex;
 	flex-flow: wrap;
 	justify-content: center;
-	margin-top: 75px;
 	overflow-y:auto;
+}
+
+#searchoptions {
+	width:100%;
+	height:30px;
+	margin-top: 65px;
+}
+
+#jumpto {
+	width:125px;
+	height:20px;
+	border-radius:10px;
+	text-align: center;
 }
 
 #imgtaglist {
@@ -222,6 +234,7 @@ body::-webkit-scrollbar {
 	<div id="contentbox"></div>
 	<div id='sunglasses' class="hidden"> </div>
 	<div id='tagbox' class="hidden">
+		<div id='searchoptions'> <input type="number" id="jumpto" min="1" max="998" placeholder="Jump to number..." onkeypress="jumpTo(event)"> </div>
 		<div id='taglist' class="flex-container"></div>
 		<div id='taglist_below' onclick="showTags()" style="width:100%;height:100vh;"></div>
 	</div>
@@ -264,6 +277,27 @@ body::-webkit-scrollbar {
 			reblockGrid()
 		}
 	});
+	
+	function jumpTo(event) {
+		if (event=='bypass' || event.keyCode==13) { // Return key
+			let num = document.getElementById("jumpto").value;
+			if(num=="") {return}
+			else { num=Number(num); }
+			if (num<1) { num = 1; }
+			else if (num>998) { num = 998; }
+			document.getElementById("jumpto").value = num;
+			if (!valid_images.includes(num)) { modifySelection("","set") } // If num not in selection, reset to include all
+			let image = document.getElementById("img" + String(num) )
+			blocks=minblocks;
+			reblockGrid()
+			image.scrollIntoView(false);
+			//window.scrollBy(0,window.innerHeight/2);
+			document.getElementById("tagbox").classList.add("hidden");
+			document.getElementById("sunglasses").classList.add("hidden");
+			showtags = 0;
+			image.focus();
+		}
+	}
 	
 	function switchMode() {
 		if (mode=='Images') {
@@ -363,7 +397,17 @@ body::-webkit-scrollbar {
 	}
 	
 	var valid_images = []
-	downselect()
+	
+	urlParams = new URLSearchParams(window.location.search);
+	paramselection = urlParams.get('search'); // Parameter for default search
+	if (paramselection) { modifySelection(paramselection.replace("%20"," "),'set'); }
+	else { downselect(); redrawImages(); }
+	
+	goto_num = urlParams.get('num'); // Parameter to jump to image num
+	if (goto_num) {
+		document.getElementById("jumpto").value = Number(goto_num);
+		setTimeout(() => { jumpTo('bypass'); }, "200");
+	}
 	
 	function redrawImages() {
 		const contentbox = document.getElementById("contentbox");
@@ -378,7 +422,7 @@ body::-webkit-scrollbar {
 			let newgroup =  mkElement("div", "group"+String(i), "grid-container nodrag");
 			document.getElementById("contentbox").appendChild(newgroup);
 		}
-		for (let i=997; i > 0; i--) {
+		for (let i=998; i > 0; i--) {
 			if ( valid_images.includes(i) ) {
 				let newimg;
 				if (mode=='Images') { newimg = mkElement("img", "img"+String(i), "image nodrag"); }
@@ -390,8 +434,6 @@ body::-webkit-scrollbar {
 			}
 		}
 	}
-	
-	redrawImages()
 	
 	var showtags = 0;
 	function showTags() {
@@ -409,12 +451,12 @@ body::-webkit-scrollbar {
 	
 	function modifySelection(tag,change) { // change to selection bar can be "add" "sub" "rem" "set"
 
-		if ( tag.includes(" ") ) { tag = tag.substr(0,tag.indexOf(" ")); } // Get rid of num after the space
 		selection = document.getElementById("searchbar");
 		if (change=="set") {
 			selection.innerHTML = tag;
 		}
 		else {
+			if ( tag.includes(" ") ) { tag = tag.substr(0,tag.indexOf(" ")); } // Get rid of num after the space
 			selection_list = selection.innerHTML.split(" ");
 			selection_list = selection_list.filter(tag => !tag.includes(')'));
 			selection.innerHTML = selection_list.join(" ");
