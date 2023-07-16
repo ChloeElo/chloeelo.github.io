@@ -79,11 +79,11 @@ body::-webkit-scrollbar {
 	display: grid;
 	grid-gap: 5px;
 	width: 100vw;
-	background-color: #black;
 	justify-content: center;
     align-items: center;
     overflow: hidden;
 	padding-top: 5px;
+	padding-bottom: 5px;
 }
 
 .image {
@@ -144,6 +144,15 @@ body::-webkit-scrollbar {
 	overflow-y:auto;
 }
 
+#imgtaglist {
+	width:100%;
+	height:fit-content;
+	display: inline-flex;
+	flex-flow: wrap;
+	justify-content: center;
+	overflow-y:auto;
+}
+
 .tag_bubble {
 	background-color: #808080;
 	color: white;
@@ -162,36 +171,36 @@ body::-webkit-scrollbar {
 	opacity:0.9;
 }
 
+#focusbox {
+	background-color: black;
+	position:fixed;
+	height:100vh;
+	width:100vw;
+	opacity:1;
+	transition: opacity 0.5s ease-in;
+}
+
 </style>
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 <!-- <script src="./index.js" defer></script> -->
 <title>Search</title>
 
-<script>
-let width = window.innerWidth;
-var blocks = Math.floor((width-100)/100); // Set default block width based on screen res
-if (blocks < 1) { blocks = 1; }
-if (blocks > 5) { blocks = 5; }
-
-stylesheet = document.styleSheets[0]
-stylesheet.insertRule(".grid-container { grid-template-columns: repeat("+String(blocks)+", minmax(0, 1fr));}", 0);
-
-console.log(blocks);
-
-</script>
-
 </head>
 
 <body>
-	<!--<h1 id='reporter' style='position:absolute;top:0px;'> Hello </h1>-->
-	<!--<h1 id='reporter2' style='position:absolute;top:30px;'> Hello2 </h1>-->
 	<div id="contentbox"></div>
 	<div id='sunglasses' class="hidden"> </div>
 	<div id='tagbox' class="hidden">
 		<div id='taglist' class="flex-container"></div>
+		<div id='taglist_below' onclick="showTags()" style="width:100%;height:100vh;"></div>
 	</div>
 	<div id='searchbox'>
 		<h1 id="searchbar" class="nodrag" onclick="showTags()">Search...</h1>
+	</div>
+	<div id="focusbox" class="hidden">
+		<img id='focusimg' onclick="hideFocus()" style="object-fit:contain;max-height:70vh;width:100vw;" src="Images/484.webp">
+		<div id='imgtaglist' class="flex-container"></div>
+		<div id='imgtaglist_below' onclick="hideFocus()" style="width:100%;height:100vh;"></div>
 	</div>
 	
 	
@@ -202,30 +211,62 @@ console.log(blocks);
 
 <script>
 	
-	grid_xscale = [0,0.15,0.3,0.45,0.6,0.75,0.85,0.95,1.1]; // 1.1 is there for initial block scaling reference
+	let width = window.innerWidth;
+	var blocks = Math.floor((width-100)/100); // Set default block width based on screen res
+	if (blocks < 1) { blocks = 1; }
+	if (blocks > 5) { blocks = 5; } // Cap block width to 5 on load to avoid lagginess when the browser has to load hundreds of images at once
+
+	stylesheet = document.styleSheets[0]
+	stylesheet.insertRule(".grid-container { grid-template-columns: repeat("+String(blocks)+", minmax(0, 1fr));}", 0);
+
+	console.log(blocks);
 	
-	var minblocks = Math.ceil(window.innerWidth/800); // Don't force upscale of images
+	grid_xscale = [0,0.15,0.3,0.45,0.6,0.75,0.85,0.95,1.1]; // 1.1 is there for initial block scaling reference - me much later, WTF does that mean?
+	
+	var minblocks = Math.ceil(window.innerWidth/800); // Don't force upscale of images past 800px - see below
 	
 	window.addEventListener("resize", (event) => { // If the browser expands, expand minblocks - TODO make sure minblocks and maxblocks don't nonintersect
 		console.log('resize');
-		minblocks = Math.ceil(window.innerWidth/800);
+		minblocks = Math.ceil(window.innerWidth/800); // N+1 minblock per 800px of width so images are never upscaled, only downscaled on the grid
 		if (blocks < minblocks) {
 			blocks = minblocks;
 			reblockGrid()
 		}
 	});
 	
+	function hideFocus() { document.getElementById("focusbox").classList.add("hidden"); }
 	
+	var focus_num = 0;
+	function focusImage(id) {
+		focus_num = Number(id.replace('img',""))-1;
+		document.getElementById("focusimg").src = 'Images/' + id.replace('img',"") + ".webp";
+		let img_tags = image_tags[focus_num]
+		const imgtaglist = document.getElementById("imgtaglist");
+		while (imgtaglist.lastElementChild) { // Clear imgtaglist
+			imgtaglist.removeChild(imgtaglist.lastElementChild);
+		}
+		for (let i=0; i < img_tags.length; i++) {
+			let tag = img_tags[i];
+			console.log(tag);
+			let imgtag_bubble = mkElement("h3", "imgtag_"+tag, "tag_bubble nodrag");
+			imgtag_bubble.innerHTML = tag;
+			imgtag_bubble.onclick = function() { modifySelection(imgtag_bubble.innerHTML,'set');  hideFocus(); };
+			console.log(imgtag_bubble);
+			imgtaglist.appendChild(imgtag_bubble);
+		}
+		document.getElementById("focusbox").classList.remove("hidden");
+	}
+
 	var dragStartBlocks = 2;
 	var dragState = 0;
 	var dragStartX;
-	document.addEventListener("pointerdown", (event) => {
+	contentbox.addEventListener("pointerdown", (event) => {
 		dragState = 1;
 		dragStartX = event.clientX;
 		dragStartBlocks = blocks;
 	});
 	
-	document.addEventListener("pointermove", (event) => {
+	contentbox.addEventListener("pointermove", (event) => {
 		if (dragState != 0) {
 			let currentX = event.clientX;
 			let newblocks = dragStartBlocks - Math.floor( (currentX-dragStartX+50)/100 )
@@ -238,12 +279,12 @@ console.log(blocks);
 		}
 	});
 	
-	document.addEventListener("pointerup", (event) => {
+	contentbox.addEventListener("pointerup", (event) => {
 		dragState = 0; // End dragging event
 	});
 	
 	var current_blocks = 2;
-	document.addEventListener("scroll", (event) => {
+	contentbox.addEventListener("scroll", (event) => {
 		if (blocks != current_blocks) {
 			current_blocks = blocks;
 			setTimeout(reblockGrid(),1);
@@ -271,7 +312,6 @@ console.log(blocks);
 	downselect()
 	
 	function redrawImages() {
-		console.log(valid_images);
 		const contentbox = document.getElementById("contentbox");
 		while (contentbox.lastElementChild) { // Clear contentbox
 			contentbox.removeChild(contentbox.lastElementChild);
@@ -284,15 +324,17 @@ console.log(blocks);
 			let newgroup =  mkElement("div", "group"+String(i), "grid-container nodrag");
 			document.getElementById("contentbox").appendChild(newgroup);
 		}
-		for (let i=996; i > 0; i--) {
+		for (let i=997; i > 0; i--) {
 			if ( valid_images.includes(i) ) {
 				let newimg = mkElement("img", "img"+String(i), "image nodrag");
-				newimg.src = 'Images/'+String(i)+'.webp'
+				newimg.src = 'Images/'+String(i)+'.webp';
+				newimg.onclick = function() { focusImage(newimg.id); };
 				newimg.loading = 'lazy'
 				document.getElementById("group"+String(Math.floor((i-1)/100)+1)).appendChild(newimg);
 			}
 		}
 	}
+	
 	redrawImages()
 	
 	var showtags = 0;
@@ -309,8 +351,8 @@ console.log(blocks);
 		}
 	}
 	
-	function modifySelection(tag,change) { // change can be "add" "sub" "rem" "set"
-		console.log(tag)
+	function modifySelection(tag,change) { // change to selection bar can be "add" "sub" "rem" "set"
+
 		if ( tag.includes(" ") ) { tag = tag.substr(0,tag.indexOf(" ")); } // Get rid of num after the space
 		selection = document.getElementById("searchbar");
 		if (change=="set") {
@@ -345,9 +387,6 @@ console.log(blocks);
 		let exclude = []
 		valid_images = []
 		
-		console.log(selection.innerHTML)
-		console.log(["Search...",""].includes(selection.innerHTML))
-		
 		if ( !["Search...",""].includes(selection.innerHTML) ) {
 			selection = selection.innerHTML.split(" ");
 			for (let i=0; i < selection.length; i++){
@@ -356,15 +395,15 @@ console.log(blocks);
 			}
 		}
 		
-		let counts = {}
-		for (let i=0; i < search_tags.length; i++){ counts[search_tags[i]] = 0 }
+		let counts = {} // Tagcounts are shown next to tag names
+		for (let i=0; i < search_tags.length; i++){ counts[search_tags[i]] = 0 } // Reset all to 0 before we start counting
 		
 		for (let i=0; i < image_tags.length; i++){
 			img_tags = image_tags[i]
-			if ( contains(include,img_tags) && excludes(exclude,img_tags) ) {
+			if ( contains(include,img_tags) && excludes(exclude,img_tags) ) { // Check that valid images have tags matching searchbar filter
 				valid_images.push(i+1);
 				for (let i=0; i < img_tags.length; i++){
-					if ( !include.includes(img_tags[i]) && !exclude.includes(img_tags[i]) ) {
+					if ( !include.includes(img_tags[i]) && !exclude.includes(img_tags[i]) ) { // Don't actually count the tags in the searchbar tho
 						counts[img_tags[i]] += 1;
 					}
 				}
@@ -394,9 +433,8 @@ console.log(blocks);
 			taglist.appendChild(tag_bubble)
 		}
 		
-		
 		for (tag in counts) {
-			if (counts[tag]>0) {
+			if (counts[tag]>0) { // Grey bubbles for all the remaining tags that can still be applied
 				let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
 				tag_bubble.innerHTML = tag + " (" + String(counts[tag]) + ")";
 				tag_bubble.onclick = function() { modifySelection(tag_bubble.innerHTML,'add'); };
@@ -404,8 +442,6 @@ console.log(blocks);
 			}
 		}
 	}
-	
-	
 	
 </script>
 
