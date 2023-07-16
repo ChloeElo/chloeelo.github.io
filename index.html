@@ -70,7 +70,7 @@ body::-webkit-scrollbar {
 .grouptitle {
 	color: white;
 	font-family: sans-serif;
-	color: #808080;
+	color: #4a4c51;
 	font-size: 24pt;
 	margin: 0;
 }
@@ -87,11 +87,15 @@ body::-webkit-scrollbar {
 }
 
 .image {
-	max-width: 100%;
-	max-height: 100%;
+	width: 100%;
 	object-fit: cover;
 	aspect-ratio: 1;
 	border-radius: 10px;
+}
+
+.image_lines {
+	object-fit: contain;
+	outline: black solid 1px;
 }
 
 .nodrag {
@@ -104,7 +108,7 @@ body::-webkit-scrollbar {
 }
 
 .image:hover {
-	outline: #9CFF00 solid 4px;
+	outline: white solid 4px;
 	transition:100ms;
 }
 
@@ -180,6 +184,33 @@ body::-webkit-scrollbar {
 	transition: opacity 0.5s ease-in;
 }
 
+#colorbutton {
+	position:fixed;
+	top:0px;
+	left:0px;
+	width: 50px;
+	height: 50px;
+	background: conic-gradient(
+	from 180deg,
+	violet,
+	DodgerBlue,
+	yellowgreen,
+	yellow,
+	orange,
+	red,
+	violet
+	);
+	outline: black solid 1.5px;
+	margin: 12px;
+	border-radius: 50%;
+	opacity:0.5;
+}
+
+#colorbutton:hover {
+	opacity:1;
+	transition:100ms;
+}
+
 </style>
 <link rel="icon" type="image/x-icon" href="favicon.ico" />
 <!-- <script src="./index.js" defer></script> -->
@@ -197,8 +228,9 @@ body::-webkit-scrollbar {
 	<div id='searchbox'>
 		<h1 id="searchbar" class="nodrag" onclick="showTags()">Search...</h1>
 	</div>
+	<div id="colorbutton" onclick="switchMode()"></div>
 	<div id="focusbox" class="hidden">
-		<img id='focusimg' onclick="hideFocus()" style="object-fit:contain;max-height:70vh;width:100vw;" src="Images/484.webp">
+		<img id='focusimg' onclick="hideFocus()" style="object-fit:contain;max-height:80vh;width:100vw;image-rendering:pixelated;" src="Images/1.webp">
 		<div id='imgtaglist' class="flex-container"></div>
 		<div id='imgtaglist_below' onclick="hideFocus()" style="width:100%;height:100vh;"></div>
 	</div>
@@ -218,12 +250,11 @@ body::-webkit-scrollbar {
 
 	stylesheet = document.styleSheets[0]
 	stylesheet.insertRule(".grid-container { grid-template-columns: repeat("+String(blocks)+", minmax(0, 1fr));}", 0);
-
-	console.log(blocks);
 	
 	grid_xscale = [0,0.15,0.3,0.45,0.6,0.75,0.85,0.95,1.1]; // 1.1 is there for initial block scaling reference - me much later, WTF does that mean?
 	
 	var minblocks = Math.ceil(window.innerWidth/800); // Don't force upscale of images past 800px - see below
+	var mode = 'Images';
 	
 	window.addEventListener("resize", (event) => { // If the browser expands, expand minblocks - TODO make sure minblocks and maxblocks don't nonintersect
 		console.log('resize');
@@ -234,12 +265,37 @@ body::-webkit-scrollbar {
 		}
 	});
 	
+	function switchMode() {
+		if (mode=='Images') {
+			let images = document.getElementsByClassName("image");
+			for(let i=0; i < images.length; i++)
+			{
+				images[i].src = images[i].src.replace('Images','Lines');
+				images[i].classList.add("image_lines");
+			}
+			document.body.style.backgroundColor = "grey";
+			document.getElementById("focusimg").style.backgroundColor = "grey";
+			mode = 'Lines'
+		}
+		else if (mode=='Lines') {
+			let images = document.getElementsByClassName("image");
+			for(let i=0; i < images.length; i++)
+			{
+				images[i].src = images[i].src.replace('Lines','Images');
+				images[i].classList.remove("image_lines");
+			}
+			document.body.style.backgroundColor = "black";
+			document.getElementById("focusimg").style.backgroundColor = "black";
+			mode = 'Images'
+		}
+	}
+	
 	function hideFocus() { document.getElementById("focusbox").classList.add("hidden"); }
 	
 	var focus_num = 0;
 	function focusImage(id) {
 		focus_num = Number(id.replace('img',""))-1;
-		document.getElementById("focusimg").src = 'Images/' + id.replace('img',"") + ".webp";
+		document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp";
 		let img_tags = image_tags[focus_num]
 		const imgtaglist = document.getElementById("imgtaglist");
 		while (imgtaglist.lastElementChild) { // Clear imgtaglist
@@ -247,11 +303,9 @@ body::-webkit-scrollbar {
 		}
 		for (let i=0; i < img_tags.length; i++) {
 			let tag = img_tags[i];
-			console.log(tag);
 			let imgtag_bubble = mkElement("h3", "imgtag_"+tag, "tag_bubble nodrag");
 			imgtag_bubble.innerHTML = tag;
 			imgtag_bubble.onclick = function() { modifySelection(imgtag_bubble.innerHTML,'set');  hideFocus(); };
-			console.log(imgtag_bubble);
 			imgtaglist.appendChild(imgtag_bubble);
 		}
 		document.getElementById("focusbox").classList.remove("hidden");
@@ -326,8 +380,10 @@ body::-webkit-scrollbar {
 		}
 		for (let i=997; i > 0; i--) {
 			if ( valid_images.includes(i) ) {
-				let newimg = mkElement("img", "img"+String(i), "image nodrag");
-				newimg.src = 'Images/'+String(i)+'.webp';
+				let newimg;
+				if (mode=='Images') { newimg = mkElement("img", "img"+String(i), "image nodrag"); }
+				else if (mode=='Lines') { newimg = mkElement("img", "img"+String(i), "image image_lines nodrag"); }
+				newimg.src = mode+'/'+String(i)+'.webp';
 				newimg.onclick = function() { focusImage(newimg.id); };
 				newimg.loading = 'lazy'
 				document.getElementById("group"+String(Math.floor((i-1)/100)+1)).appendChild(newimg);
@@ -356,9 +412,14 @@ body::-webkit-scrollbar {
 		if ( tag.includes(" ") ) { tag = tag.substr(0,tag.indexOf(" ")); } // Get rid of num after the space
 		selection = document.getElementById("searchbar");
 		if (change=="set") {
-			selection.innerHTML = tag; downselect();
+			selection.innerHTML = tag;
 		}
-		else if ( change=="add" ) {
+		else {
+			selection_list = selection.innerHTML.split(" ");
+			selection_list = selection_list.filter(tag => !tag.includes(')'));
+			selection.innerHTML = selection_list.join(" ");
+		}
+		if ( change=="add" ) {
 			selection.innerHTML = selection.innerHTML + " " + tag;
 		}
 		else if ( change=="rem" ) {
@@ -388,10 +449,11 @@ body::-webkit-scrollbar {
 		valid_images = []
 		
 		if ( !["Search...",""].includes(selection.innerHTML) ) {
-			selection = selection.innerHTML.split(" ");
-			for (let i=0; i < selection.length; i++){
-				if (selection[i][0]=="-") { exclude.push(selection[i].substr(1)) }
-				else { include.push(selection[i]) }
+			let selection_list = selection.innerHTML.split(" ");
+			selection_list = selection_list.filter(tag => !tag.includes(')'));
+			for (let i=0; i < selection_list.length; i++){
+				if (selection_list[i][0]=="-") { exclude.push(selection_list[i].substr(1)) }
+				else { include.push(selection_list[i]) }
 			}
 		}
 		
@@ -403,12 +465,15 @@ body::-webkit-scrollbar {
 			if ( contains(include,img_tags) && excludes(exclude,img_tags) ) { // Check that valid images have tags matching searchbar filter
 				valid_images.push(i+1);
 				for (let i=0; i < img_tags.length; i++){
-					if ( !include.includes(img_tags[i]) && !exclude.includes(img_tags[i]) ) { // Don't actually count the tags in the searchbar tho
+					//if ( !include.includes(img_tags[i]) && !exclude.includes(img_tags[i]) ) { // Don't actually count the tags in the searchbar tho
 						counts[img_tags[i]] += 1;
-					}
+					//}
 				}
 			}
 		}
+		
+		selection_list = selection.innerHTML.split(" ");
+		selection.innerHTML = selection_list.join(" ") + ' (' + String(valid_images.length) + ')';
 		
 		const taglist = document.getElementById("taglist");
 		while (taglist.lastElementChild) { // Clear taglist
@@ -434,7 +499,7 @@ body::-webkit-scrollbar {
 		}
 		
 		for (tag in counts) {
-			if (counts[tag]>0) { // Grey bubbles for all the remaining tags that can still be applied
+			if (counts[tag]>0 && !include.includes(tag) && !exclude.includes(tag)) { // Grey bubbles for all the remaining tags that can still be applied
 				let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
 				tag_bubble.innerHTML = tag + " (" + String(counts[tag]) + ")";
 				tag_bubble.onclick = function() { modifySelection(tag_bubble.innerHTML,'add'); };
