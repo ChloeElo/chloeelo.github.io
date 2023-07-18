@@ -226,8 +226,10 @@ body::-webkit-scrollbar {
 #focuslinks {
 	position:fixed;
 	bottom:0;
-	left:0;
+	left:50%;
+	transform: translateX(-50%);
 	width:100vw;
+	max-width:600px;
 	height:fit-content;
 	display: flex;
 	justify-content: space-between;
@@ -266,7 +268,10 @@ body::-webkit-scrollbar {
 			<img id='reddit' class="focusbar" src='Assets/b_reddit.png'>
 			<img id='twitter' class="focusbar" src='Assets/b_twitter.png'>
 			<img id='discord' class="focusbar" src='Assets/b_discord.png'>
-			<img id='hearts' class="focusbar" src='Assets/b_hearts.png'>
+			<div style='text-align:center;position:relative;'>
+				<img id='hearts' class="focusbar" src='Assets/b_hearts.png'>
+				<!-- <h4 style='position:absolute;color:white;top:40%;width:100%;margin:0px;'> 999 </h4> -->
+			</div>
 		</div>
 	</div>
 	
@@ -348,12 +353,13 @@ body::-webkit-scrollbar {
 		}
 	}
 	
-	function hideFocus() { document.getElementById("focusbox").classList.add("hidden"); }
+	function hideFocus() { document.getElementById("focusbox").classList.add("hidden"); } // document.exitFullscreen(); }
 	
 	var focus_num = 0;
 	function focusImage(id) {
 		focus_num = Number(id.replace('img',""))-1;
 		document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp";
+		//document.getElementById("focusbox").requestFullscreen();
 		let img_tags = image_tags[focus_num]
 		const imgtaglist = document.getElementById("imgtaglist");
 		while (imgtaglist.lastElementChild) { // Clear imgtaglist
@@ -373,9 +379,30 @@ body::-webkit-scrollbar {
 			document.getElementById("twitter").classList.remove("hidden");
 			if ( twitter_altnums.includes(focus_num+1) ) { twitter_account = "https://twitter.com/SrGrafo_Art/status/"; }
 			else { twitter_account = "https://twitter.com/ChloeLouvre/status/"; }
+			document.getElementById("twitter").onclick = function() { window.open(twitter_account+twitter_uris[focus_num]); }
 		}
 		else { document.getElementById("twitter").classList.add("hidden"); }
-		document.getElementById("twitter").onclick = function() { window.open(twitter_account+twitter_uris[focus_num]); }
+		
+		
+		if (!gumroad_singles[focus_num]=="" || !gumroad_bundles[focus_num]=="") {
+			document.getElementById("hearts").classList.remove("hidden");
+			if (!gumroad_singles[focus_num]=="") { gumroad_path = "https://srgrafo.gumroad.com/l/" + gumroad_singles[focus_num] + "?layout=profile"; }
+			else { gumroad_path = "https://srgrafo.gumroad.com/l/" + gumroad_bundles[focus_num] + "?layout=profile"; }
+			if (hearts_imgs.includes(focus_num+1)) {
+				document.getElementById("hearts").onclick = function() {
+					window.open(gumroad_path);
+					document.getElementById("focusimg").src = 'Hearts/' + id.replace('img',"") + ".webp";
+				}
+				document.getElementById("hearts").onmouseenter = function() { document.getElementById("focusimg").src = 'Hearts/' + id.replace('img',"") + ".webp"; }
+				document.getElementById("hearts").onmouseleave = function() { document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp"; }
+			}
+			else {
+				document.getElementById("hearts").onclick = function() {
+					window.open(gumroad_path);
+				}
+			}
+		}
+		else { document.getElementById("hearts").classList.add("hidden"); }
 		
 		document.getElementById("focusbox").classList.remove("hidden");
 	}
