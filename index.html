@@ -151,13 +151,32 @@ body::-webkit-scrollbar {
 	width:100%;
 	height:30px;
 	margin-top: 65px;
+	margin-bottom:5px;
 }
 
 #jumpto {
-	width:125px;
-	height:20px;
+	font-size: 12pt;
+	font-family: sans-serif;
+	width:150px;
+	height:24px;
 	border-radius:10px;
 	text-align: center;
+	margin-top:0px;
+	padding:1px;
+	border-width:2px;
+}
+
+#sort {
+	font-size: 14pt;
+	font-family: sans-serif;
+	width:150px;
+	height:26px;
+	border-radius:10px;
+	text-align: center;
+	margin-top:0px;
+	margin-left:10px;
+	padding:1px;
+	border-width:1px;
 }
 
 #imgtaglist {
@@ -252,7 +271,14 @@ body::-webkit-scrollbar {
 	<div id="contentbox"></div>
 	<div id='sunglasses' class="hidden"> </div>
 	<div id='tagbox' class="hidden">
-		<div id='searchoptions'> <input type="number" id="jumpto" min="1" max="998" placeholder="Jump to number..." onkeypress="jumpTo(event)"> </div>
+		<div id='searchoptions'>
+			<input type="number" id="jumpto" min="1" max="998" placeholder="Jump to number..." onkeypress="jumpTo(event)">
+			<select id='sort' onchange='if(document.getElementById("sort").value=="rand") { shuffle(randlist); } redrawImages();'>
+				<option value="new">Sort Newest</option>
+				<option value="old">Sort Oldest</option>
+				<option value="rand">Sort Random</option>
+			</select>
+		</div>
 		<div id='taglist' class="flex-container"></div>
 		<div id='taglist_below' onclick="showTags()" style="width:100%;height:100vh;"></div>
 	</div>
@@ -307,6 +333,18 @@ body::-webkit-scrollbar {
 		}
 	});
 	
+	var randlist = [];
+	for (let i = 0; i <= 998; i++) { randlist.push(i); } // Make default randlist
+	
+	function shuffle(array) {
+		for (let i = array.length - 1; i > 0; i--) {
+			const j = Math.floor(Math.random() * (i + 1));
+			[array[i], array[j]] = [array[j], array[i]];
+		}
+	}
+	
+	shuffle(randlist);
+	
 	function jumpTo(event) {
 		if (event=='bypass' || event.keyCode==13) { // Return key
 			let num = document.getElementById("jumpto").value;
@@ -325,6 +363,7 @@ body::-webkit-scrollbar {
 			document.getElementById("sunglasses").classList.add("hidden");
 			showtags = 0;
 			image.focus();
+			document.getElementById("jumpto").value='';
 		}
 	}
 	
@@ -351,14 +390,28 @@ body::-webkit-scrollbar {
 			document.getElementById("focusimg").style.backgroundColor = "black";
 			mode = 'Images'
 		}
+		else if (mode=='Hearts') {
+			let images = document.getElementsByClassName("image");
+			for(let i=0; i < images.length; i++)
+			{
+				images[i].src = images[i].src.replace('Hearts','Images');
+			}
+			document.body.style.backgroundColor = "black";
+			document.getElementById("focusimg").style.backgroundColor = "black";
+			mode = 'Images'
+		}
 	}
 	
 	function hideFocus() { document.getElementById("focusbox").classList.add("hidden"); } // document.exitFullscreen(); }
 	
+	var stay_hearts = 0; // Prevents toggling back to normal after clicking hearts button - reset on reloading focus_box
 	var focus_num = 0;
 	function focusImage(id) {
+		stay_hearts = 0;
 		focus_num = Number(id.replace('img',""))-1;
-		document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp";
+		focus_img = document.getElementById("focusimg");
+		if (mode=='Hearts' && nnn.includes(focus_num+1)) { focus_img.src = 'Images/'+ id.replace('img',"") + ".webp"; } // Special case when Image works for Hearts too
+		else { focus_img.src = mode + '/' + id.replace('img',"") + ".webp";}
 		//document.getElementById("focusbox").requestFullscreen();
 		let img_tags = image_tags[focus_num]
 		const imgtaglist = document.getElementById("imgtaglist");
@@ -383,7 +436,6 @@ body::-webkit-scrollbar {
 		}
 		else { document.getElementById("twitter").classList.add("hidden"); }
 		
-		
 		if (!gumroad_singles[focus_num]=="" || !gumroad_bundles[focus_num]=="") {
 			document.getElementById("hearts").classList.remove("hidden");
 			if (!gumroad_singles[focus_num]=="") { gumroad_path = "https://srgrafo.gumroad.com/l/" + gumroad_singles[focus_num] + "?layout=profile"; }
@@ -392,17 +444,31 @@ body::-webkit-scrollbar {
 				document.getElementById("hearts").onclick = function() {
 					window.open(gumroad_path);
 					document.getElementById("focusimg").src = 'Hearts/' + id.replace('img',"") + ".webp";
+					stay_hearts = 1; // Keep hearts on the focus_img after clicking through to gumroad instead of flipping back to normal after mouse leaves heart button
 				}
-				document.getElementById("hearts").onmouseenter = function() { document.getElementById("focusimg").src = 'Hearts/' + id.replace('img',"") + ".webp"; }
-				document.getElementById("hearts").onmouseleave = function() { document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp"; }
+				document.getElementById("hearts").onmouseenter = function() { if (stay_hearts==0) {document.getElementById("focusimg").src = 'Hearts/' + id.replace('img',"") + ".webp"; } }
+				document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp"; } }
 			}
 			else {
 				document.getElementById("hearts").onclick = function() {
 					window.open(gumroad_path);
 				}
+				document.getElementById("hearts").onmouseenter = ""
+				document.getElementById("hearts").onmouseleave = ""
 			}
 		}
 		else { document.getElementById("hearts").classList.add("hidden"); }
+		
+		if (focus_num==595 || focus_num==239) {
+			document.getElementById("hearts").classList.remove("hidden"); 
+			document.getElementById("hearts").onclick = function() {
+					mode = 'Hearts';
+					modifySelection("","set");
+					document.body.scrollTop = document.documentElement.scrollTop = 0; // Jump to top
+					redrawImages();
+					hideFocus();
+			}
+		}
 		
 		document.getElementById("focusbox").classList.remove("hidden");
 	}
@@ -441,10 +507,25 @@ body::-webkit-scrollbar {
 		}
 	})
 	
+	
 	function reblockGrid() {
+		let images = document.getElementsByClassName("image");
+		let closestimage
+		let mindist = 10000;
+		for (let  i=0; i<images.length; i++) {
+			bounds = images[i].getBoundingClientRect()
+			dist = Math.abs(window.innerHeight+100-bounds.bottom)
+			if (dist<mindist) {
+				mindist=dist;
+				closestimage=images[i];
+			}
+		}
+		
 		document.querySelectorAll('.grid-container').forEach((group) => {
 			group.style["grid-template-columns"] = 'repeat('+String(blocks)+', minmax(0, 1fr))';
 		});
+		
+		closestimage.scrollIntoView(false);
 	}
 	
 	function mkElement(type, id, clas) {
@@ -476,23 +557,32 @@ body::-webkit-scrollbar {
 		while (contentbox.lastElementChild) { // Clear contentbox
 			contentbox.removeChild(contentbox.lastElementChild);
 		}
+		let sort = document.getElementById("sort").value;
 		for (let i=10; i > 0; i--) {
-			let newheader = mkElement("h2", "header"+String(i), "grouptitle nodrag");
-			newheader.innerHTML = 'Season '+String(i)
+			if (sort=='old'||sort=='rand') { j = 11-i; } // Reverse order for old first, for rand start with 1
+			else { j=i; }
+			let newheader = mkElement("h2", "header"+String(j), "grouptitle nodrag");
+			newheader.innerHTML = 'Season '+String(j)
 			document.getElementById("contentbox").appendChild(newheader);
 			
-			let newgroup =  mkElement("div", "group"+String(i), "grid-container nodrag");
+			let newgroup =  mkElement("div", "group"+String(j), "grid-container nodrag");
 			document.getElementById("contentbox").appendChild(newgroup);
+			if (sort=='rand') { newheader.innerHTML = 'Random Order'; break } // Only create one header if random
 		}
 		for (let i=998; i > 0; i--) {
-			if ( valid_images.includes(i) ) {
+			if (sort=='new') { j=i; }
+			else if (sort=='old') { j=998-i; }
+			else if (sort=='rand') { j=randlist[i-1]; } // Scramble according to the same random list generated on start or selection
+			if ( valid_images.includes(j) ) {
 				let newimg;
-				if (mode=='Images') { newimg = mkElement("img", "img"+String(i), "image nodrag"); }
-				else if (mode=='Lines') { newimg = mkElement("img", "img"+String(i), "image image_lines nodrag"); }
-				newimg.src = mode+'/'+String(i)+'.webp';
+				if (mode=='Images' || mode=='Hearts') { newimg = mkElement("img", "img"+String(j), "image nodrag"); }
+				else if (mode=='Lines') { newimg = mkElement("img", "img"+String(j), "image image_lines nodrag"); }
+				if (mode=='Hearts' && nnn.includes(j)) { newimg.src = 'Images/'+String(j)+'.webp'; } // Special case when Image works for Hearts too
+				else { newimg.src = mode+'/'+String(j)+'.webp'; }
 				newimg.onclick = function() { focusImage(newimg.id); };
 				newimg.loading = 'lazy'
-				document.getElementById("group"+String(Math.floor((i-1)/100)+1)).appendChild(newimg);
+				if (sort=='rand') { document.getElementById("group1").appendChild(newimg); }
+				else { document.getElementById("group"+String(Math.floor((j-1)/100)+1)).appendChild(newimg); }
 			}
 		}
 	}
@@ -565,6 +655,7 @@ body::-webkit-scrollbar {
 		for (let i=0; i < search_tags.length; i++){ counts[search_tags[i]] = 0 } // Reset all to 0 before we start counting
 		
 		for (let i=0; i < image_tags.length; i++){
+			if (mode=='Hearts' && !(hearts_imgs.includes(i+1)||nnn.includes(i+1)) ) { continue }
 			img_tags = image_tags[i]
 			if ( contains(include,img_tags) && excludes(exclude,img_tags) ) { // Check that valid images have tags matching searchbar filter
 				valid_images.push(i+1);
