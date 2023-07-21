@@ -287,7 +287,7 @@ body::-webkit-scrollbar {
 	</div>
 	<div id="colorbutton" onclick="switchMode()"></div>
 	<div id="focusbox" class="hidden">
-		<img id='focusimg' onclick="hideFocus()" style="object-fit:contain;max-height:70vh;width:100vw;image-rendering:pixelated;" src="Images/1.webp">
+		<img id='focusimg' onclick="hideFocus()" style="object-fit:contain;max-height:70vh;width:100vw;image-rendering:pixelated;" src="Images/1.webp" class='nodrag'>
 		<div id='imgtaglist' class="flex-container"></div>
 		<div id='imgtaglist_below' onclick="hideFocus()" style="width:100%;height:100vh;overflow:hidden;"></div>
 		<div id='focuslinks'>
@@ -370,11 +370,17 @@ body::-webkit-scrollbar {
 	function switchMode() {
 		if (mode=='Images') {
 			let images = document.getElementsByClassName("image");
-			for(let i=0; i < images.length; i++)
-			{
-				images[i].src = images[i].src.replace('Images','Lines');
-				images[i].classList.add("image_lines");
+			for(let i=0; i<images.length; i++) {
+				num = Number(images[i].id.replace('img',''));
+				if (no_lines.includes(num) || (num<200 && num!=168)) {
+					images[i].style.display='none';
+				}
+				else {
+					images[i].src = images[i].src.replace('Images','Lines');
+					images[i].classList.add("image_lines");
+				}
 			}
+			
 			document.body.style.backgroundColor = "grey";
 			document.getElementById("focusimg").style.backgroundColor = "grey";
 			mode = 'Lines'
@@ -385,6 +391,7 @@ body::-webkit-scrollbar {
 			{
 				images[i].src = images[i].src.replace('Lines','Images');
 				images[i].classList.remove("image_lines");
+				images[i].style.display='block';
 			}
 			document.body.style.backgroundColor = "black";
 			document.getElementById("focusimg").style.backgroundColor = "black";
@@ -411,6 +418,7 @@ body::-webkit-scrollbar {
 		focus_num = Number(id.replace('img',""))-1;
 		focus_img = document.getElementById("focusimg");
 		if (mode=='Hearts' && nnn.includes(focus_num+1)) { focus_img.src = 'Images/'+ id.replace('img',"") + ".webp"; } // Special case when Image works for Hearts too
+		else if ( focus_num==225 ) { focus_img.src = 'Images/226.gif';}
 		else { focus_img.src = mode + '/' + id.replace('img',"") + ".webp";}
 		//document.getElementById("focusbox").requestFullscreen();
 		let img_tags = image_tags[focus_num]
@@ -440,14 +448,17 @@ body::-webkit-scrollbar {
 			document.getElementById("hearts").classList.remove("hidden");
 			if (!gumroad_singles[focus_num]=="") { gumroad_path = "https://srgrafo.gumroad.com/l/" + gumroad_singles[focus_num] + "?layout=profile"; }
 			else { gumroad_path = "https://srgrafo.gumroad.com/l/" + gumroad_bundles[focus_num] + "?layout=profile"; }
-			if (hearts_imgs.includes(focus_num+1)) {
+			if (focus_num==493) { heartspath = 'Hearts/494.gif'; }
+			else { heartspath = 'Hearts/' + id.replace('img',"") + ".webp"; }
+			if (hearts_imgs.includes(focus_num+1)||focus_num==493) {
 				document.getElementById("hearts").onclick = function() {
 					window.open(gumroad_path);
-					document.getElementById("focusimg").src = 'Hearts/' + id.replace('img',"") + ".webp";
+					document.getElementById("focusimg").src = heartspath;
 					stay_hearts = 1; // Keep hearts on the focus_img after clicking through to gumroad instead of flipping back to normal after mouse leaves heart button
 				}
-				document.getElementById("hearts").onmouseenter = function() { if (stay_hearts==0) {document.getElementById("focusimg").src = 'Hearts/' + id.replace('img',"") + ".webp"; } }
-				document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp"; } }
+				document.getElementById("hearts").onmouseenter = function() { if (stay_hearts==0) {document.getElementById("focusimg").src = heartspath; } }
+				if (focus_num==493) { document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = 'Images/' + id.replace('img',"") + ".webp"; } } }
+				else { document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp"; } } }
 			}
 			else {
 				document.getElementById("hearts").onclick = function() {
@@ -468,6 +479,8 @@ body::-webkit-scrollbar {
 					redrawImages();
 					hideFocus();
 			}
+			document.getElementById("hearts").onmouseenter = ""
+			document.getElementById("hearts").onmouseleave = ""
 		}
 		
 		document.getElementById("focusbox").classList.remove("hidden");
@@ -514,7 +527,7 @@ body::-webkit-scrollbar {
 		let mindist = 10000;
 		for (let  i=0; i<images.length; i++) {
 			bounds = images[i].getBoundingClientRect()
-			dist = Math.abs(window.innerHeight+100-bounds.bottom)
+			dist = Math.abs(window.innerHeight/2 +100 -bounds.bottom)
 			if (dist<mindist) {
 				mindist=dist;
 				closestimage=images[i];
@@ -525,7 +538,9 @@ body::-webkit-scrollbar {
 			group.style["grid-template-columns"] = 'repeat('+String(blocks)+', minmax(0, 1fr))';
 		});
 		
-		closestimage.scrollIntoView(false);
+		bounds = closestimage.getBoundingClientRect()
+		diff = window.innerHeight/2 +100 - bounds.bottom; // Bring element back to prev center position
+		window.scrollBy(0,-diff);
 	}
 	
 	function mkElement(type, id, clas) {
