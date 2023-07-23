@@ -101,6 +101,10 @@ body::-webkit-scrollbar {
 	outline: black solid 1px;
 }
 
+.gray {
+	filter: grayscale(100%) brightness(50%);
+}
+
 .nodrag {
 	user-drag: none;
     -webkit-user-drag: none;
@@ -245,6 +249,10 @@ body::-webkit-scrollbar {
 	transition:100ms;
 }
 
+.graybutton {
+	filter: grayscale(100%);
+}
+
 #focuslinks {
 	position:fixed;
 	bottom:0;
@@ -318,7 +326,7 @@ body::-webkit-scrollbar {
 	if (blocks > 5) { blocks = 5; } // Cap block width to 5 on load to avoid lagginess when the browser has to load hundreds of images at once
 
 	stylesheet = document.styleSheets[0]
-	stylesheet.insertRule(".grid-container { grid-template-columns: repeat("+String(blocks)+", minmax(0, 1fr));}", 0);
+	//stylesheet.insertRule(".grid-container { grid-template-columns: repeat("+String(blocks)+", minmax(0, 1fr));}", 0);
 	
 	grid_xscale = [0,0.15,0.3,0.45,0.6,0.75,0.85,0.95,1.1]; // 1.1 is there for initial block scaling reference - me much later, WTF does that mean?
 	
@@ -376,6 +384,8 @@ body::-webkit-scrollbar {
 			let images = document.getElementsByClassName("image");
 			for(let i=0; i<images.length; i++) { images[i].style.display="none"; }
 			
+			document.getElementById("colorbutton").classList.add("graybutton");
+			
 			let lines = document.getElementsByClassName("line");
 			for(let i=0; i<lines.length; i++) { lines[i].style.display="block"; }
 			
@@ -387,8 +397,11 @@ body::-webkit-scrollbar {
 			let images = document.getElementsByClassName("image");
 			for(let i=0; i<images.length; i++) { images[i].style.display="block"; }
 			
+			document.getElementById("colorbutton").classList.remove("graybutton");
+			
 			let lines = document.getElementsByClassName("line");
 			for(let i=0; i<lines.length; i++) { lines[i].style.display="none"; }
+			
 			document.body.style.backgroundColor = "black";
 			document.getElementById("focusimg").style.backgroundColor = "black";
 			mode = 'Images'
@@ -396,6 +409,7 @@ body::-webkit-scrollbar {
 				hearts = 0;
 				redrawImages()
 			}
+			
 		}
 	}
 	
@@ -403,13 +417,12 @@ body::-webkit-scrollbar {
 	
 	var stay_hearts = 0; // Prevents toggling back to normal after clicking hearts button - reset on reloading focus_box
 	var focus_num = 0;
-	function focusImage(id) {
+	function focusImage(id,src) {
 		stay_hearts = 0;
 		focus_num = Number(id.replace('img',""))-1;
 		focus_img = document.getElementById("focusimg");
-		if (mode=='Hearts' && nnn.includes(focus_num+1)) { focus_img.src = 'Images/'+ id.replace('img',"") + ".webp"; } // Special case when Image works for Hearts too
-		else if ( focus_num==225 ) { focus_img.src = 'Images/226.gif';}
-		else { focus_img.src = mode + '/' + id.replace('img',"") + ".webp";}
+		if ( focus_num==225 ) { focus_img.src = 'Images/226.gif';}
+		else { focus_img.src = src;}
 		//document.getElementById("focusbox").requestFullscreen();
 		let img_tags = image_tags[focus_num]
 		const imgtaglist = document.getElementById("imgtaglist");
@@ -510,7 +523,6 @@ body::-webkit-scrollbar {
 		}
 	})
 	
-	
 	function reblockGrid() {
 		let images = document.getElementsByClassName("image");
 		let closestimage
@@ -545,18 +557,6 @@ body::-webkit-scrollbar {
 	}
 	
 	var valid_images = []
-	
-	urlParams = new URLSearchParams(window.location.search);
-	paramselection = urlParams.get('search'); // Parameter for default search
-	if (paramselection) { modifySelection(paramselection.replace("%20"," "),'set'); }
-	else { downselect(); redrawImages(); }
-	
-	goto_num = urlParams.get('num'); // Parameter to jump to image num
-	if (goto_num) {
-		document.getElementById("jumpto").value = Number(goto_num);
-		setTimeout(() => { jumpTo('bypass'); }, "200");
-	}
-	
 	function redrawImages() {
 		const contentbox = document.getElementById("contentbox");
 		while (contentbox.lastElementChild) { // Clear contentbox
@@ -569,6 +569,15 @@ body::-webkit-scrollbar {
 			let newheader = mkElement("h2", "header"+String(j), "grouptitle nodrag");
 			newheader.innerHTML = 'Season '+String(j)
 			document.getElementById("contentbox").appendChild(newheader);
+			
+			if (sort!='rand') {
+				newheader.onclick = function() {
+					groupid= newheader.id.replace('header','group');
+					let group = document.getElementById(groupid);
+					if ( group.style.display == 'none' ) { group.style.display = 'grid'; newheader.style.textDecoration = ''; }
+					else { group.style.display = 'none'; newheader.style.textDecoration = 'underline'; }
+				}
+			}
 			
 			let newgroup =  mkElement("div", "group"+String(j), "grid-container nodrag");
 			document.getElementById("contentbox").appendChild(newgroup);
@@ -589,21 +598,27 @@ body::-webkit-scrollbar {
 					else { newimg.src = 'Hearts/'+String(j)+'.webp'; }
 				}
 				else { newimg.src = 'Images/'+String(j)+'.webp'; }
-				newimg.onclick = function() { focusImage(newimg.id); }
+				newimg.onclick = function() { focusImage(newimg.id,newimg.src); }
 				newimg.loading = 'lazy'
 				if (mode=='Lines') { newimg.style.display = "none"; }
 				document.getElementById(groupid).appendChild(newimg);
 				
+				
+				let newline = mkElement("img", "line"+String(j), "line nodrag");
 				if ( !(no_lines.includes(j) || (j<200 && j!=168)) ) { // Downselect for only images with lines
-					let newline = mkElement("img", "line"+String(j), "line nodrag");
 					newline.src = 'Lines/'+String(j)+'.webp';
-					newline.onclick = function() { focusImage(newimg.id); };
-					newline.loading = 'lazy'
-					if (mode!='Lines') { newline.style.display = "none"; }
-					document.getElementById(groupid).appendChild(newline);
 				}
+				else {
+					newline.src = 'Images/'+String(j)+'.webp';
+					newline.classList.add("gray"); // Show imgs with no lines but grayscale
+				}
+				newline.onclick = function() { focusImage(newimg.id,newline.src); };
+				newline.loading = 'lazy'
+				if (mode!='Lines') { newline.style.display = "none"; }
+				document.getElementById(groupid).appendChild(newline);
 			}
 		}
+		reblockGrid()
 	}
 	
 	var showtags = 0;
@@ -721,6 +736,19 @@ body::-webkit-scrollbar {
 			}
 		}
 	}
+	
+	urlParams = new URLSearchParams(window.location.search);
+	paramselection = urlParams.get('search'); // Parameter for default search
+	if (paramselection) { modifySelection(paramselection.replace("%20"," "),'set'); }
+	else { downselect(); redrawImages(); }
+	
+	goto_num = urlParams.get('num'); // Parameter to jump to image num
+	if (goto_num) {
+		document.getElementById("jumpto").value = Number(goto_num);
+		setTimeout(() => { jumpTo('bypass'); }, "200");
+	}
+	
+	reblockGrid()
 	
 </script>
 
