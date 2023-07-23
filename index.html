@@ -93,8 +93,11 @@ body::-webkit-scrollbar {
 	border-radius: 10px;
 }
 
-.image_lines {
+.line {
+	width: 100%;
 	object-fit: contain;
+	aspect-ratio: 1;
+	border-radius: 10px;
 	outline: black solid 1px;
 }
 
@@ -162,6 +165,7 @@ body::-webkit-scrollbar {
 	border-radius:10px;
 	text-align: center;
 	margin-top:0px;
+	margin-left:10px;
 	padding:1px;
 	border-width:2px;
 }
@@ -174,7 +178,6 @@ body::-webkit-scrollbar {
 	border-radius:10px;
 	text-align: center;
 	margin-top:0px;
-	margin-left:10px;
 	padding:1px;
 	border-width:1px;
 }
@@ -272,12 +275,12 @@ body::-webkit-scrollbar {
 	<div id='sunglasses' class="hidden"> </div>
 	<div id='tagbox' class="hidden">
 		<div id='searchoptions'>
-			<input type="number" id="jumpto" min="1" max="998" placeholder="Jump to number..." onkeypress="jumpTo(event)">
 			<select id='sort' onchange='if(document.getElementById("sort").value=="rand") { shuffle(randlist); } redrawImages();'>
 				<option value="new">Sort Newest</option>
 				<option value="old">Sort Oldest</option>
 				<option value="rand">Sort Random</option>
 			</select>
+			<input type="number" id="jumpto" min="1" max="998" placeholder="Jump to number..." onkeypress="jumpTo(event)">
 		</div>
 		<div id='taglist' class="flex-container"></div>
 		<div id='taglist_below' onclick="showTags()" style="width:100%;height:100vh;"></div>
@@ -323,6 +326,7 @@ body::-webkit-scrollbar {
 	
 	var minblocks = Math.ceil(window.innerWidth/800); // Don't force upscale of images past 800px - see below
 	var mode = 'Images';
+	var hearts = 0;
 	
 	window.addEventListener("resize", (event) => { // If the browser expands, expand minblocks - TODO make sure minblocks and maxblocks don't nonintersect
 		console.log('resize');
@@ -370,16 +374,10 @@ body::-webkit-scrollbar {
 	function switchMode() {
 		if (mode=='Images') {
 			let images = document.getElementsByClassName("image");
-			for(let i=0; i<images.length; i++) {
-				num = Number(images[i].id.replace('img',''));
-				if (no_lines.includes(num) || (num<200 && num!=168)) {
-					images[i].style.display='none';
-				}
-				else {
-					images[i].src = images[i].src.replace('Images','Lines');
-					images[i].classList.add("image_lines");
-				}
-			}
+			for(let i=0; i<images.length; i++) { images[i].style.display="none"; }
+			
+			let lines = document.getElementsByClassName("line");
+			for(let i=0; i<lines.length; i++) { lines[i].style.display="block"; }
 			
 			document.body.style.backgroundColor = "grey";
 			document.getElementById("focusimg").style.backgroundColor = "grey";
@@ -387,25 +385,17 @@ body::-webkit-scrollbar {
 		}
 		else if (mode=='Lines') {
 			let images = document.getElementsByClassName("image");
-			for(let i=0; i < images.length; i++)
-			{
-				images[i].src = images[i].src.replace('Lines','Images');
-				images[i].classList.remove("image_lines");
-				images[i].style.display='block';
-			}
+			for(let i=0; i<images.length; i++) { images[i].style.display="block"; }
+			
+			let lines = document.getElementsByClassName("line");
+			for(let i=0; i<lines.length; i++) { lines[i].style.display="none"; }
 			document.body.style.backgroundColor = "black";
 			document.getElementById("focusimg").style.backgroundColor = "black";
 			mode = 'Images'
-		}
-		else if (mode=='Hearts') {
-			let images = document.getElementsByClassName("image");
-			for(let i=0; i < images.length; i++)
-			{
-				images[i].src = images[i].src.replace('Hearts','Images');
+			if ( hearts ) {
+				hearts = 0;
+				redrawImages()
 			}
-			document.body.style.backgroundColor = "black";
-			document.getElementById("focusimg").style.backgroundColor = "black";
-			mode = 'Images'
 		}
 	}
 	
@@ -470,10 +460,10 @@ body::-webkit-scrollbar {
 		}
 		else { document.getElementById("hearts").classList.add("hidden"); }
 		
-		if (focus_num==595 || focus_num==239) {
+		if (focus_num==595 || focus_num==230) {
 			document.getElementById("hearts").classList.remove("hidden"); 
 			document.getElementById("hearts").onclick = function() {
-					mode = 'Hearts';
+					hearts = 1;
 					modifySelection("","set");
 					document.body.scrollTop = document.documentElement.scrollTop = 0; // Jump to top
 					redrawImages();
@@ -589,15 +579,29 @@ body::-webkit-scrollbar {
 			else if (sort=='old') { j=998-i; }
 			else if (sort=='rand') { j=randlist[i-1]; } // Scramble according to the same random list generated on start or selection
 			if ( valid_images.includes(j) ) {
-				let newimg;
-				if (mode=='Images' || mode=='Hearts') { newimg = mkElement("img", "img"+String(j), "image nodrag"); }
-				else if (mode=='Lines') { newimg = mkElement("img", "img"+String(j), "image image_lines nodrag"); }
-				if (mode=='Hearts' && nnn.includes(j)) { newimg.src = 'Images/'+String(j)+'.webp'; } // Special case when Image works for Hearts too
-				else { newimg.src = mode+'/'+String(j)+'.webp'; }
-				newimg.onclick = function() { focusImage(newimg.id); };
+				
+				if (sort=='rand') { groupid = "group1"; }
+				else { groupid = "group"+String(Math.floor((j-1)/100)+1); }
+				
+				let newimg = mkElement("img", "img"+String(j), "image nodrag"); // Generate img element for Image/Hearts
+				if ( hearts ) {
+					if ( nnn.includes(j) ) { newimg.src = 'Images/'+String(j)+'.webp'; } // Special case when Image works for Hearts too
+					else { newimg.src = 'Hearts/'+String(j)+'.webp'; }
+				}
+				else { newimg.src = 'Images/'+String(j)+'.webp'; }
+				newimg.onclick = function() { focusImage(newimg.id); }
 				newimg.loading = 'lazy'
-				if (sort=='rand') { document.getElementById("group1").appendChild(newimg); }
-				else { document.getElementById("group"+String(Math.floor((j-1)/100)+1)).appendChild(newimg); }
+				if (mode=='Lines') { newimg.style.display = "none"; }
+				document.getElementById(groupid).appendChild(newimg);
+				
+				if ( !(no_lines.includes(j) || (j<200 && j!=168)) ) { // Downselect for only images with lines
+					let newline = mkElement("img", "line"+String(j), "line nodrag");
+					newline.src = 'Lines/'+String(j)+'.webp';
+					newline.onclick = function() { focusImage(newimg.id); };
+					newline.loading = 'lazy'
+					if (mode!='Lines') { newline.style.display = "none"; }
+					document.getElementById(groupid).appendChild(newline);
+				}
 			}
 		}
 	}
@@ -670,7 +674,7 @@ body::-webkit-scrollbar {
 		for (let i=0; i < search_tags.length; i++){ counts[search_tags[i]] = 0 } // Reset all to 0 before we start counting
 		
 		for (let i=0; i < image_tags.length; i++){
-			if (mode=='Hearts' && !(hearts_imgs.includes(i+1)||nnn.includes(i+1)) ) { continue }
+			if (hearts==1 && !(hearts_imgs.includes(i+1)||nnn.includes(i+1)) ) { continue }
 			img_tags = image_tags[i]
 			if ( contains(include,img_tags) && excludes(exclude,img_tags) ) { // Check that valid images have tags matching searchbar filter
 				valid_images.push(i+1);
