@@ -298,7 +298,9 @@ body::-webkit-scrollbar {
 	</div>
 	<div id="colorbutton" onclick="switchMode()"></div>
 	<div id="focusbox" class="hidden">
-		<img id='focusimg' onclick="hideFocus()" style="object-fit:contain;max-height:70vh;width:100vw;image-rendering:pixelated;" src="Images/1.webp" class='nodrag'>
+		<div id='focusback'  style="height:100%;max-height:70vh;width:100vw;">
+			<img id='focusimg' onclick="hideFocus()" style="height:100%;max-width:100%;object-fit:contain;image-rendering:pixelated;" src="Images/1.webp" class='nodrag'>
+		</div>
 		<div id='imgtaglist' class="flex-container"></div>
 		<div id='imgtaglist_below' onclick="hideFocus()" style="width:100%;height:100vh;overflow:hidden;"></div>
 		<div id='focuslinks'>
@@ -365,8 +367,13 @@ body::-webkit-scrollbar {
 			if (num<1) { num = 1; }
 			else if (num>998) { num = 998; }
 			document.getElementById("jumpto").value = num;
-			if (!valid_images.includes(num)) { modifySelection("","set") } // If num not in selection, reset to include all
-			let image = document.getElementById("img" + String(num) )
+			if (!valid_images.includes(num)) {
+				if ( hearts ) { document.getElementById("jumpto").value=''; return } // Exit if in hearts and not included
+				modifySelection("","set") // If num not in selection, reset to include all
+			}
+			if (mode=='Images') { image = document.getElementById("img" + String(num) ) }
+			else { image = document.getElementById("line" + String(num) ) }
+			console.log(image);
 			blocks=minblocks;
 			reblockGrid()
 			image.scrollIntoView(false);
@@ -390,7 +397,7 @@ body::-webkit-scrollbar {
 			for(let i=0; i<lines.length; i++) { lines[i].style.display="block"; }
 			
 			document.body.style.backgroundColor = "grey";
-			document.getElementById("focusimg").style.backgroundColor = "grey";
+			document.getElementById("focusback").style.backgroundColor = "grey";
 			mode = 'Lines'
 		}
 		else if (mode=='Lines') {
@@ -403,7 +410,7 @@ body::-webkit-scrollbar {
 			for(let i=0; i<lines.length; i++) { lines[i].style.display="none"; }
 			
 			document.body.style.backgroundColor = "black";
-			document.getElementById("focusimg").style.backgroundColor = "black";
+			document.getElementById("focusback").style.backgroundColor = "black";
 			mode = 'Images'
 			if ( hearts ) {
 				hearts = 0;
@@ -421,6 +428,8 @@ body::-webkit-scrollbar {
 		stay_hearts = 0;
 		focus_num = Number(id.replace('img',""))-1;
 		focus_img = document.getElementById("focusimg");
+		if (mode=='Lines' && (no_lines.includes(focus_num+1) || (focus_num+1<200 && focus_num+1!=168)) ) { focus_img.classList.add("gray"); }
+		else { focus_img.classList.remove("gray"); }
 		if ( focus_num==225 ) { focus_img.src = 'Images/226.gif';}
 		else { focus_img.src = src;}
 		//document.getElementById("focusbox").requestFullscreen();
@@ -476,11 +485,12 @@ body::-webkit-scrollbar {
 		if (focus_num==595 || focus_num==230) {
 			document.getElementById("hearts").classList.remove("hidden"); 
 			document.getElementById("hearts").onclick = function() {
-					hearts = 1;
-					modifySelection("","set");
-					document.body.scrollTop = document.documentElement.scrollTop = 0; // Jump to top
-					redrawImages();
-					hideFocus();
+				if (mode=='Lines') { switchMode(); }
+				hearts = 1;
+				modifySelection("","set");
+				document.body.scrollTop = document.documentElement.scrollTop = 0; // Jump to top
+				redrawImages();
+				hideFocus();
 			}
 			document.getElementById("hearts").onmouseenter = ""
 			document.getElementById("hearts").onmouseleave = ""
