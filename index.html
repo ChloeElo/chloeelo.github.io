@@ -213,6 +213,11 @@ body::-webkit-scrollbar {
 	opacity:0.9;
 }
 
+.tag_bubble:hover {
+	background-color: #A0A0A0;
+	transition:100ms;
+}
+
 #focusbox {
 	background-color: black;
 	position:fixed;
@@ -229,14 +234,14 @@ body::-webkit-scrollbar {
 	width: 50px;
 	height: 50px;
 	background: conic-gradient(
-	from 180deg,
-	violet,
-	DodgerBlue,
-	yellowgreen,
-	yellow,
-	orange,
-	red,
-	violet
+		from 180deg,
+		violet,
+		DodgerBlue,
+		yellowgreen,
+		yellow,
+		orange,
+		red,
+		violet
 	);
 	outline: black solid 1.5px;
 	margin: 12px;
@@ -271,6 +276,47 @@ body::-webkit-scrollbar {
 	aspect-ratio:1;
 }
 
+#scoring {
+	width:fit-content;
+	max-width:100vw;
+	height:fit-content;
+	display: flex;
+	justify-content: space-between;
+	margin: auto;
+}
+
+.scorebar {
+	max-width:300px;
+	width:50vw;
+	background-color: #808080;
+	color: white;
+	font-family: sans-serif;
+	font-size: 24pt;
+	padding-left:10px;
+	padding-right:10px;
+	padding-top:5px;
+	padding-bottom:5px;
+	margin-left:5px;
+	margin-right:5px;
+	margin-top:5px;
+	margin-bottom:5px;
+	border-radius: 10px;
+	height:fit-content;
+}
+
+.scorebar:hover {
+	background-color: #A0A0A0;
+	transition:100ms;
+}
+
+.liked {
+	background-color: green !important;
+}
+
+.favorited {
+	background-color: green !important;
+}
+
 </style>
 <link rel="icon" type="image/x-icon" href="Assets/favicon.ico" />
 <!-- <script src="./index.js" defer></script> -->
@@ -297,19 +343,22 @@ body::-webkit-scrollbar {
 		<h1 id="searchbar" class="nodrag" onclick="showTags()">Search...</h1>
 	</div>
 	<div id="colorbutton" onclick="switchMode()"></div>
-	<div id="focusbox" class="hidden">
-		<div id='focusback'  style="height:100%;max-height:70vh;width:100vw;">
-			<img id='focusimg' onclick="hideFocus()" style="height:100%;max-width:100%;object-fit:contain;image-rendering:pixelated;" src="Images/1.webp" class='nodrag'>
+	<div id="focusbox" class="hidden nodrag">
+		<div id='focusback'  style="height:fit-content;width:100vw;">
+			<img id='focusimg' onclick="hideFocus()" style="max-height:70vh;width:100%;max-width:100%;object-fit:contain;image-rendering:pixelated;display:block;" src="Images/1.webp" class='nodrag'>
 		</div>
-		<div id='imgtaglist' class="flex-container"></div>
-		<div id='imgtaglist_below' onclick="hideFocus()" style="width:100%;height:100vh;overflow:hidden;"></div>
-		<div id='focuslinks'>
-			<img id='reddit' class="focusbar" src='Assets/b_reddit.png'>
-			<img id='twitter' class="focusbar" src='Assets/b_twitter.png'>
-			<img id='discord' class="focusbar" src='Assets/b_discord.png'>
+		<div id='scoring'>
+			<h5 id='like' class='scorebar nodrag' onclick="score('like')"> Like </h5>
+			<h5 id='favorite' class='scorebar nodrag' onclick="score('favorite')"> Favorite </h5>
+		</div>
+		<div id='imgtaglist' class="flex-container nodrag"></div>
+		<div id='imgtaglist_below' class='nodrag' onclick="hideFocus()" style="width:100%;height:100vh;overflow:hidden;"></div>
+		<div id='focuslinks' class='nodrag'>
+			<img id='reddit' class="focusbar nodrag" src='Assets/b_reddit.png'>
+			<img id='twitter' class="focusbar nodrag" src='Assets/b_twitter.png'>
+			<img id='discord' class="focusbar nodrag" src='Assets/b_discord.png'>
 			<div style='text-align:center;position:relative;'>
-				<img id='hearts' class="focusbar" src='Assets/b_hearts.png'>
-				<!-- <h4 style='position:absolute;color:white;top:40%;width:100%;margin:0px;'> 999 </h4> -->
+				<img id='hearts' class="focusbar nodrag" src='Assets/b_hearts.png'>
 			</div>
 		</div>
 	</div>
@@ -321,6 +370,34 @@ body::-webkit-scrollbar {
 <script src="data.js"></script>
 
 <script>
+	
+	var cookie = Object.fromEntries(document.cookie.split('; ').map(c => c.split('='))) // Turn cookie string into object with named properties
+	
+	function makeid(length) { // Generate a random alphanumeric ID out of 62 chars
+		let result = "";
+		const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for (var i = 0; i < length; i++) { result += charset.charAt(Math.floor(Math.random() * charset.length)); }
+		return result;
+	}
+	
+	function setCookie(id,value) { document.cookie = id + "=" + value + "; expires=Tue, 1 Jan 2030 12:00:00 UTC"; }
+	
+	if (!Object.hasOwn(cookie,'uuid')) {
+		setCookie('uuid',makeid(5));
+		setCookie('likes',"");
+		setCookie('favorites',"");
+		cookie = Object.fromEntries(document.cookie.split('; ').map(c => c.split('=')))
+	}
+	
+	if (cookie.likes) {	cookie.likes = cookie.likes.split(','); }
+	else { cookie.likes = []; }
+	if (cookie.favorites) {
+		cookie.favorites = cookie.favorites.split(',');
+		for(let i=0; i<cookie.favorites.length; i++) { image_tags[Number(cookie.favorites[i])-1].push('favorites') }
+	}
+	else { cookie.favorites = []; }
+	
+	console.log('Cookie:',cookie);
 	
 	let width = window.innerWidth;
 	var blocks = Math.floor((width-100)/100); // Set default block width based on screen res
@@ -359,6 +436,39 @@ body::-webkit-scrollbar {
 	
 	shuffle(randlist);
 	
+	function score(action) {
+		let src = document.getElementById("focusimg").src;
+		let num = src.split('/').slice(-1)[0].split('.')[0];
+		if ( action=='like' ) {
+			if ( cookie.likes.includes(num) ) {
+				cookie.likes.splice(cookie.likes.indexOf(num), 1);
+				setCookie('likes',cookie.likes.join(',') );
+				document.getElementById("like").classList.remove("liked");
+			}
+			else {
+				cookie.likes.push(num);
+				setCookie('likes',cookie.likes.join(',') );
+				document.getElementById("like").classList.add("liked");
+			}
+		}
+		else if ( action=='favorite' ) {
+			if ( cookie.favorites.includes(num) ) {
+				cookie.favorites.splice(cookie.favorites.indexOf(num), 1);
+				setCookie('favorites',cookie.favorites.join(',') );
+				document.getElementById("favorite").classList.remove("favorited"); // Make ungreen
+				if (image_tags[Number(num)-1].includes('favorites')) { image_tags[Number(num)-1].splice(image_tags[Number(num)-1].indexOf('favorites'),1); } // Remove favorite tag
+				modifySelection("","update");
+			}
+			else {
+				cookie.favorites.push(num);
+				setCookie('favorites',cookie.favorites.join(',') );
+				document.getElementById("favorite").classList.add("favorited"); // Make green
+				image_tags[Number(num)-1].push('favorites'); // Add favorite tag
+				modifySelection("","update");
+			}
+		}
+	}
+	
 	function jumpTo(event) {
 		if (event=='bypass' || event.keyCode==13) { // Return key
 			let num = document.getElementById("jumpto").value;
@@ -373,7 +483,6 @@ body::-webkit-scrollbar {
 			}
 			if (mode=='Images') { image = document.getElementById("img" + String(num) ) }
 			else { image = document.getElementById("line" + String(num) ) }
-			console.log(image);
 			blocks=minblocks;
 			reblockGrid()
 			image.scrollIntoView(false);
@@ -433,6 +542,12 @@ body::-webkit-scrollbar {
 		if ( focus_num==225 ) { focus_img.src = 'Images/226.gif';}
 		else { focus_img.src = src;}
 		//document.getElementById("focusbox").requestFullscreen();
+		
+		if ( cookie.likes.includes(String(focus_num+1)) ) { document.getElementById('like').classList.add('liked'); }
+		else { document.getElementById('like').classList.remove('liked'); }
+		if ( cookie.favorites.includes(String(focus_num+1)) ) { document.getElementById('favorite').classList.add('favorited'); }
+		else { document.getElementById('favorite').classList.remove('favorited'); }
+		
 		let img_tags = image_tags[focus_num]
 		const imgtaglist = document.getElementById("imgtaglist");
 		while (imgtaglist.lastElementChild) { // Clear imgtaglist
@@ -534,7 +649,9 @@ body::-webkit-scrollbar {
 	})
 	
 	function reblockGrid() {
-		let images = document.getElementsByClassName("image");
+		let images
+		if (mode=='Images') { images = document.getElementsByClassName("image"); }
+		else { images = document.getElementsByClassName("line"); }
 		let closestimage
 		let mindist = 10000;
 		for (let  i=0; i<images.length; i++) {
