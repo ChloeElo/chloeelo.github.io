@@ -202,12 +202,12 @@ body::-webkit-scrollbar {
 	font-size: 14pt;
 	padding-left:10px;
 	padding-right:10px;
-	padding-top:5px;
-	padding-bottom:5px;
+	padding-top:3px;
+	padding-bottom:3px;
 	margin-left:5px;
 	margin-right:5px;
-	margin-top:5px;
-	margin-bottom:5px;
+	margin-top:3px;
+	margin-bottom:3px;
 	border-radius: 10px;
 	height:fit-content;
 	opacity:0.9;
@@ -271,6 +271,7 @@ body::-webkit-scrollbar {
 }
 
 .focusbar {
+	display: inline-block;
 	width:20vw;
 	max-width:100px;
 	aspect-ratio:1;
@@ -317,10 +318,24 @@ body::-webkit-scrollbar {
 	background-color: green !important;
 }
 
+.fade:hover {
+	opacity:0;
+	transition:200ms;
+}
+
+#x_button {
+	background-color: red;
+	position:fixed;
+	right:5%;
+	top:25px;
+	border-radius: 50%;
+	aspect-ratio:1;
+}
+
 </style>
 <link rel="icon" type="image/x-icon" href="Assets/favicon.ico" />
 <!-- <script src="./index.js" defer></script> -->
-<title>Search</title>
+<title>ChloeBooru</title>
 
 </head>
 
@@ -342,6 +357,7 @@ body::-webkit-scrollbar {
 	<div id='searchbox'>
 		<h1 id="searchbar" class="nodrag" onclick="showTags()">Search...</h1>
 	</div>
+	<button id='x_button' onclick='modifySelection("","set");'> <b>X</b> </button>
 	<div id="colorbutton" onclick="switchMode()"></div>
 	<div id="focusbox" class="hidden nodrag">
 		<div id='focusback'  style="height:fit-content;width:100vw;">
@@ -354,12 +370,24 @@ body::-webkit-scrollbar {
 		<div id='imgtaglist' class="flex-container nodrag"></div>
 		<div id='imgtaglist_below' class='nodrag' onclick="hideFocus()" style="width:100%;height:100vh;overflow:hidden;"></div>
 		<div id='focuslinks' class='nodrag'>
-			<img id='reddit' class="focusbar nodrag" src='Assets/b_reddit.png'>
-			<img id='twitter' class="focusbar nodrag" src='Assets/b_twitter.png'>
-			<img id='discord' class="focusbar nodrag" src='Assets/b_discord.png'>
+			<div style='text-align:center;position:relative;display:block;'>
+				<img id='twitter' class="focusbar nodrag" src='Assets/b_twitter.png'>
+			</div> 
 			<div style='text-align:center;position:relative;'>
-				<img id='hearts' class="focusbar nodrag" src='Assets/b_hearts.png'>
-			</div>
+				<img id='reddit' class="focusbar nodrag fade" style="position:absolute;" src='Assets/b_reddit.png'>
+				<img id='reddit2' class="focusbar nodrag" src='Assets/b_reddit2.png'>
+			</div> 
+			<div style='text-align:center;position:relative;'>
+				<img id='discord' class="focusbar nodrag fade" style="position:absolute;" src='Assets/b_discord.png'>
+				<img id='discord2' class="focusbar nodrag" src='Assets/b_discord2.png'>
+			</div> 
+			<div id='hoodiediv' style='text-align:center;position:relative;display:none;'>
+				<img id='hoodie' class="focusbar nodrag" src='Assets/b_hoodie.png'>
+			</div> 
+			<div style='text-align:center;position:relative;'>
+				<img id='hearts' class="focusbar nodrag fade" style="position:absolute;" src='Assets/b_gumroad.png'>
+				<img id='hearts2' class="focusbar nodrag" src='Assets/b_gumroad2.png'>
+			</div> 
 		</div>
 	</div>
 	
@@ -370,6 +398,8 @@ body::-webkit-scrollbar {
 <script src="data.js"></script>
 
 <script>
+	
+	console.log(buy_hoodie[3]);
 	
 	var cookie = Object.fromEntries(document.cookie.split('; ').map(c => c.split('='))) // Turn cookie string into object with named properties
 	
@@ -398,6 +428,33 @@ body::-webkit-scrollbar {
 	else { cookie.favorites = []; }
 	
 	console.log('Cookie:',cookie);
+	
+	function send(payload) {
+		let xhr = new XMLHttpRequest();
+		xhr.open(
+			"GET",
+			"https://script.google.com/macros/s/AKfycbzP2AXiKehcB_Aso16XDyZbpJcwko7D16lqUEwYVKupxZ_SZl0DW9VQNtyVTd0jyY3bxA/exec",
+			true
+		);
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.onreadystatechange = function () {
+			// Call a function when the state changes.
+			if (this.readyState === XMLHttpRequest.DONE) {
+				console.log(this);
+				if (this.status === 200) {
+					let response = JSON.parse("[" + xhr.response + "]")
+					console.log("Send success", response);
+				}
+				else {
+					let response = JSON.parse("[" + xhr.response + "]")
+					console.log("Send failed", this.status, response);
+				}
+			}
+		};
+		xhr.send("data="+payload);
+	}
+	
+	//send('testpayload');
 	
 	let width = window.innerWidth;
 	var blocks = Math.floor((width-100)/100); // Set default block width based on screen res
@@ -457,14 +514,14 @@ body::-webkit-scrollbar {
 				setCookie('favorites',cookie.favorites.join(',') );
 				document.getElementById("favorite").classList.remove("favorited"); // Make ungreen
 				if (image_tags[Number(num)-1].includes('favorites')) { image_tags[Number(num)-1].splice(image_tags[Number(num)-1].indexOf('favorites'),1); } // Remove favorite tag
-				modifySelection("","update");
+				setTimeout(() => { modifySelection("","update"); }, "100");
 			}
 			else {
 				cookie.favorites.push(num);
 				setCookie('favorites',cookie.favorites.join(',') );
 				document.getElementById("favorite").classList.add("favorited"); // Make green
 				image_tags[Number(num)-1].push('favorites'); // Add favorite tag
-				modifySelection("","update");
+				setTimeout(() => { modifySelection("","update"); }, "100");
 			}
 		}
 	}
@@ -571,6 +628,12 @@ body::-webkit-scrollbar {
 		}
 		else { document.getElementById("twitter").classList.add("hidden"); }
 		
+		if ( Object.hasOwn(buy_hoodie,focus_num+1) ) {
+			document.getElementById('hoodiediv').style.display = 'block';
+			document.getElementById('hoodiediv').onclick = function() { window.open(hoodie_links[buy_hoodie[focus_num+1]]); }
+		}
+		else { document.getElementById('hoodiediv').style.display = 'none'; }
+		
 		if (!gumroad_singles[focus_num]=="" || !gumroad_bundles[focus_num]=="") {
 			document.getElementById("hearts").classList.remove("hidden");
 			if (!gumroad_singles[focus_num]=="") { gumroad_path = "https://srgrafo.gumroad.com/l/" + gumroad_singles[focus_num] + "?layout=profile"; }
@@ -588,9 +651,7 @@ body::-webkit-scrollbar {
 				else { document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp"; } } }
 			}
 			else {
-				document.getElementById("hearts").onclick = function() {
-					window.open(gumroad_path);
-				}
+				document.getElementById("hearts").onclick = function() { window.open(gumroad_path); }
 				document.getElementById("hearts").onmouseenter = ""
 				document.getElementById("hearts").onmouseleave = ""
 			}
@@ -859,6 +920,8 @@ body::-webkit-scrollbar {
 				let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
 				tag_bubble.innerHTML = tag + " (" + String(counts[tag]) + ")";
 				tag_bubble.onclick = function() { modifySelection(tag_bubble.innerHTML,'add'); };
+				tag_bubble.style.fontSize = String(Math.floor(Math.sqrt(counts[tag])+10))+"px";
+				//console.log( tag, Math.floor(Math.sqrt(counts[tag])+10) );
 				taglist.appendChild(tag_bubble)
 			}
 		}
