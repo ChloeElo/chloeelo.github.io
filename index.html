@@ -231,27 +231,15 @@ body::-webkit-scrollbar {
 	position:fixed;
 	top:0px;
 	left:0px;
-	width: 50px;
-	height: 50px;
-	background: conic-gradient(
-		from 180deg,
-		violet,
-		DodgerBlue,
-		yellowgreen,
-		yellow,
-		orange,
-		red,
-		violet
-	);
-	outline: black solid 1.5px;
-	margin: 12px;
+	width: 75px;
+	height: 75px;
 	border-radius: 50%;
 	opacity:0.5;
 }
 
 #colorbutton:hover {
 	opacity:1;
-	transition:100ms;
+	transition:200ms;
 }
 
 .graybutton {
@@ -289,33 +277,33 @@ body::-webkit-scrollbar {
 .scorebar {
 	max-width:300px;
 	width:50vw;
-	background-color: #808080;
+	background-color: #303030;
 	color: white;
 	font-family: sans-serif;
 	font-size: 24pt;
 	padding-left:10px;
 	padding-right:10px;
-	padding-top:5px;
-	padding-bottom:5px;
+	padding-top:3px;
+	padding-bottom:3px;
 	margin-left:5px;
 	margin-right:5px;
 	margin-top:5px;
-	margin-bottom:5px;
+	margin-bottom:3px;
 	border-radius: 10px;
 	height:fit-content;
 }
 
 .scorebar:hover {
-	background-color: #A0A0A0;
+	background-color: #505050;
 	transition:100ms;
 }
 
 .liked {
-	background-color: green !important;
+	background-color: #477a17 !important;
 }
 
 .favorited {
-	background-color: green !important;
+	background-color: #9d1c15 !important;
 }
 
 .fade:hover {
@@ -324,12 +312,19 @@ body::-webkit-scrollbar {
 }
 
 #x_button {
-	background-color: red;
+	background-color:black;
+	color:#A0A0A0;
 	position:fixed;
 	right:5%;
 	top:25px;
 	border-radius: 50%;
 	aspect-ratio:1;
+}
+
+#x_button:hover {
+	background-color: #8B0000;
+	transition:200ms;
+}
 }
 
 </style>
@@ -358,7 +353,7 @@ body::-webkit-scrollbar {
 		<h1 id="searchbar" class="nodrag" onclick="showTags()">Search...</h1>
 	</div>
 	<button id='x_button' onclick='modifySelection("","set");'> <b>X</b> </button>
-	<div id="colorbutton" onclick="switchMode()"></div>
+	<img id="colorbutton" onclick="switchMode()" src='Assets/b_color.png'>
 	<div id="focusbox" class="hidden nodrag">
 		<div id='focusback'  style="height:fit-content;width:100vw;">
 			<img id='focusimg' onclick="hideFocus()" style="max-height:70vh;width:100%;max-width:100%;object-fit:contain;image-rendering:pixelated;display:block;" src="Images/1.webp" class='nodrag'>
@@ -371,7 +366,8 @@ body::-webkit-scrollbar {
 		<div id='imgtaglist_below' class='nodrag' onclick="hideFocus()" style="width:100%;height:100vh;overflow:hidden;"></div>
 		<div id='focuslinks' class='nodrag'>
 			<div style='text-align:center;position:relative;display:block;'>
-				<img id='twitter' class="focusbar nodrag" src='Assets/b_twitter.png'>
+				<img id='twitter' class="focusbar nodrag fade" style="position:absolute;" src='Assets/b_twitter.png'>
+				<img id='twitter2' class="focusbar nodrag" src='Assets/b_twitter2.png'>
 			</div> 
 			<div style='text-align:center;position:relative;'>
 				<img id='reddit' class="focusbar nodrag fade" style="position:absolute;" src='Assets/b_reddit.png'>
