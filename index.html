@@ -500,9 +500,7 @@ body::-webkit-scrollbar {
 		
 	}
 	
-	updateCounts();
-	updateSearchbar();
-	redrawImages();
+	
 	
 	function updateSearchbar() {
 		let selection = document.getElementById("searchbar");
@@ -582,6 +580,10 @@ body::-webkit-scrollbar {
 	else { cookie.favorites = []; }
 	
 	console.log('Cookie:',cookie);
+	
+	updateCounts();
+	updateSearchbar();
+	redrawImages();
 	
 	function send(payload) {
 		let xhr = new XMLHttpRequest();
@@ -668,14 +670,14 @@ body::-webkit-scrollbar {
 				setCookie('favorites',cookie.favorites.join(',') );
 				document.getElementById("favorite").classList.remove("favorited"); // Make ungreen
 				if (image_tags[Number(num)-1].includes('favorites')) { image_tags[Number(num)-1].splice(image_tags[Number(num)-1].indexOf('favorites'),1); } // Remove favorite tag
-				setTimeout(() => { modifySelection("","update"); }, "100");
+				setTimeout(() => { updateCounts(); }, "100");
 			}
 			else {
 				cookie.favorites.push(num);
 				setCookie('favorites',cookie.favorites.join(',') );
 				document.getElementById("favorite").classList.add("favorited"); // Make green
 				image_tags[Number(num)-1].push('favorites'); // Add favorite tag
-				setTimeout(() => { modifySelection("","update"); }, "100");
+				setTimeout(() => { updateCounts(); }, "100");
 			}
 		}
 	}
@@ -981,6 +983,7 @@ body::-webkit-scrollbar {
 	}
 	
 	function showTags() {
+		if (showtags==1 && document.getElementById('searchbar').value=='') { hideTags(); return }
 		document.getElementById("tagbox").classList.remove("hidden");
 		document.getElementById("sunglasses").classList.remove("hidden");
 		document.getElementById("searchbar").value = search_string + ' ';
