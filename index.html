@@ -821,8 +821,13 @@ body::-webkit-scrollbar {
 			document.getElementById("hearts").onclick = function() {
 				if (mode=='Lines') { switchMode(); }
 				hearts = 1;
-				modifySelection("","set");
+				document.getElementById('searchbar').value = "";
+				updateCounts()
+				updateSearchbar()
 				document.body.scrollTop = document.documentElement.scrollTop = 0; // Jump to top
+				blocks = Math.floor((width-100)/100);
+				if (blocks < 1) { blocks = 1; }
+				if (blocks > 5) { blocks = 5; }
 				redrawImages();
 				hideFocus();
 			}
