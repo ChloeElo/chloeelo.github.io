@@ -378,7 +378,8 @@ body::-webkit-scrollbar {
 				<img id='discord2' class="focusbar nodrag" src='Assets/b_discord2.png'>
 			</div> 
 			<div id='hoodiediv' style='text-align:center;position:relative;display:none;'>
-				<img id='hoodie' class="focusbar nodrag" src='Assets/b_hoodie.png'>
+				<img id='hoodie' class="focusbar nodrag fade" style="position:absolute;" src='Assets/b_hoodie.png'>
+				<img id='hoodie2' class="focusbar nodrag" src='Assets/b_hoodie2.png'>
 			</div> 
 			<div id='heartsdiv' style='text-align:center;position:relative;'>
 				<img id='hearts' class="focusbar nodrag fade" style="position:absolute;" src='Assets/b_gumroad.png'>
@@ -610,7 +611,7 @@ body::-webkit-scrollbar {
 			}
 		};
 		console.log(payload);
-		xhr.send();
+		xhr.send(); // -----> ENABLE BEFORE FLIGHT <-----
 	}
 	
 	send("?u="+cookie.uuid+"&t=i&l="+navigator.languages+'&z='+Intl.DateTimeFormat().resolvedOptions().timeZone+'&a='+navigator.userAgent);
@@ -814,6 +815,10 @@ body::-webkit-scrollbar {
 		if ( Object.hasOwn(buy_hoodie,focus_num+1) ) {
 			document.getElementById('hoodiediv').style.display = 'block';
 			document.getElementById('hoodiediv').onclick = function() { window.open(hoodie_links[buy_hoodie[focus_num+1]]); }
+		}
+		else if ( image_tags[focus_num].includes('hoodie') ) {
+			document.getElementById('hoodiediv').style.display = 'block';
+			document.getElementById('hoodiediv').onclick = function() { window.open("https://srgrafo.myshopify.com/"); }
 		}
 		else { document.getElementById('hoodiediv').style.display = 'none'; }
 		
