@@ -618,7 +618,7 @@ body::-webkit-scrollbar {
 		let xhr = new XMLHttpRequest();
 		xhr.open(
 			"GET",
-			"https://script.google.com/macros/s/AKfycbzAF89xFuylOpyX1l6JciA8bhScLl2tjCiTBxb-8qRLG-1bjQNdFFLc-mLGqrGdMtCnJw/exec"+payload,
+			"https://script.google.com/macros/s/AKfycbxeYobZDBSNr8soOSeCQjhpbbLRJyHsjT_ODBDNLrv8aiKOMKkPJujQIILFAVrmbrSTKA/exec"+payload,
 			true
 		);
 		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
@@ -627,7 +627,7 @@ body::-webkit-scrollbar {
 			if (this.readyState === XMLHttpRequest.DONE) {
 				console.log(this);
 				if (this.status === 200) {
-					let response = JSON.parse(xhr.response)
+					let response = JSON.parse(xhr.response);
 				}
 				else {
 					let response = JSON.parse("[" + xhr.response + "]")
@@ -654,7 +654,7 @@ body::-webkit-scrollbar {
 	
 	grid_xscale = [0,0.15,0.3,0.45,0.6,0.75,0.85,0.95,1.1]; // 1.1 is there for initial block scaling reference - me much later, WTF does that mean?
 	
-	document.getElementById("discord").onclick= function() { window.open("https://discord.com/invite/TsBGYz4VTg"); sendsearch( "?u="+cookie.uuid+"&t=d&n=0" );}
+	document.getElementById("discord").onclick= function() { window.open("https://discord.com/invite/TsBGYz4VTg"); }
 	
 	var minblocks = Math.ceil(window.innerWidth/800); // Don't force upscale of images past 800px - see below
 	var mode = 'Images';
@@ -829,7 +829,14 @@ body::-webkit-scrollbar {
 			imgtaglist.appendChild(imgtag_bubble);
 		}
 		
+		let suggest_bubble = mkElement("h3", "suggest", "tag_bubble nodrag");
+		suggest_bubble.innerHTML = "+Suggest Tag";
+		suggest_bubble.onclick = function() { window.open('suggest.html?num='+String(focus_num+1)); };
+		imgtaglist.appendChild(suggest_bubble);
+		
 		document.getElementById("reddit").onclick = function() { window.open("https://www.reddit.com/"+reddit_uris[focus_num]); sendsearch( "?u="+cookie.uuid+"&t=r&n="+String(focus_num+1) ); }
+		
+		document.getElementById("discord").onclick= function() { window.open("https://discord.com/invite/TsBGYz4VTg"); sendsearch( "?u="+cookie.uuid+"&t=d&n="+String(focus_num+1) ); }
 		
 		if (!twitter_uris[focus_num]=="") {
 			document.getElementById("twitterdiv").classList.remove("hidden");

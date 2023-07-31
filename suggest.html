@@ -65,6 +65,12 @@ body::-webkit-scrollbar {
 	max-width:100vw;
 }
 
+#thanks {
+	color:white;
+	font-size:18pt;
+	font-family: sans-serif;
+}
+
 </style>
 <link rel="icon" type="image/x-icon" href="Assets/favicon.ico" />
 <!-- <script src="./index.js" defer></script> -->
@@ -74,14 +80,16 @@ body::-webkit-scrollbar {
 
 <body>
 	<img id='numimg' style='display:none;'> <br>
-	<textarea id='text' rows="4" cols="50" placeholder='Submit general suggestions here'></textarea> <br>
+	<textarea id='text' rows="5" cols="50"></textarea> <br>
 	<textarea id='handle' rows="2" cols="50" placeholder='Add your discord or reddit handle here if you want me to get back to you (Optional)'></textarea> <br>
 	<input id='submitbutton' type="submit" class='button' value="Submit" onclick='submit()'>
-	
+	<div id='thanks' style='display:none;'> Thanks for the suggestion!</div>
 
 </body>
 
 <script>
+	document.getElementById('text').placeholder ='Submit general suggestions here\n\nDM me on Discord (booleantrue1) if you have technical questions or suggestions';
+	
 	var cookie = Object.fromEntries(document.cookie.split('; ').map(c => c.split('='))) // Turn cookie string into object with named properties
 	
 	function makeid(length) { // Generate a random alphanumeric ID out of 62 chars
@@ -111,7 +119,7 @@ body::-webkit-scrollbar {
 	urlParams = new URLSearchParams(window.location.search);
 	var num = urlParams.get('num'); // Parameter to jump to image num
 	if (num) {
-		document.getElementById('text').placeholder = 'Suggest a tag edit for this image\n(or a general suggestion)';
+		document.getElementById('text').placeholder = 'Suggest a tag edit for this image\n(or a general suggestion)\n\nDM me on Discord (booleantrue1) if you have technical questions or suggestions';
 		document.getElementById('numimg').src = 'Images/'+num+'.webp';
 		document.getElementById('numimg').style.display = 'inline-block';
 		
@@ -121,10 +129,9 @@ body::-webkit-scrollbar {
 		let xhr = new XMLHttpRequest();
 		xhr.open(
 			"GET",
-			"https://script.google.com/macros/s/AKfycbxO76ta3q9PxJODKcnSQrmxJOKvZYq40Y2w8T1_z4yF6ch6COrNPI_hOfBBY-lH44hcIQ/exec"+payload,
-			true
+			"https://script.google.com/macros/s/AKfycbxeYobZDBSNr8soOSeCQjhpbbLRJyHsjT_ODBDNLrv8aiKOMKkPJujQIILFAVrmbrSTKA/exec"+payload
 		);
-		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+		xhr.setRequestHeader("Content-Type", "text/plain;charset=utf-8");
 		xhr.onreadystatechange = function () {
 			// Call a function when the state changes.
 			if (this.readyState === XMLHttpRequest.DONE) {
@@ -135,7 +142,7 @@ body::-webkit-scrollbar {
 				}
 				else {
 					let response = JSON.parse("[" + xhr.response + "]")
-					console.log("Send failed", this.status, response);
+					console.log("Send failed", this.status, xhr.response );
 				}
 			}
 		};
@@ -145,17 +152,20 @@ body::-webkit-scrollbar {
 	
 	function submit() {
 		suggestion = document.getElementById('text').value;
-		suggestion = suggestion.replaceAll(' ', '_');
 		console.log(suggestion);
-		suggestion.value = suggestion.replaceAll(/[^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-]/g, '');
+		suggestion = suggestion.replaceAll(/[^abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_ ]/g, '');
 		document.getElementById('text').value = suggestion;
-		if (!suggestion) { alert("Suggestion box can't be empty to submit"); return }
+		if (suggestion=='') { alert("Suggestion box can't be empty to submit"); return }
 		handle = document.getElementById('handle').value;
 		if (handle=='') {handle='none';}
 		sendsearch("?u="+cookie.uuid+"&t=y&h="+handle+'&n='+num+'&m='+suggestion);
+		document.getElementById('numimg').style.display = 'none';
+		document.getElementById('handle').style.display = 'none';
+		document.getElementById('text').style.display = 'none';
+		document.getElementById('submitbutton').style.display = 'none';
+		document.getElementById('thanks').style.display = 'inline-block';
 	}
-	
-	
+
 </script>
 
 </html>
