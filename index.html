@@ -242,8 +242,12 @@ body::-webkit-scrollbar {
 	transition:200ms;
 }
 
+.fullopacity {
+	
+}
+
 .graybutton {
-	filter: grayscale(100%);
+	
 }
 
 #focuslinks {
@@ -753,6 +757,8 @@ body::-webkit-scrollbar {
 	}
 	
 	function switchMode() {
+		if (showtags==1) { hideTags(); return }
+		
 		if (mode=='Images') {
 			let images = document.getElementsByClassName("image");
 			for(let i=0; i<images.length; i++) { images[i].style.display="none"; }
@@ -1060,6 +1066,8 @@ body::-webkit-scrollbar {
 		document.getElementById("tagbox").classList.remove("hidden");
 		document.getElementById("sunglasses").classList.remove("hidden");
 		document.getElementById("searchbar").value = search_string + ' ';
+		document.getElementById("colorbutton").src ='Assets/b_back.png';
+		document.getElementById("colorbutton").classList.add("fullopacity");
 		updateSearchbar()
 		showtags = 1;
 	}
@@ -1071,6 +1079,8 @@ body::-webkit-scrollbar {
 		if (search_string!="") { document.getElementById("searchbar").value = search_string + ' (' + String(valid_images.length) + ')'; }
 		//else { document.getElementById("searchbar").value = ""; }
 		showtags = 0;
+		document.getElementById("colorbutton").src ='Assets/b_color.png';
+		document.getElementById("colorbutton").classList.remove("fullopacity")
 		sendsearch("?u="+cookie.uuid+"&t=s&o="+document.getElementById("sort").value+"&s="+search_string);
 	}
 	

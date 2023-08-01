@@ -90,32 +90,6 @@ body::-webkit-scrollbar {
 <script>
 	document.getElementById('text').placeholder ='Submit general suggestions here\n\nDM me on Discord (booleantrue1) if you have technical questions or suggestions';
 	
-	var cookie = Object.fromEntries(document.cookie.split('; ').map(c => c.split('='))) // Turn cookie string into object with named properties
-	
-	function makeid(length) { // Generate a random alphanumeric ID out of 62 chars
-		let result = "";
-		const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-		for (var i = 0; i < length; i++) { result += charset.charAt(Math.floor(Math.random() * charset.length)); }
-		return result;
-	}
-	
-	function setCookie(id,value) { document.cookie = id + "=" + value + "; expires=Tue, 1 Jan 2030 12:00:00 UTC"; }
-	
-	if (!Object.hasOwn(cookie,'uuid')) {
-		setCookie('uuid',makeid(5));
-		setCookie('likes',"");
-		setCookie('favorites',"");
-		cookie = Object.fromEntries(document.cookie.split('; ').map(c => c.split('=')))
-	}
-	
-	if (cookie.likes) {	cookie.likes = cookie.likes.split(','); }
-	else { cookie.likes = []; }
-	if (cookie.favorites) {
-		cookie.favorites = cookie.favorites.split(',');
-		for(let i=0; i<cookie.favorites.length; i++) { image_tags[Number(cookie.favorites[i])-1].push('favorites') }
-	}
-	else { cookie.favorites = []; }
-	
 	urlParams = new URLSearchParams(window.location.search);
 	var num = urlParams.get('num'); // Parameter to jump to image num
 	if (num) {
@@ -165,6 +139,32 @@ body::-webkit-scrollbar {
 		document.getElementById('submitbutton').style.display = 'none';
 		document.getElementById('thanks').style.display = 'inline-block';
 	}
+	
+	var cookie = Object.fromEntries(document.cookie.split('; ').map(c => c.split('='))) // Turn cookie string into object with named properties
+	
+	function makeid(length) { // Generate a random alphanumeric ID out of 62 chars
+		let result = "";
+		const charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+		for (var i = 0; i < length; i++) { result += charset.charAt(Math.floor(Math.random() * charset.length)); }
+		return result;
+	}
+	
+	function setCookie(id,value) { document.cookie = id + "=" + value + "; expires=Tue, 1 Jan 2030 12:00:00 UTC"; }
+	
+	if (!Object.hasOwn(cookie,'uuid')) {
+		setCookie('uuid',makeid(5));
+		setCookie('likes',"");
+		setCookie('favorites',"");
+		cookie = Object.fromEntries(document.cookie.split('; ').map(c => c.split('=')))
+	}
+	
+	if (cookie.likes) {	cookie.likes = cookie.likes.split(','); }
+	else { cookie.likes = []; }
+	if (cookie.favorites) {
+		cookie.favorites = cookie.favorites.split(',');
+		for(let i=0; i<cookie.favorites.length; i++) { image_tags[Number(cookie.favorites[i])-1].push('favorites') }
+	}
+	else { cookie.favorites = []; }
 
 </script>
 
