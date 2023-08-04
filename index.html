@@ -585,7 +585,7 @@ body::-webkit-scrollbar {
 	else { cookie.likes = []; }
 	if (cookie.favorites) {
 		cookie.favorites = cookie.favorites.split(',');
-		for(let i=0; i<cookie.favorites.length; i++) { image_tags[Number(cookie.favorites[i])-1].push('favorites') }
+		for(let i=0; i<cookie.favorites.length; i++) { graf_data.get(cookie.favorites[i]).tags.push('favorites') }
 	}
 	else { cookie.favorites = []; }
 	
@@ -691,7 +691,9 @@ body::-webkit-scrollbar {
 	
 	function score(action) {
 		let src = document.getElementById("focusimg").src;
-		let num = src.split('/').slice(-1)[0].split('.')[0];
+		let name = src.split('/').slice(-1)[0].split('.')[0];
+		let graf = graf_data.get(name);
+		let num = graf.i;
 		if ( action=='like' ) {
 			if ( cookie.likes.includes(num) ) { // Unlike this image
 				cookie.likes.splice(cookie.likes.indexOf(num), 1);
@@ -715,7 +717,7 @@ body::-webkit-scrollbar {
 				cookie.favorites.splice(cookie.favorites.indexOf(num), 1);
 				setCookie('favorites',cookie.favorites.join(',') );
 				document.getElementById("favorite").classList.remove("favorited"); // Make ungreen
-				if (image_tags[Number(num)-1].includes('favorites')) { image_tags[Number(num)-1].splice(image_tags[Number(num)-1].indexOf('favorites'),1); } // Remove favorite tag
+				if (graf.tags.includes('favorites')) { graf.tags.splice(graf.tags.indexOf('favorites'),1); } // Remove favorite tag
 				score_counts[num-1][1] = score_counts[num-1][1]-1;
 				favorite_button.innerHTML = 'Favorite ('+String(score_counts[num-1][1])+')';
 				sendscore("?u="+cookie.uuid+"&t=g&n="+String(num));
@@ -725,7 +727,7 @@ body::-webkit-scrollbar {
 				cookie.favorites.push(num);
 				setCookie('favorites',cookie.favorites.join(',') );
 				document.getElementById("favorite").classList.add("favorited"); // Make green
-				image_tags[Number(num)-1].push('favorites'); // Add favorite tag
+				graf.tags.push('favorites'); // Add favorite tag
 				score_counts[num-1][1] = score_counts[num-1][1]+1;
 				favorite_button.innerHTML = 'Favorite ('+String(score_counts[num-1][1])+')';
 				sendscore("?u="+cookie.uuid+"&t=f&n="+String(num));
