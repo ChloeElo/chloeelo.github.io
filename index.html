@@ -247,7 +247,7 @@ body::-webkit-scrollbar {
 }
 
 .graybutton {
-	
+	filter: grayscale(1);
 }
 
 #focuslinks {
@@ -400,10 +400,13 @@ body::-webkit-scrollbar {
 
 <script>
 	
+	console.log(graf_data);
+	
 	var search_string = '';
 	var counts = {};
 	var include
 	var exclude
+	var hearts = 0;
 	
 	function updateCounts() {
 		include = []
@@ -412,7 +415,6 @@ body::-webkit-scrollbar {
 		
 		if (search_string!="") {
 			let selection_list = search_string.split(" ");
-			selection_list = selection_list.filter(tag => !tag.includes(')'));
 			for (let i=0; i < selection_list.length; i++){
 				if (selection_list[i][0]=="-") { exclude.push(selection_list[i].substr(1)) }
 				else { include.push(selection_list[i]) }
@@ -422,18 +424,23 @@ body::-webkit-scrollbar {
 		counts = {} // Tagcounts are shown next to tag names
 		for (let i=0; i < search_tags.length; i++){ counts[search_tags[i]] = 0 } // Reset all to 0 before we start counting
 		
-		for (let i=0; i < image_tags.length; i++){
-			if (hearts==1 && !(hearts_imgs.includes(i+1)||nnn.includes(i+1)) ) { continue }
-			img_tags = image_tags[i]
-			if ( contains(include,img_tags) && excludes(exclude,img_tags) ) { // Check that valid images have tags matching searchbar filter
-				valid_images.push(i+1);
-				for (let i=0; i < img_tags.length; i++){
-					if ( !include.includes(img_tags[i]) && !exclude.includes(img_tags[i]) ) { // Don't actually count the tags in the searchbar tho
-						counts[img_tags[i]] += 1;
+		for (const [name,graf] of graf_data) {
+			if (hearts && !(graf.heart||graf.nnn) ) { continue }
+			if (hearts==0 && search_string=="" && !Number.isInteger(Number(name))) { continue } 
+			if (hearts==0 && graf.req) { // This graf requires a tag in the search string to be shown
+				if (!search_string.includes(graf.req)) { continue }
+			}
+			let tags = graf.tags;
+			if ( contains(include,tags) && excludes(exclude,tags) ) { // Check that valid images have tags matching searchbar filter
+				valid_images.push(name);
+				for (let i=0; i < tags.length; i++){
+					if ( !include.includes(tags[i]) && !exclude.includes(tags[i]) ) { // Don't actually count the tags in the searchbar tho
+						counts[tags[i]] += 1;
 					}
 				}
 			}
 		}
+		console.log(valid_images);
 	}
 	
 	function xclicked() {
@@ -517,7 +524,7 @@ body::-webkit-scrollbar {
 		}
 		
 		selection.value = selection.value.toLowerCase();
-		selection.value = selection.value.replace(/[^abcdefghijklmnopqrstuvwxyz0123456789_ +-]/g, '');
+		selection.value = selection.value.replace(/[^abcdefghijklmnopqrstuvwxyz0123456789_ +-@]/g, '');
 		selection.value = selection.value.replace("  "," ");
 		selection.value = selection.value.replace(" + "," +");
 		selection.value = selection.value.replace(" - "," -");
@@ -615,7 +622,7 @@ body::-webkit-scrollbar {
 			}
 		};
 		console.log(payload);
-		xhr.send(); // -----> ENABLE BEFORE FLIGHT <-----
+		//xhr.send(); // -----> ENABLE BEFORE FLIGHT <-----
 	}
 	
 	function sendsearch(payload) {
@@ -640,7 +647,7 @@ body::-webkit-scrollbar {
 			}
 		};
 		console.log(payload);
-		xhr.send(); // -----> ENABLE BEFORE FLIGHT <-----
+		//xhr.send(); // -----> ENABLE BEFORE FLIGHT <-----
 	}
 	
 	sendsearch("?u="+cookie.uuid+"&t=i&l="+navigator.languages+'&z='+Intl.DateTimeFormat().resolvedOptions().timeZone+'&a='+navigator.userAgent);
@@ -662,7 +669,6 @@ body::-webkit-scrollbar {
 	
 	var minblocks = Math.ceil(window.innerWidth/800); // Don't force upscale of images past 800px - see below
 	var mode = 'Images';
-	var hearts = 0;
 	
 	window.addEventListener("resize", (event) => { // If the browser expands, expand minblocks - TODO make sure minblocks and maxblocks don't nonintersect
 		console.log('resize');
@@ -771,6 +777,11 @@ body::-webkit-scrollbar {
 			document.body.style.backgroundColor = "grey";
 			document.getElementById("focusback").style.backgroundColor = "grey";
 			mode = 'Lines'
+			if ( hearts ) {
+				hearts = 0;
+				updateCounts()
+				redrawImages()
+			}
 		}
 		else if (mode=='Lines') {
 			let images = document.getElementsByClassName("image");
@@ -784,10 +795,6 @@ body::-webkit-scrollbar {
 			document.body.style.backgroundColor = "black";
 			document.getElementById("focusback").style.backgroundColor = "black";
 			mode = 'Images'
-			if ( hearts ) {
-				hearts = 0;
-				redrawImages()
-			}
 			
 		}
 	}
@@ -795,16 +802,17 @@ body::-webkit-scrollbar {
 	function hideFocus() { document.getElementById("focusbox").classList.add("hidden"); } // document.exitFullscreen(); }
 	
 	var stay_hearts = 0; // Prevents toggling back to normal after clicking hearts button - reset on reloading focus_box
-	var focus_num = 0;
+	var focus_name = 0;
 	function focusImage(id,src) {
 		stay_hearts = 0;
-		focus_num = Number(id.replace('img',""))-1;
-		sendscore("?u="+cookie.uuid+"&t=v&n="+String(focus_num+1));
+		focus_name = id.replace('img',"");
+		graf = graf_data.get(focus_name);
+		sendscore("?u="+cookie.uuid+"&t=v&n="+String(focus_name));
 		focus_img = document.getElementById("focusimg");
-		if (mode=='Lines' && (no_lines.includes(focus_num+1) || (focus_num+1<200 && focus_num+1!=168)) ) { focus_img.classList.add("gray"); }
+		if (mode=='Lines' && graf.noL) { focus_img.classList.add("gray"); }
 		else { focus_img.classList.remove("gray"); }
-		if ( focus_num==225 ) { focus_img.src = 'Images/226.gif';}
-		else if ( focus_num==998 ) { focus_img.src = 'Images/999.gif';}
+		if ( focus_name==226 ) { focus_img.src = 'Images/226.gif';}
+		else if ( focus_name==999 ) { focus_img.src = 'Images/999.gif';}
 		else { focus_img.src = src;}
 		//document.getElementById("focusbox").requestFullscreen();
 		
@@ -813,16 +821,16 @@ body::-webkit-scrollbar {
 		
 		if (score_counts) {
 			console.log(score_counts);
-			like_button.innerHTML = 'Like ('+String(score_counts[focus_num][0])+')';
-			favorite_button.innerHTML = 'Favorite ('+String(score_counts[focus_num][1])+')';
+			like_button.innerHTML = 'Like ('+String(score_counts[graf.i][0])+')';
+			favorite_button.innerHTML = 'Favorite ('+String(score_counts[graf.i][1])+')';
 		}
 		
-		if ( cookie.likes.includes(String(focus_num+1)) ) { like_button.classList.add('liked'); }
+		if ( cookie.likes.includes(String(focus.name)) ) { like_button.classList.add('liked'); }
 		else { like_button.classList.remove('liked'); }
-		if ( cookie.favorites.includes(String(focus_num+1)) ) { favorite_button.classList.add('favorited'); }
+		if ( cookie.favorites.includes(String(focus.name)) ) { favorite_button.classList.add('favorited'); }
 		else { favorite_button.classList.remove('favorited'); }
 		
-		let img_tags = image_tags[focus_num]
+		let img_tags = graf.tags
 		const imgtaglist = document.getElementById("imgtaglist");
 		while (imgtaglist.lastElementChild) { // Clear imgtaglist
 			imgtaglist.removeChild(imgtaglist.lastElementChild);
@@ -837,44 +845,47 @@ body::-webkit-scrollbar {
 		
 		let suggest_bubble = mkElement("h3", "suggest", "tag_bubble nodrag");
 		suggest_bubble.innerHTML = "+Suggest Tag";
-		suggest_bubble.onclick = function() { window.open('suggest.html?num='+String(focus_num+1)); };
+		suggest_bubble.onclick = function() { window.open('suggest.html?num='+String(focus_name)); };
 		imgtaglist.appendChild(suggest_bubble);
 		
-		document.getElementById("reddit").onclick = function() { window.open("https://www.reddit.com/"+reddit_uris[focus_num]); sendsearch( "?u="+cookie.uuid+"&t=r&n="+String(focus_num+1) ); }
+		if (graf.reddit) {
+			document.getElementById("redditdiv").classList.remove("hidden");
+			document.getElementById("reddit").onclick = function() { window.open("https://www.reddit.com/"+graf.reddit); sendsearch( "?u="+cookie.uuid+"&t=r&n="+String(focus_name) ); }
+		}
+		else { document.getElementById("redditdiv").classList.add("hidden"); }
 		
-		document.getElementById("discord").onclick= function() { window.open("https://discord.com/invite/TsBGYz4VTg"); sendsearch( "?u="+cookie.uuid+"&t=d&n="+String(focus_num+1) ); }
+		document.getElementById("discord").onclick= function() { window.open("https://discord.com/invite/TsBGYz4VTg"); sendsearch( "?u="+cookie.uuid+"&t=d&n="+String(focus_name) ); }
 		
-		if (!twitter_uris[focus_num]=="") {
+		if (graf.twitter) {
 			document.getElementById("twitterdiv").classList.remove("hidden");
-			if ( twitter_altnums.includes(focus_num+1) ) { twitter_account = "https://twitter.com/SrGrafo_Art/status/"; }
+			if ( graf.twitter_alt ) { twitter_account = "https://twitter.com/SrGrafo_Art/status/"; }
 			else { twitter_account = "https://twitter.com/ChloeLouvre/status/"; }
-			document.getElementById("twitter").onclick = function() { window.open(twitter_account+twitter_uris[focus_num]); sendsearch( "?u="+cookie.uuid+"&t=x&n="+String(focus_num+1) ); }
+			document.getElementById("twitter").onclick = function() { window.open(twitter_account+graf.twitter); sendsearch( "?u="+cookie.uuid+"&t=x&n="+String(focus_name) ); }
 		}
 		else { document.getElementById("twitterdiv").classList.add("hidden"); }
 		
-		if ( Object.hasOwn(buy_hoodie,focus_num+1) ) {
+		if ( graf.hoodie ) {
 			document.getElementById('hoodiediv').style.display = 'block';
-			document.getElementById('hoodiediv').onclick = function() { window.open(hoodie_links[buy_hoodie[focus_num+1]]); sendsearch( "?u="+cookie.uuid+"&t=h&n="+String(focus_num+1) ); }
+			document.getElementById('hoodiediv').onclick = function() { window.open(hoodie_links[graf.hoodie]); sendsearch( "?u="+cookie.uuid+"&t=h&n="+String(focus_name) ); }
 		}
-		else if ( image_tags[focus_num].includes('hoodie') ) {
+		else if ( img_tags.includes('hoodie') ) {
 			document.getElementById('hoodiediv').style.display = 'block';
-			document.getElementById('hoodiediv').onclick = function() { window.open("https://srgrafo.myshopify.com/"); sendsearch( "?u="+cookie.uuid+"&t=h&n="+String(focus_num+1) ); }
+			document.getElementById('hoodiediv').onclick = function() { window.open("https://srgrafo.myshopify.com/"); sendsearch( "?u="+cookie.uuid+"&t=h&n="+String(focus_name) ); }
 		}
 		else { document.getElementById('hoodiediv').style.display = 'none'; }
 		
-		if (!gumroad_singles[focus_num]=="" || !gumroad_bundles[focus_num]=="") {
+		if (graf.gumroad) {
 			document.getElementById("heartsdiv").classList.remove("hidden");
-			if (!gumroad_singles[focus_num]=="") { gumroad_path = "https://srgrafo.gumroad.com/l/" + gumroad_singles[focus_num] + "?layout=profile"; }
-			else { gumroad_path = "https://srgrafo.gumroad.com/l/" + gumroad_bundles[focus_num] + "?layout=profile"; }
+			gumroad_path = "https://srgrafo.gumroad.com/l/" + graf.gumroad + "?layout=profile";
 			
 			heartspath = 'Hearts/' + id.replace('img',"") + ".webp";
 			//if (focus_num==493) { heartspath = 'Hearts/494.gif'; }
-			if (hearts_imgs.includes(focus_num+1)||focus_num==493) {
+			if (graf.gumroad) {
 				document.getElementById("hearts").onclick = function() {
 					window.open(gumroad_path);
 					document.getElementById("focusimg").src = heartspath;
 					stay_hearts = 1; // Keep hearts on the focus_img after clicking through to gumroad instead of flipping back to normal after mouse leaves heart button
-					sendsearch( "?u="+cookie.uuid+"&t=g&n="+String(focus_num+1) );
+					sendsearch( "?u="+cookie.uuid+"&t=g&n="+String(focus_name) );
 				}
 				document.getElementById("hearts").onmouseenter = function() { if (stay_hearts==0) {document.getElementById("focusimg").src = heartspath; } }
 				document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp"; } }
@@ -889,7 +900,7 @@ body::-webkit-scrollbar {
 		}
 		else { document.getElementById("heartsdiv").classList.add("hidden"); }
 		
-		if (focus_num==595 || focus_num==230) {
+		if (focus_name=="596" || focus_name=="231") {
 			document.getElementById("heartsdiv").classList.remove("hidden"); 
 			document.getElementById("hearts").onclick = function() {
 				if (mode=='Lines') { switchMode(); }
@@ -903,7 +914,7 @@ body::-webkit-scrollbar {
 				if (blocks > 5) { blocks = 5; }
 				redrawImages();
 				hideFocus();
-				sendsearch( "?u="+cookie.uuid+"&t=n&n="+String(focus_num+1) );
+				sendsearch( "?u="+cookie.uuid+"&t=n&n="+String(focus_name) );
 			}
 			document.getElementById("hearts").onmouseenter = ""
 			document.getElementById("hearts").onmouseleave = ""
@@ -1009,40 +1020,43 @@ body::-webkit-scrollbar {
 			document.getElementById("contentbox").appendChild(newgroup);
 			if (sort=='rand') { newheader.innerHTML = 'Random Order'; break } // Only create one header if random
 		}
-		for (let i=999; i > 0; i--) {
+		len = valid_images.length;
+		for (let i=len-1; i > -1; i--) {
 			if (sort=='new') { j=i; }
 			else if (sort=='old') { j=999-i; }
 			else if (sort=='rand') { j=randlist[i-1]; } // Scramble according to the same random list generated on start or selection
-			if ( valid_images.includes(j) ) {
-				
-				if (sort=='rand') { groupid = "group1"; }
-				else { groupid = "group"+String(Math.floor((j-1)/100)+1); }
-				
-				let newimg = mkElement("img", "img"+String(j), "image nodrag"); // Generate img element for Image/Hearts
-				if ( hearts ) {
-					if ( nnn.includes(j) ) { newimg.src = 'Images/'+String(j)+'.webp'; } // Special case when Image works for Hearts too
-					else { newimg.src = 'Hearts/'+String(j)+'.webp'; }
-				}
-				else { newimg.src = 'Images/'+String(j)+'.webp'; }
-				newimg.onclick = function() { focusImage(newimg.id,newimg.src); }
-				newimg.loading = 'lazy'
-				if (mode=='Lines') { newimg.style.display = "none"; }
-				document.getElementById(groupid).appendChild(newimg);
-				
-				
-				let newline = mkElement("img", "line"+String(j), "line nodrag");
-				if ( !(no_lines.includes(j) || (j<200 && j!=168)) ) { // Downselect for only images with lines
-					newline.src = 'Lines/'+String(j)+'.webp';
-				}
-				else {
-					newline.src = 'Images/'+String(j)+'.webp';
-					newline.classList.add("gray"); // Show imgs with no lines but grayscale
-				}
-				newline.onclick = function() { focusImage(newimg.id,newline.src); };
-				newline.loading = 'lazy'
-				if (mode!='Lines') { newline.style.display = "none"; }
-				document.getElementById(groupid).appendChild(newline);
+			name = valid_images[j];
+			graf = graf_data.get(name);
+			
+			// NOTE - need to add some code here to specify group for non-numeric named ids (Though because in JS '999.1'-1 = 998.1 decimal names should be fine... cursed)
+			if (sort=='rand') { groupid = "group1"; }
+			else { groupid = "group"+String(Math.floor((name-1)/100)+1); }
+			
+			let newimg = mkElement("img", "img"+name, "image nodrag"); // Generate img element for Image/Hearts
+			if ( hearts ) {
+				if ( graf.nnn ) { newimg.src = 'Images/'+name+'.webp'; } // Special case when Image works for Hearts too
+				else { newimg.src = 'Hearts/'+name+'.webp'; }
 			}
+			else { newimg.src = 'Images/'+name+'.webp'; }
+			newimg.onclick = function() { focusImage(newimg.id,newimg.src); }
+			newimg.loading = 'lazy'
+			if (mode=='Lines') { newimg.style.display = "none"; }
+			document.getElementById(groupid).appendChild(newimg);
+			
+			
+			let newline = mkElement("img", "line"+String(j), "line nodrag");
+			if ( !(graf.noL) ) { // Downselect for only images with lines
+				newline.src = 'Lines/'+name+'.webp';
+			}
+			else {
+				newline.src = 'Images/'+name+'.webp';
+				newline.classList.add("gray"); // Show imgs with no lines but grayscale
+			}
+			newline.onclick = function() { focusImage(newimg.id,newline.src); };
+			newline.loading = 'lazy'
+			if (mode!='Lines') { newline.style.display = "none"; }
+			document.getElementById(groupid).appendChild(newline);
+			
 		}
 		reblockGrid()
 	}
@@ -1081,7 +1095,7 @@ body::-webkit-scrollbar {
 		showtags = 0;
 		document.getElementById("colorbutton").src ='Assets/b_color.png';
 		document.getElementById("colorbutton").classList.remove("fullopacity")
-		sendsearch("?u="+cookie.uuid+"&t=s&o="+document.getElementById("sort").value+"&s="+search_string);
+		if (search_string != '') { sendsearch("?u="+cookie.uuid+"&t=s&o="+document.getElementById("sort").value+"&s="+search_string); }
 	}
 	
 	function modifySelection(tag,change) { // change to selection bar can be "add" "sub" "rem" "set"
