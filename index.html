@@ -400,8 +400,6 @@ body::-webkit-scrollbar {
 
 <script>
 	
-	console.log(graf_data);
-	
 	var search_string = '';
 	var counts = {};
 	var include
@@ -622,7 +620,7 @@ body::-webkit-scrollbar {
 			}
 		};
 		console.log(payload);
-		//xhr.send(); // -----> ENABLE BEFORE FLIGHT <-----
+		xhr.send(); // -----> ENABLE BEFORE FLIGHT <-----
 	}
 	
 	function sendsearch(payload) {
@@ -647,7 +645,7 @@ body::-webkit-scrollbar {
 			}
 		};
 		console.log(payload);
-		//xhr.send(); // -----> ENABLE BEFORE FLIGHT <-----
+		xhr.send(); // -----> ENABLE BEFORE FLIGHT <-----
 	}
 	
 	sendsearch("?u="+cookie.uuid+"&t=i&l="+navigator.languages+'&z='+Intl.DateTimeFormat().resolvedOptions().timeZone+'&a='+navigator.userAgent);
@@ -936,7 +934,8 @@ body::-webkit-scrollbar {
 		if (dragState != 0) {
 			let currentX = event.clientX;
 			let newblocks = dragStartBlocks - Math.floor( (currentX-dragStartX+50)/100 )
-			if (newblocks>20) { newblocks = 20 }; // Cap block width to 20
+			let maxblocks = Math.floor(window.innerWidth/50)
+			if (newblocks>50) { newblocks = 50 }; // Cap block width to 20
 			if (newblocks<minblocks) { newblocks = minblocks };
 			if (newblocks != blocks ) {
 				blocks = newblocks;
