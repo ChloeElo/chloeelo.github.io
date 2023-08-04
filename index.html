@@ -227,6 +227,15 @@ body::-webkit-scrollbar {
 	transition: opacity 0.5s ease-in;
 }
 
+#backbutton {
+	position:fixed;
+	top:0px;
+	left:0px;
+	width: 75px;
+	height: 75px;
+	border-radius: 50%;
+}
+
 #colorbutton {
 	position:fixed;
 	top:0px;
@@ -358,6 +367,7 @@ body::-webkit-scrollbar {
 	</div>
 	<button id='x_button' onclick='xclicked()'> <b>X</b> </button>
 	<img id="colorbutton" onclick="switchMode()" src='Assets/b_color.png'>
+	<img id="backbutton" onclick="switchMode()" style="display:none;" src='Assets/b_back.png'>
 	<div id="focusbox" class="hidden nodrag">
 		<div id='focusback'  style="height:fit-content;width:100vw;">
 			<img id='focusimg' onclick="hideFocus()" style="max-height:70vh;width:100%;max-width:100%;object-fit:contain;image-rendering:pixelated;display:block;" src="Images/1.webp" class='nodrag'>
@@ -538,11 +548,16 @@ body::-webkit-scrollbar {
 		
 		if (event instanceof KeyboardEvent){
 			if (event.key==='Enter') {
+				if (!isNaN(search_set.split(' ').slice(-1))) { // Some kind of number
+					document.getElementById('jumpto').value=search_set.split(' ').slice(-1);
+					search_set = search_set.split(' ').slice(0,-1).join(' ');
+				}
 				search_string = search_set;
 				console.log(search_string);
 				updateCounts();
 				redrawImages();
 				hideTags();
+				jumpTo('bypass');
 				selection.blur();
 				return
 			}
@@ -744,7 +759,7 @@ body::-webkit-scrollbar {
 			if (num<1) { num = 1; }
 			else if (num>999) { num = 999; }
 			document.getElementById("jumpto").value = num;
-			if (!valid_images.includes(num)) {
+			if (!valid_images.includes(String(num))) {
 				if ( hearts ) { document.getElementById("jumpto").value=''; return } // Exit if in hearts and not included
 				document.getElementById('searchbar').value = " "; updateSearchbar(); // If num not in selection, reset to include all
 			}
@@ -1081,7 +1096,8 @@ body::-webkit-scrollbar {
 		document.getElementById("tagbox").classList.remove("hidden");
 		document.getElementById("sunglasses").classList.remove("hidden");
 		document.getElementById("searchbar").value = search_string + ' ';
-		document.getElementById("colorbutton").src ='Assets/b_back.png';
+		document.getElementById("colorbutton").style.display = "none";
+		document.getElementById("backbutton").style.display = "block";
 		document.getElementById("colorbutton").classList.add("fullopacity");
 		updateSearchbar()
 		showtags = 1;
@@ -1094,7 +1110,8 @@ body::-webkit-scrollbar {
 		if (search_string!="") { document.getElementById("searchbar").value = search_string + ' (' + String(valid_images.length) + ')'; }
 		//else { document.getElementById("searchbar").value = ""; }
 		showtags = 0;
-		document.getElementById("colorbutton").src ='Assets/b_color.png';
+		document.getElementById("colorbutton").style.display = "block";
+		document.getElementById("backbutton").style.display = "none";
 		document.getElementById("colorbutton").classList.remove("fullopacity")
 		if (search_string != '') { sendsearch("?u="+cookie.uuid+"&t=s&o="+document.getElementById("sort").value+"&s="+search_string); }
 	}
