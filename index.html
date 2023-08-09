@@ -771,8 +771,12 @@ body::-webkit-scrollbar {
 			//window.scrollBy(0,window.innerHeight/2);
 			document.getElementById("tagbox").classList.add("hidden");
 			document.getElementById("sunglasses").classList.add("hidden");
-			document.getElementById("backbutton").style.display = "none";
+			if (search_string!="") { document.getElementById("searchbar").value = search_string + ' (' + String(valid_images.length) + ')'; }
+			//else { document.getElementById("searchbar").value = ""; }
 			showtags = 0;
+			document.getElementById("colorbutton").style.display = "block";
+			document.getElementById("backbutton").style.display = "none";
+			document.getElementById("colorbutton").classList.remove("fullopacity")
 			image.focus();
 			document.getElementById("jumpto").value='';
 		}
