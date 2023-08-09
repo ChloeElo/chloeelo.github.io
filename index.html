@@ -370,7 +370,7 @@ body::-webkit-scrollbar {
 	<img id="backbutton" onclick="switchMode()" style="display:none;" src='Assets/b_back.png'>
 	<div id="focusbox" class="hidden nodrag">
 		<div id='focusback'  style="height:fit-content;width:100vw;">
-			<img id='focusimg' onclick="hideFocus()" style="max-height:70vh;width:100%;max-width:100%;object-fit:contain;image-rendering:pixelated;display:block;" src="Images/1.webp" class='nodrag'>
+			<img id='focusimg' onclick="hideFocus()" style="max-height:70vh;width:100%;max-width:100%;object-fit:contain;image-rendering:pixelated;display:block;" class='nodrag'>
 		</div>
 		<div id='scoring'>
 			<h5 id='like' class='scorebar nodrag' onclick="score('like')"> Like </h5>
@@ -448,7 +448,7 @@ body::-webkit-scrollbar {
 				}
 			}
 		}
-		console.log(valid_images);
+		//console.log(valid_images);
 	}
 	
 	function xclicked() {
@@ -553,7 +553,7 @@ body::-webkit-scrollbar {
 					search_set = search_set.split(' ').slice(0,-1).join(' ');
 				}
 				search_string = search_set;
-				console.log(search_string);
+				//console.log(search_string);
 				updateCounts();
 				redrawImages();
 				hideTags();
@@ -623,7 +623,7 @@ body::-webkit-scrollbar {
 		xhr.onreadystatechange = function () {
 			// Call a function when the state changes.
 			if (this.readyState === XMLHttpRequest.DONE) {
-				console.log(this);
+				//console.log(this);
 				if (this.status === 200) {
 					let response = JSON.parse(xhr.response)
 					if (response != 'success') { score_counts = response; }
@@ -649,7 +649,7 @@ body::-webkit-scrollbar {
 		xhr.onreadystatechange = function () {
 			// Call a function when the state changes.
 			if (this.readyState === XMLHttpRequest.DONE) {
-				console.log(this);
+				//console.log(this);
 				if (this.status === 200) {
 					let response = JSON.parse(xhr.response);
 				}
@@ -680,12 +680,12 @@ body::-webkit-scrollbar {
 	
 	document.getElementById("discord").onclick= function() { window.open("https://discord.com/invite/TsBGYz4VTg"); }
 	
-	var minblocks = Math.ceil(window.innerWidth/800); // Don't force upscale of images past 800px - see below
+	var minblocks = Math.ceil(window.innerWidth/400); // Don't force upscale of images past 400px - see below
 	var mode = 'Images';
 	
 	window.addEventListener("resize", (event) => { // If the browser expands, expand minblocks - TODO make sure minblocks and maxblocks don't nonintersect
 		console.log('resize');
-		minblocks = Math.ceil(window.innerWidth/800); // N+1 minblock per 800px of width so images are never upscaled, only downscaled on the grid
+		minblocks = Math.ceil(window.innerWidth/400); // N+1 minblock per 400px of width so images are never upscaled, only downscaled on the grid
 		if (blocks < minblocks) {
 			blocks = minblocks;
 			reblockGrid()
@@ -771,6 +771,7 @@ body::-webkit-scrollbar {
 			//window.scrollBy(0,window.innerHeight/2);
 			document.getElementById("tagbox").classList.add("hidden");
 			document.getElementById("sunglasses").classList.add("hidden");
+			document.getElementById("backbutton").style.display = "none";
 			showtags = 0;
 			image.focus();
 			document.getElementById("jumpto").value='';
@@ -828,14 +829,14 @@ body::-webkit-scrollbar {
 		else { focus_img.classList.remove("gray"); }
 		if ( focus_name==226 ) { focus_img.src = 'Images/226.gif';}
 		else if ( focus_name==999 ) { focus_img.src = 'Images/999.gif';}
-		else { focus_img.src = src;}
+		else { focus_img.src = src.replace('_thumb','');}
 		//document.getElementById("focusbox").requestFullscreen();
 		
 		like_button = document.getElementById('like');
 		favorite_button = document.getElementById('favorite');
 		
 		if (score_counts) {
-			console.log(score_counts);
+			//console.log(score_counts);
 			like_button.innerHTML = 'Like ('+String(score_counts[graf.i][0])+')';
 			favorite_button.innerHTML = 'Favorite ('+String(score_counts[graf.i][1])+')';
 		}
@@ -894,7 +895,7 @@ body::-webkit-scrollbar {
 			gumroad_path = "https://srgrafo.gumroad.com/l/" + graf.gumroad + "?layout=profile";
 			
 			heartspath = 'Hearts/' + id.replace('img',"") + ".webp";
-			//if (focus_num==493) { heartspath = 'Hearts/494.gif'; }
+			if (focus_name=='494') { heartspath = 'Hearts/494.gif'; }
 			if (graf.gumroad) {
 				document.getElementById("hearts").onclick = function() {
 					window.open(gumroad_path);
@@ -904,7 +905,7 @@ body::-webkit-scrollbar {
 				}
 				document.getElementById("hearts").onmouseenter = function() { if (stay_hearts==0) {document.getElementById("focusimg").src = heartspath; } }
 				document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp"; } }
-				//if (focus_num==493) { document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = 'Images/' + id.replace('img',"") + ".webp"; } } }
+				if (focus_name=='494') { document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = 'Images/' + id.replace('img',"") + ".webp"; } } }
 
 			}
 			else {
@@ -1050,10 +1051,10 @@ body::-webkit-scrollbar {
 			
 			let newimg = mkElement("img", "img"+name, "image nodrag"); // Generate img element for Image/Hearts
 			if ( hearts ) {
-				if ( graf.nnn ) { newimg.src = 'Images/'+name+'.webp'; } // Special case when Image works for Hearts too
+				if ( graf.nnn ) { newimg.src = 'Images_thumb/'+name+'.webp'; } // Special case when Image works for Hearts too
 				else { newimg.src = 'Hearts/'+name+'.webp'; }
 			}
-			else { newimg.src = 'Images/'+name+'.webp'; }
+			else { newimg.src = 'Images_thumb/'+name+'.webp'; }
 			newimg.onclick = function() { focusImage(newimg.id,newimg.src); }
 			newimg.loading = 'lazy'
 			if (mode=='Lines') { newimg.style.display = "none"; }
@@ -1062,10 +1063,10 @@ body::-webkit-scrollbar {
 			
 			let newline = mkElement("img", "line"+String(j), "line nodrag");
 			if ( !(graf.noL) ) { // Downselect for only images with lines
-				newline.src = 'Lines/'+name+'.webp';
+				newline.src = 'Lines_thumb/'+name+'.webp';
 			}
 			else {
-				newline.src = 'Images/'+name+'.webp';
+				newline.src = 'Images_thumb/'+name+'.webp';
 				newline.classList.add("gray"); // Show imgs with no lines but grayscale
 			}
 			newline.onclick = function() { focusImage(newimg.id,newline.src); };
