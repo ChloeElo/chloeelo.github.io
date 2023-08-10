@@ -357,7 +357,7 @@ body::-webkit-scrollbar {
 				<option value="old">Sort Oldest</option>
 				<option value="rand">Sort Random</option>
 			</select>
-			<input type="number" id="jumpto" min="1" max="999" placeholder="Jump to number..." onkeypress="jumpTo(event)">
+			<input type="number" id="jumpto" min="1" max="999" placeholder="Jump to number..." onkeypress="jumpTo(event)" style="display:none;">
 		</div>
 		<div id='taglist' class="flex-container"></div>
 		<div id='taglist_below' onclick="hideTags()" style="width:100%;height:100vh;"></div>
@@ -415,6 +415,42 @@ body::-webkit-scrollbar {
 	var include
 	var exclude
 	var hearts = 0;
+	var valid_images = []
+	
+	function updateCounts2() {
+		include = []
+		exclude = []
+		valid_images = []
+		
+		if (search_string!="") {
+			let selection_list = search_string.split(" ");
+			for (let i=0; i < selection_list.length; i++){
+				if (selection_list[i][0]=="-") { exclude.push(selection_list[i].substr(1)) }
+				else { include.push(selection_list[i]) }
+			}
+		}
+		
+		counts = {} // Tagcounts are shown next to tag names
+		for (let i=0; i < search_tags.length; i++){ counts[search_tags[i]] = 0 } // Reset all to 0 before we start counting
+		
+		for (const [name,graf] of graf_data) {
+			if (hearts && !(graf.heart||graf.nnn) ) { continue }
+			if (hearts==0 && search_string=="" && !Number.isInteger(Number(name))) { continue } 
+			if (hearts==0 && graf.req) { // This graf requires a tag in the search string to be shown
+				if (!search_string.includes(graf.req)) { continue }
+			}
+			let tags = graf.tags;
+			if ( contains(include,tags) && excludes(exclude,tags) ) { // Check that valid images have tags matching searchbar filter
+				valid_images.push(name);
+				for (let i=0; i < tags.length; i++){
+					if ( !include.includes(tags[i]) && !exclude.includes(tags[i]) ) { // Don't actually count the tags in the searchbar tho
+						counts[tags[i]] += 1;
+					}
+				}
+			}
+		}
+		//console.log(valid_images);
+	}
 	
 	function updateCounts() {
 		include = []
@@ -518,10 +554,23 @@ body::-webkit-scrollbar {
 			}
 		}
 		
+		if (isNumbers.test(last_tag)) {
+			for (i=0; i<valid_images.length; i++) {
+				if (String(valid_images[i]).includes(last_tag)){
+					let num_bubble = mkElement("h3", "num_"+valid_images[i], "tag_bubble nodrag");
+					num_bubble.innerHTML = valid_images[i];
+					num_bubble.onclick = function() { jumpNum(num_bubble.innerHTML) };
+					num_bubble.style.fontSize = "16px";
+					taglist.appendChild(num_bubble)
+				}
+			}
+		}
+		
 	}
+
+	var isNumbers = /^\d+$/; // Regex that tests if a string is only numbers
 	
-	
-	
+	var last_tag = ''
 	function updateSearchbar() {
 		let selection = document.getElementById("searchbar");
 		
@@ -749,6 +798,26 @@ body::-webkit-scrollbar {
 				setTimeout(() => { updateCounts(); }, "100");
 			}
 		}
+	}
+	
+	function jumpNum(num) {
+		if(num=="") {return}
+		
+		if (mode=='Images') { image = document.getElementById("img" + String(num) ) }
+		else { image = document.getElementById("line" + String(num) ) }
+		blocks=minblocks;
+		reblockGrid()
+		image.scrollIntoView(false);
+		//window.scrollBy(0,window.innerHeight/2);
+		document.getElementById("tagbox").classList.add("hidden");
+		document.getElementById("sunglasses").classList.add("hidden");
+		if (search_string!="") { document.getElementById("searchbar").value = search_string + ' (' + String(valid_images.length) + ')'; }
+		//else { document.getElementById("searchbar").value = ""; }
+		showtags = 0;
+		document.getElementById("colorbutton").style.display = "block";
+		document.getElementById("backbutton").style.display = "none";
+		document.getElementById("colorbutton").classList.remove("fullopacity")
+		image.focus();
 	}
 	
 	function jumpTo(event) {
@@ -1014,7 +1083,6 @@ body::-webkit-scrollbar {
 		return newel;
 	}
 	
-	var valid_images = []
 	function redrawImages() {
 		const contentbox = document.getElementById("contentbox");
 		while (contentbox.lastElementChild) { // Clear contentbox
