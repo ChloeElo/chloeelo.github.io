@@ -706,53 +706,53 @@ body::-webkit-scrollbar {
 	
 	function score(action) {
 		let src = document.getElementById("focusimg").src;
-		let name = src.split('/').slice(-1)[0].split('.')[0];
+		let name = focus_name;
 		let graf = graf_data.get(name);
 		let num = graf.i;
 		if ( action=='like' ) {
-			if ( cookie.likes.includes(num) ) { // Unlike this image
-				cookie.likes.splice(cookie.likes.indexOf(num), 1);
+			if ( cookie.likes.includes(name) ) { // Unlike this image
+				cookie.likes.splice(cookie.likes.indexOf(name), 1);
 				setCookie('likes',cookie.likes.join(',') );
 				document.getElementById("like").classList.remove("liked");
-				score_counts[num-1][0] = score_counts[num-1][0]-1;
-				like_button.innerHTML = 'Like ('+String(score_counts[num-1][0])+')';
-				sendscore("?u="+cookie.uuid+"&t=m&n="+String(num));
+				score_counts[num][0] = score_counts[num][0]-1;
+				like_button.innerHTML = 'Like ('+String(score_counts[num][0])+')';
+				sendscore("?u="+cookie.uuid+"&t=m&n="+String(num+1));
 			}
 			else { // Like this image
-				cookie.likes.push(num);
+				cookie.likes.push(name);
 				setCookie('likes',cookie.likes.join(',') );
 				document.getElementById("like").classList.add("liked");
-				score_counts[num-1][0] = score_counts[num-1][0]+1;
-				like_button.innerHTML = 'Like ('+String(score_counts[num-1][0])+')';
-				sendscore("?u="+cookie.uuid+"&t=l&n="+String(num));
+				score_counts[num][0] = score_counts[num][0]+1;
+				like_button.innerHTML = 'Like ('+String(score_counts[num][0])+')';
+				sendscore("?u="+cookie.uuid+"&t=l&n="+String(num+1));
 			}
 		}
 		else if ( action=='favorite' ) {
-			if ( cookie.favorites.includes(num) ) {
-				cookie.favorites.splice(cookie.favorites.indexOf(num), 1);
+			if ( cookie.favorites.includes(name) ) {
+				cookie.favorites.splice(cookie.favorites.indexOf(name), 1);
 				setCookie('favorites',cookie.favorites.join(',') );
 				document.getElementById("favorite").classList.remove("favorited"); // Make ungreen
 				if (graf.tags.includes('favorites')) { graf.tags.splice(graf.tags.indexOf('favorites'),1); } // Remove favorite tag
-				score_counts[num-1][1] = score_counts[num-1][1]-1;
-				favorite_button.innerHTML = 'Favorite ('+String(score_counts[num-1][1])+')';
-				sendscore("?u="+cookie.uuid+"&t=g&n="+String(num));
+				score_counts[num][1] = score_counts[num][1]-1;
+				favorite_button.innerHTML = 'Favorite ('+String(score_counts[num][1])+')';
+				sendscore("?u="+cookie.uuid+"&t=g&n="+String(num+1));
 				setTimeout(() => { updateCounts(); }, "100");
 			}
 			else {
-				cookie.favorites.push(num);
+				cookie.favorites.push(name);
 				setCookie('favorites',cookie.favorites.join(',') );
 				document.getElementById("favorite").classList.add("favorited"); // Make green
 				graf.tags.push('favorites'); // Add favorite tag
-				score_counts[num-1][1] = score_counts[num-1][1]+1;
-				favorite_button.innerHTML = 'Favorite ('+String(score_counts[num-1][1])+')';
-				sendscore("?u="+cookie.uuid+"&t=f&n="+String(num));
+				score_counts[num][1] = score_counts[num][1]+1;
+				favorite_button.innerHTML = 'Favorite ('+String(score_counts[num][1])+')';
+				sendscore("?u="+cookie.uuid+"&t=f&n="+String(num+1));
 				setTimeout(() => { updateCounts(); }, "100");
 			}
 		}
 	}
 	
 	function jumpTo(event) {
-		if (event=='bypass' || event.keyCode==13) { // Return key
+		if (event=='bypass' || event.keyCode==13 || event.keyCode==9) { // Return or Tab key
 			let num = document.getElementById("jumpto").value;
 			if(num=="") {return}
 			else { num=Number(num); }
@@ -827,7 +827,7 @@ body::-webkit-scrollbar {
 		stay_hearts = 0;
 		focus_name = id.replace('img',"");
 		graf = graf_data.get(focus_name);
-		sendscore("?u="+cookie.uuid+"&t=v&n="+String(focus_name));
+		sendscore("?u="+cookie.uuid+"&t=v&n="+String(graf.i+1));
 		focus_img = document.getElementById("focusimg");
 		if (mode=='Lines' && graf.noL) { focus_img.classList.add("gray"); }
 		else { focus_img.classList.remove("gray"); }
@@ -845,9 +845,9 @@ body::-webkit-scrollbar {
 			favorite_button.innerHTML = 'Favorite ('+String(score_counts[graf.i][1])+')';
 		}
 		
-		if ( cookie.likes.includes(String(focus.name)) ) { like_button.classList.add('liked'); }
+		if ( cookie.likes.includes(String(focus_name)) ) { like_button.classList.add('liked'); }
 		else { like_button.classList.remove('liked'); }
-		if ( cookie.favorites.includes(String(focus.name)) ) { favorite_button.classList.add('favorited'); }
+		if ( cookie.favorites.includes(String(focus_name)) ) { favorite_button.classList.add('favorited'); }
 		else { favorite_button.classList.remove('favorited'); }
 		
 		let img_tags = graf.tags
@@ -898,9 +898,9 @@ body::-webkit-scrollbar {
 			document.getElementById("heartsdiv").classList.remove("hidden");
 			gumroad_path = "https://srgrafo.gumroad.com/l/" + graf.gumroad + "?layout=profile";
 			
-			heartspath = 'Hearts/' + id.replace('img',"") + ".webp";
-			if (focus_name=='494') { heartspath = 'Hearts/494.gif'; }
 			if (graf.heart) {
+				heartspath = 'Hearts/' + id.replace('img',"") + ".webp";
+				if (focus_name=='494') { heartspath = 'Hearts/494.gif'; }
 				document.getElementById("hearts").onclick = function() {
 					window.open(gumroad_path);
 					document.getElementById("focusimg").src = heartspath;
@@ -1000,7 +1000,7 @@ body::-webkit-scrollbar {
 		
 		bounds = closestimage.getBoundingClientRect()
 		diff = window.innerHeight/2 +100 - bounds.bottom; // Bring element back to prev center position
-		window.scrollBy(0,-diff);
+		if (centerjump) { window.scrollBy(0,-diff); } // centerjump is true after the first pass
 	}
 	
 	function mkElement(type, id, clas) {
@@ -1161,10 +1161,12 @@ body::-webkit-scrollbar {
 	goto_num = urlParams.get('num'); // Parameter to jump to image num
 	if (goto_num) {
 		document.getElementById("jumpto").value = Number(goto_num);
-		setTimeout(() => { jumpTo('bypass'); }, "200");
+		//setTimeout(() => { jumpTo('bypass'); }, "200");
 	}
 	
+	var centerjump = 0;
 	reblockGrid()
+	centerjump = 1;
 	
 </script>
 
