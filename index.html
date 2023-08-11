@@ -417,42 +417,69 @@ body::-webkit-scrollbar {
 	var hearts = 0;
 	var valid_images = []
 	
-	function updateCounts2() {
-		include = []
-		exclude = []
+	var tag_sets = {}
+	function generateSets() {
+		tag_sets['all'] = []; // Master set of all grafs
+		for (let i=0; i < search_tags.length; i++) { tag_sets[search_tags[i]] = []; }
+		for (let [name, graf] of graf_data) {
+			tag_sets['all'].push(name)
+			graf.tags.forEach((tag) => tag_sets[tag].push(name));
+		}
+	}
+	
+	generateSets()
+	
+	function intersection(a,b) { return a.filter(x => b.includes(x)); } // These should really be native...
+	function difference(a,b) { return a.filter(x => !b.includes(x)); }
+	function union(a,b) { return [...new Set([...a,...b])]; }
+	
+	function updateCounts() {
 		valid_images = []
+		valid_set = tag_sets['all']
+		let tags_searched = []
 		
 		if (search_string!="") {
 			let selection_list = search_string.split(" ");
 			for (let i=0; i < selection_list.length; i++){
-				if (selection_list[i][0]=="-") { exclude.push(selection_list[i].substr(1)) }
-				else { include.push(selection_list[i]) }
+				if (selection_list[i][0]=="-") {
+					tag = selection_list[i].substr(1);
+					tags_searched.push(tag);
+					valid_set = difference(valid_set,tag_sets[tag]);
+				}
+				else if (selection_list[i][0]=="+") {
+					tag = selection_list[i].substr(1);
+					tags_searched.push(tag);
+					valid_set = union(valid_set,tag_sets[tag]);
+				}
+				else {
+					tag = selection_list[i];
+					tags_searched.push(tag);
+					valid_set = intersection(valid_set,tag_sets[tag]);
+				}
 			}
 		}
 		
 		counts = {} // Tagcounts are shown next to tag names
 		for (let i=0; i < search_tags.length; i++){ counts[search_tags[i]] = 0 } // Reset all to 0 before we start counting
 		
-		for (const [name,graf] of graf_data) {
+		for (let i=0; i < valid_set.length; i++){
+			let name = valid_set[i];
+			let graf = graf_data.get(name);
 			if (hearts && !(graf.heart||graf.nnn) ) { continue }
 			if (hearts==0 && search_string=="" && !Number.isInteger(Number(name))) { continue } 
 			if (hearts==0 && graf.req) { // This graf requires a tag in the search string to be shown
 				if (!search_string.includes(graf.req)) { continue }
 			}
 			let tags = graf.tags;
-			if ( contains(include,tags) && excludes(exclude,tags) ) { // Check that valid images have tags matching searchbar filter
-				valid_images.push(name);
-				for (let i=0; i < tags.length; i++){
-					if ( !include.includes(tags[i]) && !exclude.includes(tags[i]) ) { // Don't actually count the tags in the searchbar tho
-						counts[tags[i]] += 1;
-					}
-				}
+			valid_images.push(name);
+			for (let i=0; i < tags.length; i++){
+				if (tags_searched.includes(tags[i])) { continue }
+				counts[tags[i]] += 1;
 			}
 		}
-		//console.log(valid_images);
 	}
 	
-	function updateCounts() {
+	function updateCounts2() {
 		include = []
 		exclude = []
 		valid_images = []
@@ -502,7 +529,9 @@ body::-webkit-scrollbar {
 		let searchbar = document.getElementById("searchbar");
 		lastspace = searchbar.value.lastIndexOf(' ');
 		lastminus = searchbar.value.lastIndexOf('-');
+		lastplus = searchbar.value.lastIndexOf('+');
 		if (lastminus>lastspace) { index=lastminus; }
+		else if (lastplus>lastspace) { index=lastplus; }
 		else { index=lastspace; }
 		if (index==-1) { // Neither space nor minus is present
 			searchbar.value = tag + ' '; // Set whole string to tag
@@ -513,8 +542,8 @@ body::-webkit-scrollbar {
 		updateSearchbar()
 	}
 
-	function contains(these,inthis){ if (these.length==0) { return 1 } else { return these.every(i => inthis.includes(i)); } } // Self explanatory
-	function excludes(these,inthis){ if (these.length==0) { return 1 } else { return !these.some(i => inthis.includes(i)); } } // Self explanatory
+	//function contains(these,inthis){ if (these.length==0) { return 1 } else { return these.every(i => inthis.includes(i)); } } // Self explanatory
+	//function excludes(these,inthis){ if (these.length==0) { return 1 } else { return !these.some(i => inthis.includes(i)); } } // Self explanatory
 	
 	function updateTags(tags) {
 		const taglist = document.getElementById("taglist");
@@ -524,24 +553,48 @@ body::-webkit-scrollbar {
 		
 		let searchbar = document.getElementById("searchbar");
 		
+		if (search_string!="") {
+			let selection_list = search_string.split(" ");
+			for (let i=0; i < selection_list.length; i++){
+				if (selection_list[i][0]=="-") {
+					tag = selection_list[i].substr(1);
+					let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
+					tag_bubble.style.backgroundColor = "red";
+					tag_bubble.innerHTML = '-'+tag;
+					tag_bubble.onclick = function() { searchbar.value = searchbar.value.replace(tag_bubble.innerHTML+' ',""); updateSearchbar(); };
+					taglist.appendChild(tag_bubble)
+				}
+				else if (selection_list[i][0]=="+") {
+					tag = selection_list[i].substr(1);
+					let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
+					tag_bubble.style.backgroundColor = "blue";
+					tag_bubble.innerHTML = '+'+tag;
+					tag_bubble.onclick = function() { searchbar.value = searchbar.value.replace(tag_bubble.innerHTML+' ',""); updateSearchbar(); };
+					taglist.appendChild(tag_bubble)
+				}
+				else {
+					tag = selection_list[i];
+					let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
+					tag_bubble.style.backgroundColor = "green";
+					tag_bubble.innerHTML = tag;
+					tag_bubble.onclick = function() { searchbar.value = searchbar.value.replace(tag_bubble.innerHTML+' ',""); updateSearchbar(); };
+					taglist.appendChild(tag_bubble)
+				}
+			}
+		}
+		
+		/*
 		for (let i=0; i < include.length; i++) { // Green bubbles for included tags
 			tag = include[i];
-			let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
-			tag_bubble.style.backgroundColor = "green";
-			tag_bubble.innerHTML = tag;
-			tag_bubble.onclick = function() { searchbar.value = searchbar.value.replace(tag_bubble.innerHTML+' ',""); updateSearchbar(); };
-			taglist.appendChild(tag_bubble)
-		}
-		
+			
+			
+		}*/
+		/*
 		for (let i=0; i < exclude.length; i++) { // Red bubbles for excluded tags
 			tag = exclude[i];
-			let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
-			tag_bubble.style.backgroundColor = "red";
-			tag_bubble.innerHTML = tag;
-			tag_bubble.onclick = function() { searchbar.value = searchbar.value.replace('-'+tag_bubble.innerHTML+' ',""); updateSearchbar(); };
-			taglist.appendChild(tag_bubble)
+			
 		}
-		
+		*/
 		for (i=0; i<tags.length; i++) {
 			let tag = tags[i];
 			if (counts[tag]>0) { // Grey bubbles for all the remaining tags that can still be applied
@@ -891,14 +944,12 @@ body::-webkit-scrollbar {
 		}
 	}
 	
-	function hideFocus() {
-		document.getElementById("focusbox").classList.add("hidden");
-		document.getElementById("focusimg").src = "";
-	} // document.exitFullscreen(); }
+	function hideFocus() { document.getElementById("focusbox").classList.add("hidden"); }
 	
 	var stay_hearts = 0; // Prevents toggling back to normal after clicking hearts button - reset on reloading focus_box
 	var focus_name = 0;
 	function focusImage(id,src) {
+		document.getElementById("focusimg").src = ""; // Clear last focus image before loading new one
 		stay_hearts = 0;
 		focus_name = id.replace('img',"");
 		graf = graf_data.get(focus_name);
