@@ -352,7 +352,7 @@ body::-webkit-scrollbar {
 	<div id='sunglasses' class="hidden"> </div>
 	<div id='tagbox' class="hidden">
 		<div id='searchoptions'>
-			<select id='sort' onchange='if(document.getElementById("sort").value=="rand") { shuffle(randlist); } redrawImages();'>
+			<select id='sort' onchange='if(document.getElementById("sort").value=="rand") { shuffle(); } redrawImages();'>
 				<option value="new">Sort Newest</option>
 				<option value="old">Sort Oldest</option>
 				<option value="rand">Sort Random</option>
@@ -619,8 +619,6 @@ body::-webkit-scrollbar {
 			
 			updateCounts();
 			redrawImages();
-			
-			console.log(valid_images);
 		}
 		
 		potential_tags = search_tags.filter(tag => tag.includes(last_tag));
@@ -642,6 +640,7 @@ body::-webkit-scrollbar {
 		setCookie('uuid',makeid(5));
 		setCookie('likes',"");
 		setCookie('favorites',"");
+		setCookie('logintime',0);
 		cookie = Object.fromEntries(document.cookie.split('; ').map(c => c.split('=')))
 	}
 	
@@ -712,7 +711,10 @@ body::-webkit-scrollbar {
 		xhr.send(); // -----> ENABLE BEFORE FLIGHT <-----
 	}
 	
-	sendsearch("?u="+cookie.uuid+"&t=i&l="+navigator.languages+'&z='+Intl.DateTimeFormat().resolvedOptions().timeZone+'&a='+navigator.userAgent);
+	if (Date.now()-cookie.logintime>900000) { //15min in ms
+		sendsearch("?u="+cookie.uuid+"&t=i&l="+navigator.languages+'&z='+Intl.DateTimeFormat().resolvedOptions().timeZone+'&a='+navigator.userAgent);
+		setCookie('logintime',Date.now());
+	}
 	sendscore("?u="+cookie.uuid+"&t=r");
 	
 	//send('initialize');
@@ -742,16 +744,17 @@ body::-webkit-scrollbar {
 	});
 	
 	var randlist = [];
-	for (let i = 0; i <= 999; i++) { randlist.push(i); } // Make default randlist
 	
-	function shuffle(array) {
-		for (let i = array.length - 1; i > 0; i--) {
+	function shuffle() {
+		randlist = [];
+		for (let i = 0; i < valid_images.length; i++) { randlist.push(i); } // Make default randlist
+		for (let i = randlist.length - 1; i > 0; i--) {
 			const j = Math.floor(Math.random() * (i + 1));
-			[array[i], array[j]] = [array[j], array[i]];
+			[randlist[i], randlist[j]] = [randlist[j], randlist[i]];
 		}
 	}
 	
-	shuffle(randlist);
+	shuffle();
 	
 	function score(action) {
 		let src = document.getElementById("focusimg").src;
@@ -888,7 +891,10 @@ body::-webkit-scrollbar {
 		}
 	}
 	
-	function hideFocus() { document.getElementById("focusbox").classList.add("hidden"); } // document.exitFullscreen(); }
+	function hideFocus() {
+		document.getElementById("focusbox").classList.add("hidden");
+		document.getElementById("focusimg").src = "";
+	} // document.exitFullscreen(); }
 	
 	var stay_hearts = 0; // Prevents toggling back to normal after clicking hearts button - reset on reloading focus_box
 	var focus_name = 0;
@@ -1110,14 +1116,16 @@ body::-webkit-scrollbar {
 			if (sort=='rand') { newheader.innerHTML = 'Random Order'; break } // Only create one header if random
 		}
 		len = valid_images.length;
+		if (sort=='rand') { shuffle(); }
 		for (let i=len-1; i > -1; i--) {
 			if (sort=='new') { j=i; }
-			else if (sort=='old') { j=999-i; }
-			else if (sort=='rand') { j=randlist[i-1]; } // Scramble according to the same random list generated on start or selection
+			else if (sort=='old') { j=len-i-1; } // Offset by -1 to make this work, no I don't know why...
+			else if (sort=='rand') { j=randlist[i]; } // Scramble according to the same random list generated on start or selection
 			name = valid_images[j];
 			graf = graf_data.get(name);
 			
 			// NOTE - need to add some code here to specify group for non-numeric named ids (Though because in JS '999.1'-1 = 998.1 decimal names should be fine... cursed)
+			// Me later, yeah I just decided to go with the cursed option and use only numeric names
 			if (sort=='rand') { groupid = "group1"; }
 			else { groupid = "group"+String(Math.floor((name-1)/100)+1); }
 			
