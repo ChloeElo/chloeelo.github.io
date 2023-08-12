@@ -444,21 +444,17 @@ body::-webkit-scrollbar {
 		if (search_string!="") {
 			let selection_list = search_string.split(" ");
 			for (let i=0; i < selection_list.length; i++){
-				if (selection_list[i][0]=="-") {
-					tag = selection_list[i].substr(1);
-					tags_searched.push(tag);
-					valid_set = difference(valid_set,tag_sets[tag]);
-				}
-				else if (selection_list[i][0]=="+") {
-					tag = selection_list[i].substr(1);
-					tags_searched.push(tag);
-					valid_set = union(valid_set,tag_sets[tag]);
-				}
-				else {
-					tag = selection_list[i];
-					tags_searched.push(tag);
-					valid_set = intersection(valid_set,tag_sets[tag]);
-				}
+				
+				if (selection_list[i][0]=="-"||selection_list[i][0]=="+") { tag = selection_list[i].substr(1); }
+				else { tag = selection_list[i]; }
+				
+				if (!Object.hasOwn(tag_sets,tag)) { valid_set = []; continue }
+				
+				tags_searched.push(tag);
+				
+				if (selection_list[i][0]=="-") { valid_set = difference(valid_set,tag_sets[tag]); }
+				else if (selection_list[i][0]=="+") { valid_set = union(valid_set,tag_sets[tag]); }
+				else { valid_set = intersection(valid_set,tag_sets[tag]); }
 			}
 		}
 		
@@ -471,7 +467,7 @@ body::-webkit-scrollbar {
 			if (hearts && !(graf.heart||graf.nnn) ) { continue }
 			if (hearts==0 && search_string=="" && !Number.isInteger(Number(name))) { continue } 
 			if (hearts==0 && graf.req) { // This graf requires a tag in the search string to be shown
-				if (!search_string.includes(graf.req)) { continue }
+				if (!search_string.includes('all')&&!search_string.includes(graf.req)) { continue }
 			}
 			let tags = graf.tags;
 			valid_images.push(name);
@@ -1043,7 +1039,7 @@ body::-webkit-scrollbar {
 			
 			if (graf.heart) {
 				heartspath = 'Hearts/' + id.replace('img',"") + ".webp";
-				if (focus_name=='494') { heartspath = 'Hearts/494.gif'; }
+				//if (focus_name=='494') { heartspath = 'Hearts/494.gif'; }
 				document.getElementById("hearts").onclick = function() {
 					window.open(gumroad_path);
 					document.getElementById("focusimg").src = heartspath;
@@ -1052,7 +1048,7 @@ body::-webkit-scrollbar {
 				}
 				document.getElementById("hearts").onmouseenter = function() { if (stay_hearts==0) {document.getElementById("focusimg").src = heartspath; } }
 				document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = mode + '/' + id.replace('img',"") + ".webp"; } }
-				if (focus_name=='494') { document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = 'Images/' + id.replace('img',"") + ".webp"; } } }
+				//if (focus_name=='494') { document.getElementById("hearts").onmouseleave = function() { if (stay_hearts==0) { document.getElementById("focusimg").src = 'Images/' + id.replace('img',"") + ".webp"; } } }
 
 			}
 			else {
