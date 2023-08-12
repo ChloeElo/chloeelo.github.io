@@ -371,6 +371,9 @@ body::-webkit-scrollbar {
 	<div id="focusbox" class="hidden nodrag">
 		<div id='focusback'  style="height:fit-content;width:100vw;">
 			<img id='focusimg' onclick="hideFocus()" style="max-height:70vh;width:100%;max-width:100%;object-fit:contain;image-rendering:pixelated;display:block;" class='nodrag'>
+			<video id='focusvid' onclick="hideFocus()" style="max-height:70vh;width:100%;max-width:100%;display:none;" playsinline loop>
+				<source src="" type="video/mp4" />
+			</video>
 		</div>
 		<div id='scoring'>
 			<h5 id='like' class='scorebar nodrag' onclick="score('like')"> Like </h5>
@@ -582,24 +585,13 @@ body::-webkit-scrollbar {
 				}
 			}
 		}
-		
-		/*
-		for (let i=0; i < include.length; i++) { // Green bubbles for included tags
-			tag = include[i];
-			
-			
-		}*/
-		/*
-		for (let i=0; i < exclude.length; i++) { // Red bubbles for excluded tags
-			tag = exclude[i];
-			
-		}
-		*/
+
 		for (i=0; i<tags.length; i++) {
 			let tag = tags[i];
-			if (counts[tag]>0) { // Grey bubbles for all the remaining tags that can still be applied
+			if (plusflag || counts[tag]>0) { // Grey bubbles for all the remaining tags that can still be applied
 				let tag_bubble = mkElement("h3", "tag_"+tag, "tag_bubble nodrag");
-				tag_bubble.innerHTML = tag + " (" + String(counts[tag]) + ")";
+				if (plusflag) { tag_bubble.innerHTML = tag + " (" + tag_sets[tag].length + ")"; }
+				else { tag_bubble.innerHTML = tag + " (" + String(counts[tag]) + ")"; }
 				tag_bubble.onclick = function() { finishSearchTag(tag_bubble.innerHTML); };
 				tag_bubble.style.fontSize = String(Math.floor(Math.sqrt(counts[tag])+10))+"px";
 				//console.log( tag, Math.floor(Math.sqrt(counts[tag])+10) );
@@ -624,6 +616,7 @@ body::-webkit-scrollbar {
 	var isNumbers = /^\d+$/; // Regex that tests if a string is only numbers
 	
 	var last_tag = ''
+	var plusflag = 0;
 	function updateSearchbar() {
 		let selection = document.getElementById("searchbar");
 		
@@ -644,6 +637,8 @@ body::-webkit-scrollbar {
 		//if (selection.value[0]==' ') { selection.value = selection.value.slice(1); return }
 		
 		last_mtag = selection.value.split(' ').slice(-1)[0];
+		if (last_mtag.includes('+')) { plusflag=1; } //Used to determine what count to show on potential tag bubbles
+		else { plusflag=0; }
 		last_tag = last_mtag.replace('+','').replace('-','');
 		
 		let search_set = selection.value.split(' ').slice(0,-1).join(' ');
@@ -944,7 +939,14 @@ body::-webkit-scrollbar {
 		}
 	}
 	
-	function hideFocus() { document.getElementById("focusbox").classList.add("hidden"); }
+	function hideFocus() {
+		document.getElementById("focusbox").classList.add("hidden");
+		if (document.getElementById("focusvid").src != '') {
+			document.getElementById("focusimg").style.display = 'block';
+			document.getElementById("focusvid").src = '';
+			document.getElementById("focusvid").style.display = 'none';
+		}
+	}
 	
 	var stay_hearts = 0; // Prevents toggling back to normal after clicking hearts button - reset on reloading focus_box
 	var focus_name = 0;
@@ -987,6 +989,21 @@ body::-webkit-scrollbar {
 			imgtag_bubble.innerHTML = tag;
 			imgtag_bubble.onclick = function() { document.getElementById('searchbar').value=imgtag_bubble.innerHTML+' '; updateSearchbar(); hideFocus(); };
 			imgtaglist.appendChild(imgtag_bubble);
+		}
+		
+		if (focus_name=='367'||focus_name=='494') {
+			document.getElementById("imgtag_@dobbele").remove();
+			let dobbele_bubble = mkElement("h3", "suggest", "tag_bubble nodrag");
+			dobbele_bubble.innerHTML = "+dobbele";
+			dobbele_bubble.style.color = "#e66423";
+			dobbele_bubble.style.backgroundColor = "#83cb39";
+			document.getElementById('focusvid').src = 'Images/'+focus_name+'.mp4';
+			dobbele_bubble.onclick = function() {
+				document.getElementById('focusimg').style.display='none';
+				document.getElementById('focusvid').style.display='block';
+				document.getElementById('focusvid').play();
+			};
+			imgtaglist.appendChild(dobbele_bubble);
 		}
 		
 		let suggest_bubble = mkElement("h3", "suggest", "tag_bubble nodrag");
