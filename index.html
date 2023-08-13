@@ -211,6 +211,7 @@ body::-webkit-scrollbar {
 	border-radius: 10px;
 	height:fit-content;
 	opacity:0.9;
+	white-space: nowrap;
 }
 
 .tag_bubble:hover {
@@ -764,9 +765,16 @@ body::-webkit-scrollbar {
 	//send('initialize');
 	
 	let width = window.innerWidth;
-	var blocks = Math.floor((width-100)/100); // Set default block width based on screen res
+	const initialBlockWidths = [2,3,4,5,6,8,10,15,20]; 
+	var blockWidths = initialBlockWidths; // Add 25, 34 and 50 to this if wide enough
+	let blocklimit = Math.floor(width/25);
+	if (blocklimit >= 25) { initialBlockWidths.push(25) };
+	if (blocklimit >= 34) { initialBlockWidths.push(34) };
+	if (blocklimit >= 50) { initialBlockWidths.push(50) };
+	
+	var blocks = Math.floor((width-100)/100); // Set ideal default block width based on screen res
 	if (blocks < 1) { blocks = 1; }
-	if (blocks > 5) { blocks = 5; } // Cap block width to 5 on load to avoid lagginess when the browser has to load hundreds of images at once
+	//if (blocks > 5) { blocks = 5; } // Cap block width to 5 on load to avoid lagginess when the browser has to load hundreds of images at once
 
 	stylesheet = document.styleSheets[0]
 	//stylesheet.insertRule(".grid-container { grid-template-columns: repeat("+String(blocks)+", minmax(0, 1fr));}", 0);
@@ -786,6 +794,42 @@ body::-webkit-scrollbar {
 			reblockGrid()
 		}
 	});
+	
+	var dragStartBlocks = 2;
+	var blockIndex = 0;
+	var dragState = 0;
+	var dragStartX;
+	contentbox.addEventListener("pointerdown", (event) => {
+		dragState = 1;
+		dragStartX = event.clientX;
+		dragStartBlocks = blocks;
+	});
+	
+	contentbox.addEventListener("pointermove", (event) => {
+		if (dragState != 0) {
+			let currentX = event.clientX;
+			let newblocks = dragStartBlocks - Math.floor( (currentX-dragStartX+50)/100 )
+			let maxblocks = Math.floor(window.innerWidth/50)
+			if (newblocks>50) { newblocks = 50 }; // Cap block width to 20
+			if (newblocks<minblocks) { newblocks = minblocks };
+			if (newblocks != blocks ) {
+				blocks = newblocks;
+				reblockGrid();
+			}
+		}
+	});
+	
+	contentbox.addEventListener("pointerup", (event) => {
+		dragState = 0; // End dragging event
+	});
+	
+	var current_blocks = 2;
+	contentbox.addEventListener("scroll", (event) => {
+		if (blocks != current_blocks) {
+			current_blocks = blocks;
+			setTimeout(reblockGrid(),1);
+		}
+	})
 	
 	var randlist = [];
 	
@@ -1081,41 +1125,6 @@ body::-webkit-scrollbar {
 		
 		document.getElementById("focusbox").classList.remove("hidden");
 	}
-
-	var dragStartBlocks = 2;
-	var dragState = 0;
-	var dragStartX;
-	contentbox.addEventListener("pointerdown", (event) => {
-		dragState = 1;
-		dragStartX = event.clientX;
-		dragStartBlocks = blocks;
-	});
-	
-	contentbox.addEventListener("pointermove", (event) => {
-		if (dragState != 0) {
-			let currentX = event.clientX;
-			let newblocks = dragStartBlocks - Math.floor( (currentX-dragStartX+50)/100 )
-			let maxblocks = Math.floor(window.innerWidth/50)
-			if (newblocks>50) { newblocks = 50 }; // Cap block width to 20
-			if (newblocks<minblocks) { newblocks = minblocks };
-			if (newblocks != blocks ) {
-				blocks = newblocks;
-				reblockGrid();
-			}
-		}
-	});
-	
-	contentbox.addEventListener("pointerup", (event) => {
-		dragState = 0; // End dragging event
-	});
-	
-	var current_blocks = 2;
-	contentbox.addEventListener("scroll", (event) => {
-		if (blocks != current_blocks) {
-			current_blocks = blocks;
-			setTimeout(reblockGrid(),1);
-		}
-	})
 	
 	function reblockGrid() {
 		let images
