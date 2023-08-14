@@ -496,7 +496,7 @@ var graf_data= new Map([
 ["491",{tags:["bikini","ass","blood","horror","lila","annoyed_face","angry_face"],reddit:"onn67l",twitter:"1417228226376646658",gumroad:"icuxho",i:490}],
 ["492",{tags:["chloe","ass","nude","censor_bar","pillow","smiling_face","smug_face"],reddit:"ooa6cv",twitter:"1417579272982704132",gumroad:"icuxho",nnn:1,i:491}],
 ["493",{tags:["chloe","bikini","feet","pillow","smiling_face"],reddit:"ooyrpb",twitter:"1417950523962138625",gumroad:"icuxho",i:492}],
-["494",{tags:["chloe","bikini","ass","nude","bottomless","topless","pillow","smiling_face","smug_face","@dobbele"],reddit:"opn12q",twitter:"1418315466678882304",heart:1,gumroad:"icuxho",nnn:1,i:493}],
+["494",{tags:["chloe","bikini","ass","nude","bottomless","topless","pillow","smiling_face","smug_face","@dobbele"],reddit:"opn12q",twitter:"1418315466678882304",gumroad:"icuxho",nnn:1,i:493}],
 ["495",{tags:["chloe","cat_outfit","tail","cat_ears","horror","claw","pillow","smiling_face","smug_face"],reddit:"oqaz8g",twitter:"1418671285077520388",gumroad:"icuxho",i:494}],
 ["496",{tags:["bikini","albino_girl","boob_wrap","smiling_face","smug_face"],reddit:"oqyia9",twitter:"1419045532778049542",gumroad:"icuxho",i:495}],
 ["497",{tags:["bikini","feet","lila","jacket","smiling_face","smug_face"],reddit:"orjfxq",twitter:"1419396839426732037",gumroad:"icuxho",i:496}],
