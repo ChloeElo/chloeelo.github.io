@@ -129,6 +129,7 @@ body::-webkit-scrollbar {
 
 #tagbox {
 	position:fixed;
+	top:65px;
 	width:100vw;
 	height:100vh;
 	overflow:hidden;
@@ -157,7 +158,6 @@ body::-webkit-scrollbar {
 #searchoptions {
 	width:100%;
 	height:30px;
-	margin-top: 65px;
 	margin-bottom:5px;
 }
 
@@ -184,6 +184,30 @@ body::-webkit-scrollbar {
 	margin-top:0px;
 	padding:1px;
 	border-width:1px;
+}
+
+#sort:hover {
+	color: gray;
+	transition:200ms;
+}
+
+#suggest {
+	font-size: 14pt;
+	font-family: sans-serif;
+	width:180px;
+	height:26px;
+	border-radius:10px;
+	text-align: center;
+	margin-top:0px;
+	margin-left:10px;
+	padding:1px;
+	border-width:1px;
+	border-style: groove;
+}
+
+#suggest:hover {
+	color: gray;
+	transition:200ms;
 }
 
 #imgtaglist {
@@ -351,6 +375,9 @@ body::-webkit-scrollbar {
 <body>
 	<div id="contentbox"></div>
 	<div id='sunglasses' class="hidden"> </div>
+	<div id='searchbox'>
+		<input id="searchbar" type="text" spellcheck="false" placeholder="Search..." class="nodrag" onclick="showTags()" onkeyup="updateSearchbar()">
+	</div>
 	<div id='tagbox' class="hidden">
 		<div id='searchoptions'>
 			<select id='sort' onchange='if(document.getElementById("sort").value=="rand") { shuffle(); } redrawImages();'>
@@ -358,13 +385,11 @@ body::-webkit-scrollbar {
 				<option value="old">Sort Oldest</option>
 				<option value="rand">Sort Random</option>
 			</select>
+			<button id='suggest' onclick='suggestSearch()'> Explore Searches </button>
 			<input type="number" id="jumpto" min="1" max="999" placeholder="Jump to number..." onkeypress="jumpTo(event)" style="display:none;">
 		</div>
 		<div id='taglist' class="flex-container"></div>
 		<div id='taglist_below' onclick="hideTags()" style="width:100%;height:100vh;"></div>
-	</div>
-	<div id='searchbox'>
-		<input id="searchbar" type="text" spellcheck="false" placeholder="Search..." class="nodrag" onclick="showTags()" onkeyup="updateSearchbar()">
 	</div>
 	<button id='x_button' onclick='xclicked()'> <b>X</b> </button>
 	<img id="colorbutton" onclick="switchMode()" src='Assets/b_color.png'>
@@ -432,6 +457,33 @@ body::-webkit-scrollbar {
 	}
 	
 	generateSets()
+	
+	var searchSuggestions = [
+		"amber +albino_girl +claire +colette +iris +lila +star_girl +willow +zoe ",
+		"angry_face +annoyed_face +scared_face +surprised_face ",
+		"dino ",
+		"@dobbele ",
+		"head_focus ",
+		"sketches ",
+		"brown_skin ",
+		"hoodie -tank_top -bikini ",
+		"gura +ina +hololive ",
+		"genshin_impact +blue_archive ",
+		"horror +blood ",
+		"ribbon_outfit ",
+		"pasties ",
+		"bunny_suit ",
+		"cat_ears +cat_outfit ",
+		]
+	function suggestSearch() {
+		
+		i = Math.floor(Math.random()*searchSuggestions.length);
+		
+		document.getElementById('searchbar').value= searchSuggestions[i];
+		updateSearchbar();
+		hideTags(); 
+
+	}
 	
 	function intersection(a,b) { return a.filter(x => b.includes(x)); } // These should really be native...
 	function difference(a,b) { return a.filter(x => !b.includes(x)); }
@@ -1257,7 +1309,7 @@ body::-webkit-scrollbar {
 		showtags = 1;
 	}
 	
-	
+	var prev_search_string = '';
 	function hideTags() {
 		document.getElementById("tagbox").classList.add("hidden");
 		document.getElementById("sunglasses").classList.add("hidden");
@@ -1267,7 +1319,10 @@ body::-webkit-scrollbar {
 		document.getElementById("colorbutton").style.display = "block";
 		document.getElementById("backbutton").style.display = "none";
 		document.getElementById("colorbutton").classList.remove("fullopacity")
-		if (search_string != '') { sendsearch("?u="+cookie.uuid+"&t=s&o="+document.getElementById("sort").value+"&s="+search_string); }
+		if (search_string != '' && search_string != prev_search_string) {
+			sendsearch("?u="+cookie.uuid+"&t=s&o="+document.getElementById("sort").value+"&s="+search_string.replaceAll('+','--'));
+			prev_search_string = search_string;
+		}
 	}
 	
 	function modifySelection(tag,change) { // change to selection bar can be "add" "sub" "rem" "set"
