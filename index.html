@@ -191,7 +191,7 @@ body::-webkit-scrollbar {
 	transition:200ms;
 }
 
-#suggest {
+#suggestsearch {
 	font-size: 14pt;
 	font-family: sans-serif;
 	width:180px;
@@ -205,7 +205,7 @@ body::-webkit-scrollbar {
 	border-style: groove;
 }
 
-#suggest:hover {
+#suggestsearch:hover {
 	color: gray;
 	transition:200ms;
 }
@@ -385,7 +385,7 @@ body::-webkit-scrollbar {
 				<option value="old">Sort Oldest</option>
 				<option value="rand">Sort Random</option>
 			</select>
-			<button id='suggest' onclick='suggestSearch()'> Explore Searches </button>
+			<button id='suggestsearch' onclick='suggestSearch()'> Explore Searches </button>
 			<input type="number" id="jumpto" min="1" max="999" placeholder="Jump to number..." onkeypress="jumpTo(event)" style="display:none;">
 		</div>
 		<div id='taglist' class="flex-container"></div>
@@ -460,21 +460,24 @@ body::-webkit-scrollbar {
 	
 	var suggest_number = 0;
 	var searchSuggestions = [
+		"animated ",
 		"amber +albino_girl +claire +colette +iris +lila +star_girl +willow +zoe ",
+		"brown_skin ",
 		"angry_face +annoyed_face +scared_face +surprised_face ",
 		"dino ",
-		"@dobbele ",
-		"head_focus ",
-		"sketches ",
-		"brown_skin ",
 		"hoodie -tank_top -bikini ",
+		"@dobbele ",
+		"manga_style ",
+		"cat_ears +cat_outfit ",
+		"head_focus ",
 		"gura +ina +hololive ",
+		"sketches ",
 		"genshin_impact +blue_archive ",
 		"horror +blood ",
+		"bunny_suit ",	
+		"claw +horns +wings ",
 		"ribbon_outfit ",
-		"pasties ",
-		"bunny_suit ",
-		"cat_ears +cat_outfit ",
+		"pasties ",	
 		]
 	function suggestSearch() {
 		
