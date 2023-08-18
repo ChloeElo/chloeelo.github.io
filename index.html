@@ -458,6 +458,7 @@ body::-webkit-scrollbar {
 	
 	generateSets()
 	
+	var suggest_number = 0;
 	var searchSuggestions = [
 		"amber +albino_girl +claire +colette +iris +lila +star_girl +willow +zoe ",
 		"angry_face +annoyed_face +scared_face +surprised_face ",
@@ -477,11 +478,12 @@ body::-webkit-scrollbar {
 		]
 	function suggestSearch() {
 		
-		i = Math.floor(Math.random()*searchSuggestions.length);
+		//i = Math.floor(Math.random()*searchSuggestions.length);
 		
-		document.getElementById('searchbar').value= searchSuggestions[i];
+		document.getElementById('searchbar').value= searchSuggestions[suggest_number%searchSuggestions.length];
 		updateSearchbar();
-		hideTags(); 
+		hideTags();
+		suggest_number = suggest_number +1;
 
 	}
 	
