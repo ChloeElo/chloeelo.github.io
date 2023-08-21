@@ -1370,7 +1370,7 @@ body::-webkit-scrollbar {
 	goto_num = urlParams.get('num'); // Parameter to jump to image num
 	if (goto_num) {
 		document.getElementById("jumpto").value = Number(goto_num);
-		//setTimeout(() => { jumpTo('bypass'); }, "200");
+		setTimeout(() => { jumpTo('bypass'); focusImage('img'+goto_num,'Images_thumb/'+goto_num+'.webp') }, "200");
 	}
 	
 	var centerjump = 0;
