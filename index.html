@@ -452,7 +452,11 @@ body::-webkit-scrollbar {
 		for (let i=0; i < search_tags.length; i++) { tag_sets[search_tags[i]] = []; }
 		for (let [name, graf] of graf_data) {
 			tag_sets['all'].push(name)
-			graf.tags.forEach((tag) => tag_sets[tag].push(name));
+			graf.tags.forEach((tag) => {
+				if (!(tag in tag_sets)) { tag_sets[tag] = []; } // If tag not initialized in search_tags, initialize our own
+				tag_sets[tag].push(name)
+				}
+			);
 		}
 	}
 	
@@ -461,9 +465,9 @@ body::-webkit-scrollbar {
 	var suggest_number = 0;
 	var searchSuggestions = [
 		"animated ",
-		"amber +albino_girl +claire +colette +iris +lila +star_girl +willow +zoe ",
+		"all amber +albino_girl +claire +colette +iris +lila_violette +star_girl +willow +zoe ",
 		"brown_skin ",
-		"angry_face +annoyed_face +scared_face +surprised_face ",
+		"angry +annoyed +neutral_face +scared +surprised ",
 		"dino ",
 		"hoodie -tank_top -bikini ",
 		"@dobbele ",
@@ -599,8 +603,8 @@ body::-webkit-scrollbar {
 		updateSearchbar()
 	}
 
-	//function contains(these,inthis){ if (these.length==0) { return 1 } else { return these.every(i => inthis.includes(i)); } } // Self explanatory
-	//function excludes(these,inthis){ if (these.length==0) { return 1 } else { return !these.some(i => inthis.includes(i)); } } // Self explanatory
+	function contains(these,inthis){ if (these.length==0) { return 1 } else { return these.every(i => inthis.includes(i)); } } // Self explanatory
+	function excludes(these,inthis){ if (these.length==0) { return 1 } else { return !these.some(i => inthis.includes(i)); } } // Self explanatory
 	
 	function updateTags(tags) {
 		const taglist = document.getElementById("taglist");
@@ -1118,7 +1122,8 @@ body::-webkit-scrollbar {
 		
 		if (graf.twitter) {
 			document.getElementById("twitterdiv").classList.remove("hidden");
-			if ( graf.twitter_alt ) { twitter_account = "https://twitter.com/SrGrafo_Art/status/"; }
+			if ( graf.twitter_alt==1 ) { twitter_account = "https://twitter.com/SrGrafo_Art/status/"; }
+			else if ( graf.twitter_alt==2 ) { twitter_account = "https://twitter.com/HarxMLeth/status/"; }
 			else { twitter_account = "https://twitter.com/ChloeLouvre/status/"; }
 			document.getElementById("twitter").onclick = function() { window.open(twitter_account+graf.twitter); sendsearch( "?u="+cookie.uuid+"&t=x&n="+String(focus_name) ); }
 		}
