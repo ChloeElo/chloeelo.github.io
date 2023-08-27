@@ -446,6 +446,16 @@ body::-webkit-scrollbar {
 	var hearts = 0;
 	var valid_images = []
 	
+	urlParams = new URLSearchParams(window.location.search);
+	paramselection = urlParams.get('search'); // Parameter for default search
+	// if (paramselection) { modifySelection(paramselection.replace("%20"," "),'set'); }
+	// else { downselect(); redrawImages(); }
+	
+	url_nnn = urlParams.get('nnn'); // Parameter to jump to image num
+	if (url_nnn) {
+		hearts=1;
+	}
+	
 	var tag_sets = {}
 	function generateSets() {
 		tag_sets['all'] = []; // Master set of all grafs
@@ -1366,11 +1376,6 @@ body::-webkit-scrollbar {
 		downselect()
 		redrawImages() 
 	}
-	
-	urlParams = new URLSearchParams(window.location.search);
-	paramselection = urlParams.get('search'); // Parameter for default search
-	// if (paramselection) { modifySelection(paramselection.replace("%20"," "),'set'); }
-	// else { downselect(); redrawImages(); }
 	
 	goto_num = urlParams.get('num'); // Parameter to jump to image num
 	if (goto_num) {
