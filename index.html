@@ -1128,7 +1128,11 @@ body::-webkit-scrollbar {
 		}
 		else { document.getElementById("redditdiv").classList.add("hidden"); }
 		
-		document.getElementById("discord").onclick= function() { window.open("https://discord.com/invite/TsBGYz4VTg"); sendsearch( "?u="+cookie.uuid+"&t=d&n="+String(focus_name) ); }
+		if (!graf.tags.includes('plotlo')) {
+			document.getElementById("discorddiv").classList.remove("hidden");
+			document.getElementById("discord").onclick= function() { window.open("https://discord.com/invite/TsBGYz4VTg"); sendsearch( "?u="+cookie.uuid+"&t=d&n="+String(focus_name) ); }
+		}
+		else { document.getElementById("discorddiv").classList.add("hidden"); }
 		
 		if (graf.twitter) {
 			document.getElementById("twitterdiv").classList.remove("hidden");
