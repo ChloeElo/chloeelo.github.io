@@ -1208,4 +1208,5 @@ var graf_data= new Map([
 ["1007",{tags:["hatsuzuki","azur_lane","long_hair","ponytail","tube_top","panties","crouching","ass","feet","smiling"],reddit:"16l8k5h",twitter:"1703479766290993428",gumroad:"jfgjnd",heart:1,i:1202}],
 ["1007.1",{tags:["albino_girl","bikini","sitting","feet","smiling"],reddit:"16m26uk",twitter:"1703829305027973441",heart:1,i:1203}],
 ["1008",{tags:["chloe","bikini","bottomless","barefoot_sandals","lying","feet","smiling"],reddit:"16mybkx",twitter:"1704199285057761595",gumroad:"ftsbfx",heart:1,i:1204}],
+["1009",{tags:["shuten_douji","fate_series","tube_top","panties","crouching","horns","feet","smug"],reddit:"16npfmq",twitter:"1704530818780041615",gumroad:"ugnsrl",heart:1,i:1205}],
 ]);
