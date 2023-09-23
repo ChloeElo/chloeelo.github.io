@@ -1211,4 +1211,5 @@ var graf_data= new Map([
 ["1009",{tags:["shuten_douji","fate_series","tube_top","panties","crouching","horns","feet","smug"],reddit:"16npfmq",twitter:"1704530818780041615",gumroad:"ugnsrl",heart:1,i:1205}],
 ["1009.1",{tags:["chloe","nude","standing","smiling","smug"],reddit:"16ojufs",twitter:"1704890003728335017",nnn:1,i:1206}],
 ["1009.2",{tags:["iris","long_hair","nude","standing","feet","surprised","horror"],reddit:"16pegwq",twitter:"1705255209054753165",nnn:1,i:1207}],
+["1010",{tags:["albino_girl","bikini","bow_ribbon","lying","feet","glasses","smiling","smug"],reddit:"16q3e6x",twitter:"1705561640601579941",gumroad:"lwjaj",heart:1,i:1208}],
 ]);
