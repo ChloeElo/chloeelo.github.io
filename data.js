@@ -1213,4 +1213,5 @@ var graf_data= new Map([
 ["1009.2",{tags:["iris","long_hair","nude","standing","feet","surprised","horror"],reddit:"16pegwq",twitter:"1705255209054753165",nnn:1,i:1207}],
 ["1010",{tags:["albino_girl","bikini","bow_ribbon","lying","feet","glasses","smiling","smug"],reddit:"16q3e6x",twitter:"1705561640601579941",gumroad:"lwjaj",heart:1,i:1208}],
 ["1010.1",{tags:["chloe","unknown_girl","nude","standing","back","feet","ass","surprised"],reddit:"16rz64s",twitter:"1706368948906680514",nnn:1,i:1209}],
+["1010.2",{tags:["chloe","nude","standing","smilling"],reddit:"16subrz",twitter:"1706723638693580944",nnn:1,i:1210}],
 ]);
