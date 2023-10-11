@@ -1219,5 +1219,6 @@ var graf_data= new Map([
 ["1012",{tags:["shigure_ui","vtuber","ponytail","bikini","skirt","barefoot_sandals","feet","sitting","angry","smug"],reddit:"16vj4va",twitter:"1707822700654203081",gumroad:"bnhcw",heart:1,i:1213}],
 ["1013",{tags:["chloe","bikini","skirt","ass","feet","sitting","smiling","smug"],reddit:"16yxlwj",twitter:"1709255122746847493",gumroad:"ykexb",heart:1,i:1214}],
 ["1014",{tags:["gura","long_hair","bunny_ears","bunny_suit","stockings","barefoot_sandals","feet","tail","standing","surprised"],reddit:"171fiqk",twitter:"1710317250761109758",gumroad:"ugaxh",heart:1,i:1215}],
-["1015",{tags:["ibaraki_douji","long_hair","bikini","skirt","feet","ass","horns","lying","smiling"],reddit:"173ujdt",twitter:"1711401819585355971",gumroad:"vabspu",heart:1,i:1216}],
+["1015",{tags:["ibaraki_douji","fate_series","long_hair","bikini","skirt","feet","ass","horns","lying","smiling"],reddit:"173ujdt",twitter:"1711401819585355971",gumroad:"vabspu",heart:1,i:1216}],
+["1015.1",{tags:["chloe","nude","standing","smiling"],reddit:"175hac2",twitter:"1712132804862005694",nnn:1,i:1217}],
 ]);
