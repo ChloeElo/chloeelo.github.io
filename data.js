@@ -1222,4 +1222,5 @@ var graf_data= new Map([
 ["1015",{tags:["ibaraki_douji","fate_series","long_hair","bikini","skirt","feet","ass","horns","lying","smiling"],reddit:"173ujdt",twitter:"1711401819585355971",gumroad:"vabspu",heart:1,i:1216}],
 ["1015.1",{tags:["chloe","nude","standing","smiling"],reddit:"175hac2",twitter:"1712132804862005694",nnn:1,i:1217}],
 ["1015.2",{tags:["albino_girl","nude","standing","smug","smiling"],reddit:"1769km7",twitter:"1712488841024606264",nnn:1,i:1218}],
+["1015.3",{tags:["claire","nude","standing","weapon","smug","smiling"],reddit:"1773ave",twitter:"1712874475430003152",nnn:1,i:1219}],
 ]);
