@@ -474,6 +474,7 @@ body::-webkit-scrollbar {
 	
 	var suggest_number = 0;
 	var searchSuggestions = [
+		"sketch ",
 		"cat_ears +cat_outfit ",
 		"head_focus ",
 		"all gura +ina +hololive ",
@@ -538,7 +539,7 @@ body::-webkit-scrollbar {
 			let name = valid_set[i];
 			let graf = graf_data.get(name);
 			if (hearts && !(graf.heart||graf.nnn) ) { continue }
-			//if (hearts==0 && search_string=="" && !Number.isInteger(Number(name))) { continue } // Show only integers if no search
+			if (hearts==0 && search_string=="" && !Number.isInteger(Number(name))) { continue } // Show only integers if no search
 			if (hearts==0 && graf.req) { // This graf requires a tag in the search string to be shown
 				if (!search_string.includes('all')&&!search_string.includes(graf.req)) { continue }
 			}
