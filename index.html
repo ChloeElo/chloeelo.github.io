@@ -847,7 +847,7 @@ body::-webkit-scrollbar {
 	
 	var blocks = Math.floor((width-100)/100); // Set ideal default block width based on screen res
 	if (blocks < 1) { blocks = 1; }
-	//if (blocks > 5) { blocks = 5; } // Cap block width to 5 on load to avoid lagginess when the browser has to load hundreds of images at once
+	if (blocks > 10) { blocks = 10; } // Cap block width to 5 on load to avoid lagginess when the browser has to load hundreds of images at once
 
 	stylesheet = document.styleSheets[0]
 	//stylesheet.insertRule(".grid-container { grid-template-columns: repeat("+String(blocks)+", minmax(0, 1fr));}", 0);
