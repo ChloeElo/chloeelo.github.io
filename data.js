@@ -1258,4 +1258,5 @@ var graf_data= new Map([
 ["1044",{tags:["rpvoid","cloak","shirt","skirt","standing","feet","neutral_face","dino","background_detail"],reddit:"1c2ffyo",twitter:"1778841880593150280",gumroad:"bexgyo",heart:1,i:1242}],
 ["1045",{tags:["rpvoid","scarf","boob_wrap","body_ribbon","apron","barefoot_sandals","standing","feet","neutral_face","dino","background_detail"],reddit:"1c35wrk",twitter:"1779184821656338545",gumroad:"bsqwvz",heart:1,i:1243}],
 ["1046",{tags:["rpvoid","tube_top","sleeves","skirt","sandals","standing","feet","annoyed","dino","background_detail"],reddit:"1c3zrzt",twitter:"1779571329856831850",gumroad:"eefxcn",heart:1,i:1244}],
+["1047",{tags:["rpvoid","scarf","bikini","skirt","barefoot_sandals","standing","feet","annoyed","angry","dino","background_detail"],reddit:"1c4p16r",twitter:"1779894179478299017",gumroad:"vgvem",heart:1,i:1245}],
 ]);
