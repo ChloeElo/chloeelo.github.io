@@ -1269,5 +1269,6 @@ var graf_data= new Map([
 ["1055",{tags:["rpvoid","scarf","boob_wrap","skirt","barefoot_sandals","standing","feet","annoyed","angry","dino","background_detail"],reddit:"1cyy7gt",twitter:"1793692563532308777",gumroad:"vigdg",heart:1,i:1253}],
 ["1056",{tags:["chloe","bikini","standing","annoyed","angry"],reddit:"1cxa2o3",twitter:"1792933978351022546",gumroad:"fxgebf",heart:1,i:1254}],
 ["1057",{tags:["digitan","@porforever","long_hair","bikini","skirt","crouching","tail","feet","smiling","smug"],reddit:"1cy518f",twitter:"1793322386130936234",gumroad:"edwreo",heart:1,i:1255}],
-["1058",{tags:["ina","hololive","long_hair","shirt","sitting","horns","feet","smiling",],reddit:"1czr5go",twitter:"1794067035443400976",gumroad:"mxmfpv",heart:1,i:1256}],
+["1058",{tags:["ina","hololive","long_hair","shirt","sitting","horns","feet","smiling"],reddit:"1czr5go",twitter:"1794067035443400976",gumroad:"mxmfpv",heart:1,i:1256}],
+["1059",{tags:["gura","hololive","long_hair","bikini","skirt","standing","tail","ass","smiling"],reddit:"1d79ir2",twitter:"1797674671007240695",gumroad:"tidsk",heart:1,i:1257}],
 ]);
