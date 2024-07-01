@@ -1273,5 +1273,10 @@ var graf_data= new Map([
 ["1059",{tags:["gura","hololive","long_hair","bikini","skirt","standing","tail","ass","smiling"],reddit:"1d79ir2",twitter:"1797674671007240695",gumroad:"tidsk",heart:1,i:1257}],
 ["1060",{tags:["rpvoid","hat","boob_wrap","skirt","standing","dino","smiling","background_detail"],reddit:"1d84wpm",twitter:"1798065658430931367",gumroad:"rlgqei",heart:1,i:1258}],
 ["1061",{tags:["celine","@suizilla","long_hair","cat_ears","bikini","sitting","brown_skin","tail","feet","smiling","smug"],reddit:"1dgjvm6",twitter:"1801992951754551597",gumroad:"rcztlg",heart:1,i:1259}],
-["1062",{tags:["chloe","bikini","sitting","sandals","feet","smiling"],reddit:"1dkh7hu",twitter:"1803840843419390330",gumroad:"dwify",heart:1,i:1260}],
+["1062",{tags:["chloe","bikini","sandals","sitting","feet","smiling"],reddit:"1dkh7hu",twitter:"1803840843419390330",gumroad:"dwify",heart:1,i:1260}],
+["1063",{tags:["rpvoid","long_hair","blonde_girl","boob_wrap","skirt","barefoot_sandals","standing","feet","smiling","dino","background_detail"],reddit:"1dm2a9h",twitter:"1804582473000505542",gumroad:"iwhsis",heart:1,i:1261}],
+["1064",{tags:["chloe","bikini","standing","smiling"],reddit:"1dnlige",twitter:"1805316660628189199",gumroad:"nmckj",heart:1,i:1262}],
+["1065",{tags:["perl","@vertigris_art","bikini","tail","mouse","standing","annoyed"],reddit:"1doa51a",twitter:"1805638289841393890",gumroad:"noldm",heart:1,i:1263}],
+["1066",{tags:["rpvoid","hat","boob_wrap","skirt","barefoot_sandals","feet","standing","smiling","dino","background_detail"],reddit:"1dp3vnt",twitter:"1806011628996984985",gumroad:"ozmxc",heart:1,i:1264}],
+["1067",{tags:["sigewinne","genshin_impact","bunny_ears","tank_top","boob_wrap","skirt","standing","annoyed"],reddit:"1dqr6z2",twitter:"1806762370275868757",gumroad:"qcpvzr",heart:1,i:1265}],
 ]);
