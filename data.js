@@ -1280,4 +1280,5 @@ var graf_data= new Map([
 ["1066",{tags:["rpvoid","hat","boob_wrap","skirt","barefoot_sandals","feet","standing","smiling","dino","background_detail"],reddit:"1dp3vnt",twitter:"1806011628996984985",gumroad:"ozmxc",heart:1,i:1264}],
 ["1067",{tags:["sigewinne","genshin_impact","bunny_ears","tank_top","boob_wrap","skirt","standing","annoyed"],reddit:"1dqr6z2",twitter:"1806762370275868757",gumroad:"qcpvzr",heart:1,i:1265}],
 ["1068",{tags:["rpvoid","scarf","boob_wrap","skirt","feet","standing","annoyed","dino","background_detail"],reddit:"1dttmir",twitter:"1808213144365359304",gumroad:"syyco",heart:1,i:1266}],
+["1069",{tags:["rpvoid","scarf","cloak","body_ribbon","feet","standing","smiling","smug","dino","background_detail"],reddit:"1dwzdb8",twitter:"1809692749613998592",gumroad:"mqmuhl",heart:1,i:1267}],
 ]);
