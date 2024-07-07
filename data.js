@@ -1187,7 +1187,7 @@ var graf_data= new Map([
 ["999.6",{tags:["chloe","nude","standing","smiling","sketch"],twitter:"1686803546270838784",twitter_alt:1,noL:1,nnn:1,i:1005}],
 ["999.7",{tags:["chloe","nude","standing","smug","sketch"],twitter:"1687167946928312320",twitter_alt:1,noL:1,nnn:1,i:1006}],
 ["999.8",{tags:["iris","nude","short_hair","bikini","standing","feet","smug","sketch"],twitter:"1687857182510043141",twitter_alt:1,noL:1,nnn:1,i:1007}],
-["999.9",{tags:["katie","nude","long_hair","ponytail","standing","ass","smiling","@kyubumlee","sketch"],twitter:"1688592520010252313",twitter_alt:1,noL:1,nnn:1,i:1008}],
+["999.9",{tags:["katie","@kyubumlee","nude","long_hair","ponytail","standing","ass","smiling","sketch"],twitter:"1688592520010252313",twitter_alt:1,noL:1,nnn:1,i:1008}],
 ["999.91",{tags:["chloe","nude","long_hair","ponytail","standing","smiling","sketch"],twitter:"1688984230712221697",twitter_alt:1,noL:1,nnn:1,i:1013}],
 ["999.92",{tags:["chloe","nude","crouching","smiling","sketch"],twitter:"1689357593309802497",twitter_alt:1,noL:1,nnn:1,i:1014}],
 ["999.93",{tags:["chloe","nude","standing","smiling","sketch"],twitter:"1689668491568144384",noL:1,nnn:1,i:1015}],
@@ -1281,4 +1281,5 @@ var graf_data= new Map([
 ["1067",{tags:["sigewinne","genshin_impact","bunny_ears","tank_top","boob_wrap","skirt","standing","annoyed"],reddit:"1dqr6z2",twitter:"1806762370275868757",gumroad:"qcpvzr",heart:1,i:1265}],
 ["1068",{tags:["rpvoid","scarf","boob_wrap","skirt","feet","standing","annoyed","dino","background_detail"],reddit:"1dttmir",twitter:"1808213144365359304",gumroad:"syyco",heart:1,i:1266}],
 ["1069",{tags:["rpvoid","scarf","cloak","body_ribbon","feet","standing","smiling","smug","dino","background_detail"],reddit:"1dwzdb8",twitter:"1809692749613998592",gumroad:"mqmuhl",heart:1,i:1267}],
+["1070",{tags:["katie","@kyubumlee","long_hair","ponytail","bikini","ass","feet","lying","smiling"],reddit:"1dxpv86",twitter:"1810046381408821663",gumroad:"qnevn",heart:1,i:1268}],
 ]);
