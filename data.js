@@ -1282,4 +1282,5 @@ var graf_data= new Map([
 ["1068",{tags:["rpvoid","scarf","boob_wrap","skirt","feet","standing","annoyed","dino","background_detail"],reddit:"1dttmir",twitter:"1808213144365359304",gumroad:"syyco",heart:1,i:1266}],
 ["1069",{tags:["rpvoid","scarf","cloak","body_ribbon","feet","standing","smiling","smug","dino","background_detail"],reddit:"1dwzdb8",twitter:"1809692749613998592",gumroad:"mqmuhl",heart:1,i:1267}],
 ["1070",{tags:["katie","@kyubumlee","long_hair","ponytail","bikini","ass","feet","lying","smiling"],reddit:"1dxpv86",twitter:"1810046381408821663",gumroad:"qnevn",heart:1,i:1268}],
+["1071",{tags:["@deadslug","long_hair","bunny_ears","dress","gloves","pants","feet","standing","angry","annoyed"],reddit:"1ec26fz",twitter:"1816541043636207986",gumroad:"wgrwl",heart:1,i:1269}],
 ]);
