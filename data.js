@@ -1290,4 +1290,5 @@ var graf_data= new Map([
 ["1076",{tags:["@fallenshadow","vtuber","bunny_ears","long_hair","ponytail","tube_top","pants","standing","smiling"],reddit:"1ep0qww",twitter:"1822347790975996177",i:1274}],
 ["1077",{tags:["otori_tan","ponytail","boob_wrap","skirt","feet","lying","smiling","smug"],reddit:"1eqinx0",twitter:"1823036635761488036",i:1275}],
 ["1078",{tags:["chloe","sleeveless","hoodie","standing","annoyed","angry"],reddit:"1etsyb9",twitter:"1824480051678642187",i:1276}],
+["1079",{tags:["executioner","@centurii","hat","maid","bikini","gloves","standing","surprised"],reddit:"1ew8y82",twitter:"1825598304866152665",i:1277}],
 ]);
