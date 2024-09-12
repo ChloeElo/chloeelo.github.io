@@ -1126,7 +1126,7 @@ body::-webkit-scrollbar {
 		
 		if (graf.reddit) {
 			document.getElementById("redditdiv").classList.remove("hidden");
-			document.getElementById("reddit").onclick = function() { window.open("https://www.reddit.com/"+graf.reddit); sendsearch( "?u="+cookie.uuid+"&t=r&n="+String(focus_name) ); }
+			document.getElementById("reddit").onclick = function() { window.open("https://www.reddit.com/r/chloe/comments/"+graf.reddit); sendsearch( "?u="+cookie.uuid+"&t=r&n="+String(focus_name) ); }
 		}
 		else { document.getElementById("redditdiv").classList.add("hidden"); }
 		
