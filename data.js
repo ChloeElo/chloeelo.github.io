@@ -1310,4 +1310,9 @@ var graf_data= new Map([
 ["1096",{tags:["ina","hololive","vtuber","long_hair","hoodie","feet","standing","smiling","smug"],reddit:"1fz5002",twitter:"1843700735978156384",i:1294}],
 ["1097",{tags:["gura","hololive","vtuber","long_hair","jacket","skirt","tail","standing","smiling"],reddit:"1fzumqz",twitter:"1844042984548962540",i:1295}],
 ["1098",{tags:["luna","hololive","vtuber","long_hair","hat","tube_top","skirt","stockings","standing","smiling"],reddit:"1g0q4h7",twitter:"1844450351392718985",i:1296}],
+["1099",{tags:["kanade","hololive","vtuber","long_hair","hat","cosplay","shirt","standing","smiling"],reddit:"1g1gz2w",twitter:"1844810676910404063",i:1297}],
+["1100",{tags:["ina","hololive","vtuber","long_hair","ponytail","hat","shirt","skirt","heels","standing","smiling"],reddit:"1g26k12",twitter:"1845170333650690143",i:1298}],
+["1101",{tags:["ina","hololive","vtuber","long_hair","ponytail","tank_top","skirt","feet","lying","smiling"],reddit:"1g2wrst",twitter:"1845537711974969706",i:1299}],
+["1102",{tags:["baelz","hololive","vtuber","long_hair","ponytail","mouse","shirt","bag","skirt","shoes","standing","annoyed"],reddit:"1g3nmtf",twitter:"1845901624696246396",i:1230}],
+["1103",{tags:["mococo_abyssgard","hololive","vtuber","cat_ears","dress","wings","feet","tail","standing","smiling"],reddit:"1g4f9ay",twitter:"1846262884956794940",i:1231}],
 ]);
