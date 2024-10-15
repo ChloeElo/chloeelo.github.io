@@ -1246,8 +1246,8 @@ body::-webkit-scrollbar {
 			contentbox.removeChild(contentbox.lastElementChild);
 		}
 		let sort = document.getElementById("sort").value;
-		for (let i=11; i > 0; i--) {
-			if (sort=='old'||sort=='rand') { j = 12-i; } // Reverse order for old first, for rand start with 1
+		for (let i=12; i > 0; i--) {
+			if (sort=='old'||sort=='rand') { j = 13-i; } // Reverse order for old first, for rand start with 1
 			else { j=i; }
 			let newheader = mkElement("h2", "header"+String(j), "grouptitle nodrag");
 			newheader.innerHTML = 'Season '+String(j)
