@@ -1327,4 +1327,5 @@ var graf_data= new Map([
 ["1113",{tags:["centurii","shirt","feet","sitting","smiling","smug"],reddit:"1gl2xrc",twitter:"1854203003303072150",i:1311}],
 ["1114",{tags:["chloe","sleeveless","hoodie","pants","feet","sitting","smiling"],reddit:"1gppqp6",twitter:"1856386572171583635",heart:1,i:1312}],
 ["1115",{tags:["cressey","@porforever","long_hair","ponytail","shirt","pants","feet","sitting","smiling","smug"],reddit:"1gs09nt",twitter:"1857461138088235376",i:1313}],
+["1116",{tags:["albino_girl","sleeveless","hoodie","pants","feet","lying","surprised","neutral_face","dino"],reddit:"1gu87fj",twitter:"1858542757205114954",i:1314}],
 ]);
