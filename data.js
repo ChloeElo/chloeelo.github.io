@@ -1328,5 +1328,7 @@ var graf_data= new Map([
 ["1114",{tags:["chloe","sleeveless","hoodie","pants","feet","sitting","smiling"],reddit:"1gppqp6",twitter:"1856386572171583635",heart:1,i:1312}],
 ["1115",{tags:["cressey","@porforever","long_hair","ponytail","shirt","pants","feet","sitting","smiling","smug"],reddit:"1gs09nt",twitter:"1857461138088235376",i:1313}],
 ["1116",{tags:["albino_girl","sleeveless","hoodie","pants","feet","lying","surprised","neutral_face","dino"],reddit:"1gu87fj",twitter:"1858542757205114954",i:1314}],
-["1117",{tags:["chloe","shirt","pants","feet","sitting","smiling"],reddit:"1gvu5nw",twitter:"1859279412631351551",gumroad:"fehxy",i:1315}],
+["1117",{tags:["chloe","shirt","pants","feet","sitting","smiling"],reddit:"1gvu5nw",twitter:"1859279412631351551",gumroad:"fehxy",heart:1,i:1315}],
+["1118",{tags:["ina","hololive","vtuber","long_hair","shirt","pants","feet","sitting","smiling"],reddit:"1h2rnqi",twitter:"1862557582960824590",gumroad:"qlhfy",heart:1,i:1316}],
+["1119",{tags:["gura","hololive","vtuber","long_hair","tank_top","pants","ass","tail","feet","crouching","smiling"],reddit:"1h497x2",twitter:"1863282893600051293",gumroad:"bfwnl",heart:1,i:1317}],
 ]);
