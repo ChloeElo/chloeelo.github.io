@@ -1331,4 +1331,5 @@ var graf_data= new Map([
 ["1117",{tags:["chloe","shirt","pants","feet","sitting","smiling"],reddit:"1gvu5nw",twitter:"1859279412631351551",gumroad:"fehxy",heart:1,i:1315}],
 ["1118",{tags:["ina","hololive","vtuber","long_hair","shirt","pants","feet","sitting","smiling"],reddit:"1h2rnqi",twitter:"1862557582960824590",gumroad:"qlhfy",heart:1,i:1316}],
 ["1119",{tags:["gura","hololive","vtuber","long_hair","tank_top","pants","ass","tail","feet","crouching","smiling"],reddit:"1h497x2",twitter:"1863282893600051293",gumroad:"bfwnl",heart:1,i:1317}],
+["1120",{tags:["celine","@suizilla","cat_ears","long_hair","bikini","bow_ribbon","tail","feet","sitting","smug"],reddit:"1h51e40",twitter:"1863645634072359182",gumroad:"wqkre",heart:1,i:1318}],
 ]);
