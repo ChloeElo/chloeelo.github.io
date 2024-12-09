@@ -1333,4 +1333,5 @@ var graf_data= new Map([
 ["1119",{tags:["gura","hololive","vtuber","long_hair","tank_top","pants","ass","tail","feet","crouching","smiling"],reddit:"1h497x2",twitter:"1863282893600051293",gumroad:"bfwnl",heart:1,i:1317}],
 ["1120",{tags:["celine","@suizilla","cat_ears","long_hair","bikini","bow_ribbon","tail","feet","brown_skin","sitting","smug"],reddit:"1h51e40",twitter:"1863645634072359182",gumroad:"wqkre",heart:1,i:1318}],
 ["1121",{tags:["shuten_douji","fate_series","tank_top","horns","feet","sitting","surprised"],reddit:"1h7fluy",twitter:"1864733866985918800",gumroad:"nukpj",heart:1,i:1319}],
+["1122",{tags:["shimoe_koharu","blue_archive","ponytail","long_hair","tank_top","skirt","feet","crouching","surprised","neutral_face"],reddit:"1hageel",twitter:"1866186951897821237",gumroad:"dbbhcp",heart:1,i:1320}],
 ]);
