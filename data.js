@@ -1339,4 +1339,5 @@ var graf_data= new Map([
 ["1125",{tags:["niyaniya_hakase","blue_archive","long_hair","shirt","feet","sitting","smiling"],reddit:"1hdjnal",twitter:"1867646188880810410",gumroad:"ivkmw",heart:1,i:1323}],
 ["1126",{tags:["sorasaki_hina","blue_archive","long_hair","shirt","feet","horns","sitting","surprised","neutral_face"],reddit:"1he9l7g",twitter:"1868005394808709312",gumroad:"ttwcv",heart:1,i:1324}],
 ["1127",{tags:["void_girl","rpvoid","long_hair","boob_wrap","dress","standing","smiling","smug","dino","weapon"],reddit:"1i7i55y",twitter:"1882132791409930639",gumroad:"icnvoq",heart:1,i:1325}],
+["1128",{tags:["void_girl","rpvoid","shirt","apron","skirt","crouching","feet","surprised","neutral_face","dino"],reddit:"1i8bj03",twitter:"1882508303387017409",gumroad:"hcxda",heart:1,i:1326}],
 ]);
