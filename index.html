@@ -1388,6 +1388,35 @@ body::-webkit-scrollbar {
 		document.getElementById("jumpto").value = Number(goto_num);
 		setTimeout(() => { jumpTo('bypass'); focusImage('img'+goto_num,'Images_thumb/'+goto_num+'.webp') }, "200");
 	}
+
+	function focusAtOffset(offset) {
+		if(!focus_name) return;
+		if(document.getElementById("focusbox").classList.contains("hidden")) return;
+
+		const currentThumb = document.getElementById(`img${focus_name}`);
+		// grab all images regardless of season
+		const allImages = Array.from(document.querySelectorAll('div#contentbox img')).filter(el => el.id.startsWith('img'));
+		const index = allImages.indexOf(currentThumb);
+		const desiredIndex = index + offset;
+		// ignore under/overruns because that's the spirit of JS
+		const desiredThumb = allImages[desiredIndex];
+
+		if(desiredThumb) {
+			focusImage(desiredThumb.id, desiredThumb.src);
+		}
+	}
+
+	document.addEventListener('keydown', function (event) {
+		if(event.key === 'ArrowRight') {
+			focusAtOffset(1);
+		}
+		if(event.key === 'ArrowLeft') {
+			focusAtOffset(-1);
+		}
+		if(event.key === 'Escape') {
+			hideFocus();
+		}
+	});
 	
 	var centerjump = 0;
 	reblockGrid()
