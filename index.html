@@ -1424,6 +1424,26 @@ body::-webkit-scrollbar {
 			hideFocus();
 		}
 	});
+
+	let touchStartedX = null;
+
+	document.addEventListener('touchstart', function (event) {
+		console.log({event});
+		touchStartedX = event.touches[0].clientX;
+	});
+
+	document.addEventListener('touchend', function (event) {
+		if(touchStartedX === null) return;
+		const touchEndedX = event.changedTouches[0].clientX;
+		const diff = touchEndedX - touchStartedX;
+		if(diff > 50) {
+			focusAtOffset(-1);
+		}
+		if(diff < -50) {
+			focusAtOffset(1);
+		}
+		touchStartedX = null;
+	});
 	
 	var centerjump = 0;
 	reblockGrid()
