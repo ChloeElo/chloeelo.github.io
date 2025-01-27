@@ -1060,6 +1060,12 @@ body::-webkit-scrollbar {
 			document.getElementById("focusvid").style.display = 'none';
 		}
 	}
+
+	function getImageSrcFromThumb(thumb) {
+		if (focus_name == 226) return 'Images/226.gif';
+		else if (focus_name == 999) return 'Images/999.gif';
+		return thumb.replace('_thumb','');
+	}
 	
 	var stay_hearts = 0; // Prevents toggling back to normal after clicking hearts button - reset on reloading focus_box
 	var focus_name = 0;
@@ -1072,9 +1078,7 @@ body::-webkit-scrollbar {
 		focus_img = document.getElementById("focusimg");
 		if (mode=='Lines' && graf.noL) { focus_img.classList.add("gray"); }
 		else { focus_img.classList.remove("gray"); }
-		if ( focus_name==226 ) { focus_img.src = 'Images/226.gif';}
-		else if ( focus_name==999 ) { focus_img.src = 'Images/999.gif';}
-		else { focus_img.src = src.replace('_thumb','');}
+		focus_img.src = getImageSrcFromThumb(src);
 		//document.getElementById("focusbox").requestFullscreen();
 		
 		like_button = document.getElementById('like');
@@ -1401,9 +1405,12 @@ body::-webkit-scrollbar {
 		// ignore under/overruns because that's the spirit of JS
 		const desiredThumb = allImages[desiredIndex];
 
-		if(desiredThumb) {
-			focusImage(desiredThumb.id, desiredThumb.src);
-		}
+		if(!desiredThumb) return;
+
+		// try to preload it to avoid tags 'n' stuff jumping around while the image dimensions get figured out
+		const img = new Image();
+		img.onload = () => focusImage(desiredThumb.id, desiredThumb.src);
+		img.src = getImageSrcFromThumb(desiredThumb.src);
 	}
 
 	document.addEventListener('keydown', function (event) {
