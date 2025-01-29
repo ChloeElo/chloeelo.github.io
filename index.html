@@ -1077,8 +1077,9 @@ body::-webkit-scrollbar {
 		else if (focus_name == 999) return 'Images/999.gif';
 
 		const graf = graf_data.get(focus_name);
-		if(mode === 'Lines' && !graf.noL) {
-			return thumb.replace('Images_thumb','Lines');
+		if(mode === 'Lines') {
+			if(graf.noL) return thumb.replace(/(Images|Lines)_thumb/,'Images');
+			return thumb.replace(/(Images|Lines)_thumb/,'Lines');
 		}
 		return thumb.replace('_thumb','');
 	}
