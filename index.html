@@ -363,6 +363,18 @@ body::-webkit-scrollbar {
 	background-color: #8B0000;
 	transition:200ms;
 }
+
+#swipe-indicator {
+	position: absolute;
+	z-index: 100;
+	text-align: center;
+	vertical-align: center;
+	font-size: 48px;
+	color: white;
+	background-color: black;
+	border-radius: 50%;
+	border: 2px solid black;
+	box-shadow: 0 0 4px 4px rgba(0,0,0,1);
 }
 
 </style>
@@ -1394,6 +1406,12 @@ body::-webkit-scrollbar {
 	}
 
 	function focusAtOffset(offset) {
+		// just in case
+		if(swipeIndicator) {
+			swipeIndicator.remove();
+			swipeIndicator = null;
+		}
+
 		if(!focus_name) return;
 		if(document.getElementById("focusbox").classList.contains("hidden")) return;
 
@@ -1426,9 +1444,18 @@ body::-webkit-scrollbar {
 	});
 
 	let touchStartedX = null;
+	let swipeIndicator = null;
 
 	document.addEventListener('touchstart', function (event) {
 		touchStartedX = event.touches[0].clientX;
+		swipeIndicator = document.createElement('div');
+		swipeIndicator.id = 'swipe-indicator';
+
+		const focusImgHeight = document.getElementById('focusimg').clientHeight;
+		swipeIndicator.style.top = `${focusImgHeight/2}px`;
+		swipeIndicator.style.opacity = 0;
+
+		document.getElementById('focusbox').appendChild(swipeIndicator);
 	});
 
 	document.addEventListener('touchend', function (event) {
@@ -1441,7 +1468,36 @@ body::-webkit-scrollbar {
 		if(diff < -50) {
 			focusAtOffset(1);
 		}
+		if(swipeIndicator) {
+			swipeIndicator.remove();
+			swipeIndicator = null;
+		}
 		touchStartedX = null;
+	});
+
+	document.addEventListener('touchmove', function (event) {
+		const touchMoveOffset = event.touches[0].clientX - touchStartedX;
+		const side = touchMoveOffset > 0 ? 'left' : 'right';
+		const notSide = side === 'left' ? 'right' : 'left';
+		const focusImgWidth = document.getElementById('focusimg').clientWidth;
+		const swipeLength = Math.floor(focusImgWidth * 0.6);
+		const maxPosition = Math.floor(focusImgWidth / 2);
+		const swipeProgress = Math.min(Math.abs(touchMoveOffset), swipeLength) / swipeLength;
+
+		const size = Math.floor(focusImgWidth * 0.1);
+		const fontSize = Math.floor(size * 0.6);
+		const opacity = swipeProgress * 0.9;
+		const offset = Math.min(Math.abs(touchMoveOffset), maxPosition) - size / 2;
+
+		swipeIndicator.innerHTML = touchMoveOffset > 0 ? '&#x2190;' : '&#x2192;';
+		swipeIndicator.style[side] = `${offset}px`;
+		swipeIndicator.style[notSide] = 'auto';
+		swipeIndicator.style.lineHeight = `${size}px`;
+		swipeIndicator.style.height = `${size}px`;
+		swipeIndicator.style.width = `${size}px`;
+		swipeIndicator.style.fontSize = `${fontSize}px`;
+		swipeIndicator.style.marginTop = `-${size/2}px`;
+		swipeIndicator.style.opacity = opacity;
 	});
 	
 	var centerjump = 0;
