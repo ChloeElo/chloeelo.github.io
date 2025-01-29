@@ -369,12 +369,11 @@ body::-webkit-scrollbar {
 	z-index: 100;
 	text-align: center;
 	vertical-align: middle;
-	font-size: 48px;
-	color: white;
-	background-color: black;
 	border-radius: 50%;
-	border: 2px solid black;
-	box-shadow: 0 0 4px 4px rgba(0,0,0,1);
+	background-image: url('Assets/b_back.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
 }
 
 </style>
@@ -1497,7 +1496,7 @@ body::-webkit-scrollbar {
 		const opacity = swipeProgress * 0.9;
 		const offset = Math.min(Math.abs(touchMoveOffset), maxPosition) - size / 2;
 
-		swipeIndicator.innerHTML = touchMoveOffset > 0 ? '&#x2190;' : '&#x2192;';
+		swipeIndicator.style.transform = touchMoveOffset > 0 ? 'rotate(0deg)' : 'rotate(180deg)';
 		swipeIndicator.style[side] = `${offset}px`;
 		swipeIndicator.style[notSide] = 'auto';
 		swipeIndicator.style.lineHeight = `${size}px`;
