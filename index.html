@@ -1451,6 +1451,10 @@ body::-webkit-scrollbar {
 	let swipeIndicator = null;
 
 	document.addEventListener('touchstart', function (event) {
+		if(swipeIndicator) {
+			swipeIndicator.remove();
+			swipeIndicator = null;
+		}
 		touchStartedX = event.touches[0].clientX;
 		swipeIndicator = document.createElement('div');
 		swipeIndicator.id = 'swipe-indicator';
