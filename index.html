@@ -1076,6 +1076,11 @@ body::-webkit-scrollbar {
 	function getImageSrcFromThumb(thumb) {
 		if (focus_name == 226) return 'Images/226.gif';
 		else if (focus_name == 999) return 'Images/999.gif';
+
+		const graf = graf_data.get(focus_name);
+		if(mode === 'Lines' && !graf.noL) {
+			return thumb.replace('Images_thumb','Lines');
+		}
 		return thumb.replace('_thumb','');
 	}
 	
