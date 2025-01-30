@@ -363,6 +363,17 @@ body::-webkit-scrollbar {
 	background-color: #8B0000;
 	transition:200ms;
 }
+
+#swipe-indicator {
+	position: absolute;
+	z-index: 100;
+	text-align: center;
+	vertical-align: middle;
+	border-radius: 50%;
+	background-image: url('Assets/b_back.png');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: cover;
 }
 
 </style>
@@ -1060,6 +1071,18 @@ body::-webkit-scrollbar {
 			document.getElementById("focusvid").style.display = 'none';
 		}
 	}
+
+	function getImageSrcFromThumb(thumb) {
+		if (focus_name == 226) return 'Images/226.gif';
+		else if (focus_name == 999) return 'Images/999.gif';
+
+		const graf = graf_data.get(focus_name);
+		if(mode === 'Lines') {
+			if(graf.noL) return thumb.replace(/(Images|Lines)_thumb/,'Images');
+			return thumb.replace(/(Images|Lines)_thumb/,'Lines');
+		}
+		return thumb.replace('_thumb','');
+	}
 	
 	var stay_hearts = 0; // Prevents toggling back to normal after clicking hearts button - reset on reloading focus_box
 	var focus_name = 0;
@@ -1072,9 +1095,7 @@ body::-webkit-scrollbar {
 		focus_img = document.getElementById("focusimg");
 		if (mode=='Lines' && graf.noL) { focus_img.classList.add("gray"); }
 		else { focus_img.classList.remove("gray"); }
-		if ( focus_name==226 ) { focus_img.src = 'Images/226.gif';}
-		else if ( focus_name==999 ) { focus_img.src = 'Images/999.gif';}
-		else { focus_img.src = src.replace('_thumb','');}
+		focus_img.src = getImageSrcFromThumb(src);
 		//document.getElementById("focusbox").requestFullscreen();
 		
 		like_button = document.getElementById('like');
@@ -1388,6 +1409,108 @@ body::-webkit-scrollbar {
 		document.getElementById("jumpto").value = Number(goto_num);
 		setTimeout(() => { jumpTo('bypass'); focusImage('img'+goto_num,'Images_thumb/'+goto_num+'.webp') }, "200");
 	}
+
+	function focusAtOffset(offset) {
+		// just in case
+		if(swipeIndicator) {
+			swipeIndicator.remove();
+			swipeIndicator = null;
+		}
+
+		if(!focus_name) return;
+		if(document.getElementById("focusbox").classList.contains("hidden")) return;
+
+		const currentThumb = document.getElementById(`img${focus_name}`);
+		// grab all images regardless of season
+		const allImages = Array.from(document.querySelectorAll('div#contentbox img')).filter(el => el.id.startsWith('img'));
+		const index = allImages.indexOf(currentThumb);
+		const desiredIndex = index + offset;
+		// ignore under/overruns because that's the spirit of JS
+		const desiredThumb = allImages[desiredIndex];
+
+		if(!desiredThumb) return;
+
+		// try to preload it to avoid tags 'n' stuff jumping around while the image dimensions get figured out
+		const img = new Image();
+		img.onload = () => focusImage(desiredThumb.id, desiredThumb.src);
+		img.src = getImageSrcFromThumb(desiredThumb.src);
+	}
+
+	document.addEventListener('keydown', function (event) {
+		if(event.key === 'ArrowRight') {
+			focusAtOffset(1);
+		}
+		if(event.key === 'ArrowLeft') {
+			focusAtOffset(-1);
+		}
+		if(event.key === 'Escape') {
+			hideFocus();
+		}
+	});
+
+	let touchStartedX = null;
+	let swipeIndicator = null;
+
+	document.addEventListener('touchstart', function (event) {
+		if(swipeIndicator) {
+			swipeIndicator.remove();
+			swipeIndicator = null;
+		}
+		touchStartedX = event.touches[0].clientX;
+		swipeIndicator = document.createElement('div');
+		swipeIndicator.id = 'swipe-indicator';
+
+		const focusImgHeight = document.getElementById('focusimg').clientHeight;
+		swipeIndicator.style.top = `${focusImgHeight/2}px`;
+		swipeIndicator.style.opacity = 0;
+
+		document.getElementById('focusbox').appendChild(swipeIndicator);
+	});
+
+	document.addEventListener('touchend', function (event) {
+		if(touchStartedX === null) return;
+
+		const threshold = 100; // minimum swipe length before it counts as a swipe
+
+		const touchEndedX = event.changedTouches[0].clientX;
+		const diff = touchEndedX - touchStartedX;
+		if(diff > threshold) {
+			focusAtOffset(-1);
+		}
+		if(diff < -threshold) {
+			focusAtOffset(1);
+		}
+		if(swipeIndicator) {
+			swipeIndicator.remove();
+			swipeIndicator = null;
+		}
+		touchStartedX = null;
+	});
+
+	document.addEventListener('touchmove', function (event) {
+		const touchMoveOffset = event.touches[0].clientX - touchStartedX;
+		const side = touchMoveOffset > 0 ? 'left' : 'right';
+		const notSide = side === 'left' ? 'right' : 'left';
+		const focusImgWidth = document.getElementById('focusimg').clientWidth;
+		const swipeLength = Math.floor(focusImgWidth * 0.6);
+		const maxPosition = Math.floor(focusImgWidth / 2);
+		const swipeProgress = Math.min(Math.abs(touchMoveOffset), swipeLength) / swipeLength;
+
+		const size = Math.floor(focusImgWidth * 0.1 + swipeProgress * 30);
+		const fontSize = Math.floor(size * 0.6);
+		const opacity = swipeProgress * 0.9;
+		const offset = Math.min(Math.abs(touchMoveOffset), maxPosition) - size / 2;
+
+		swipeIndicator.style.transform = touchMoveOffset > 0 ? 'rotate(0deg)' : 'rotate(180deg)';
+		swipeIndicator.style[side] = `${offset}px`;
+		swipeIndicator.style[notSide] = 'auto';
+		swipeIndicator.style.lineHeight = `${size}px`;
+		swipeIndicator.style.height = `${size}px`;
+		swipeIndicator.style.width = `${size}px`;
+		swipeIndicator.style.fontSize = `${fontSize}px`;
+		swipeIndicator.style.marginTop = `-${size/2}px`;
+		swipeIndicator.style.opacity = opacity;
+	});
 	
 	var centerjump = 0;
 	reblockGrid()
