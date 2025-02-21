@@ -1121,7 +1121,7 @@ var graf_data= new Map([
 ["949",{tags:["hatsune_miku","vocaloid","long_hair","bikini","feet","bow_ribbon","barefoot_sandals","sitting","smiling","smug"],reddit:"11nziel",twitter:"1634286089300070425",gumroad:"mcawa",heart:1,i:948}],
 ["950",{tags:["sorasaki_hina","blue_archive","long_hair","tank_top","midriff","skirt","standing","back","annoyed","scared"],reddit:"11po3a7",twitter:"1635006645251211265",gumroad:"ndbvsr",heart:1,i:949}],
 ["951",{tags:["kronii","hololive","vtuber","bikini","sandals","standing","feet","smiling"],reddit:"11r1yyo",twitter:"1635579147442323456",gumroad:"zvpds",heart:1,i:950}],
-["952",{tags:["lilian","@vivelia","bikini","feet","bow_ribbon","sitting","horns","smiling","smug"],reddit:"11sqikp",twitter:"1636317636802887685",i:951}],
+["952",{tags:["lilian","@vivelia","bikini","feet","bow_ribbon","sitting","horns","smiling","smug"],reddit:"11sqikp",twitter:"1636317636802887685",heart:1,i:951}],
 ["953",{tags:["mustard","@mori","feet","tank_top","jacket","midriff","pants","sandals","standing","horns","smiling","smug"],reddit:"11ul4gx",twitter:"1637045964572598272",gumroad:"wsxqz",heart:1,i:952}],
 //["953.19",{tags:["chloe","tank_top","jacket","midriff","skirt","shoes","standing","smiling","plotlo"],req:"plotlo",i:1188}],
 ["954",{tags:["chloe","bikini","barefoot_sandals","sitting","feet","smiling"],reddit:"11wh9di",twitter:"1637788866789752832",twitter_alt:1,gumroad:"lsbif",heart:1,i:953}],
@@ -1340,4 +1340,5 @@ var graf_data= new Map([
 ["1126",{tags:["sorasaki_hina","blue_archive","long_hair","shirt","feet","horns","sitting","surprised","neutral_face"],reddit:"1he9l7g",twitter:"1868005394808709312",gumroad:"ttwcv",heart:1,i:1324}],
 ["1127",{tags:["void_girl","rpvoid","long_hair","boob_wrap","dress","standing","smiling","smug","dino","weapon"],reddit:"1i7i55y",twitter:"1882132791409930639",gumroad:"icnvoq",heart:1,i:1325}],
 ["1128",{tags:["void_girl","rpvoid","shirt","apron","skirt","crouching","feet","surprised","neutral_face","dino"],reddit:"1i8bj03",twitter:"1882508303387017409",gumroad:"hcxda",heart:1,i:1326}],
+["1129",{tags:["chloe","bikini","crouching","prone","ass","feet","smiling","smug","sketch"],twitter:"1893000052928373073",gumroad:"jphkm",heart:1,i:1327}],
 ]);
