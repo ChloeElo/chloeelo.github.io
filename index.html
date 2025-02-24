@@ -1176,9 +1176,10 @@ body::-webkit-scrollbar {
 		}
 		else { document.getElementById('hoodiediv').style.display = 'none'; }
 		
-		if (graf.gumroad) {
+		if (graf.gumroad || graf.heart) {
 			document.getElementById("heartsdiv").classList.remove("hidden");
-			gumroad_path = "https://srgrafo.gumroad.com/l/" + graf.gumroad + "?layout=profile";
+			//gumroad_path = "https://srgrafo.gumroad.com/l/" + graf.gumroad + "?layout=profile";
+			gumroad_path = "https://payhip.com/SrGrafo"
 			
 			if (graf.heart) {
 				heartspath = 'Hearts/' + id.replace('img',"") + ".webp";
