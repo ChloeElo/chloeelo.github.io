@@ -1338,8 +1338,8 @@ var graf_data= new Map([
 ["1124",{tags:["iochi_mari","blue_archive","cat_ears","long_hair","shirt","feet","sitting","smiling"],reddit:"1hcsg8i",twitter:"1867282174371901801",gumroad:"tozgir",heart:1,i:1322}],
 ["1125",{tags:["niyaniya_hakase","blue_archive","long_hair","shirt","feet","sitting","smiling"],reddit:"1hdjnal",twitter:"1867646188880810410",gumroad:"ivkmw",heart:1,i:1323}],
 ["1126",{tags:["sorasaki_hina","blue_archive","long_hair","shirt","feet","horns","sitting","surprised","neutral_face"],reddit:"1he9l7g",twitter:"1868005394808709312",gumroad:"ttwcv",heart:1,i:1324}],
-["1127",{tags:["void_girl","rpvoid","long_hair","boob_wrap","dress","standing","smiling","smug","dino","weapon"],reddit:"1i7i55y",twitter:"1882132791409930639",gumroad:"icnvoq",heart:1,i:1325}],
-["1128",{tags:["void_girl","rpvoid","shirt","apron","skirt","crouching","feet","surprised","neutral_face","dino"],reddit:"1i8bj03",twitter:"1882508303387017409",gumroad:"hcxda",heart:1,i:1326}],
+["1127",{tags:["void_girl","rpvoid","long_hair","boob_wrap","dress","standing","smiling","smug","dino","weapon","background_detail"],reddit:"1i7i55y",twitter:"1882132791409930639",gumroad:"icnvoq",heart:1,i:1325}],
+["1128",{tags:["void_girl","rpvoid","shirt","apron","skirt","crouching","feet","surprised","neutral_face","dino","background_detail"],reddit:"1i8bj03",twitter:"1882508303387017409",gumroad:"hcxda",heart:1,i:1326}],
 ["1129",{tags:["chloe","bikini","crouching","prone","ass","feet","smiling","smug","sketch"],twitter:"1893000052928373073",gumroad:"jphkm",heart:1,i:1327}],
 ["1130",{tags:["chloe","bikini","crouching","ass","feet","surprised","angry","sketch"],twitter:"1893368190316515561",nnn:1,i:1328}],
 ["1131",{tags:["chloe","bikini","ass","feet","lying","angry","sketch"],twitter:"1893740466786508849",heart:1,i:1329}],
@@ -1352,4 +1352,5 @@ var graf_data= new Map([
 ["1138",{tags:["star_girl","boob_wrap","dress","feet","brown_skin","sitting","smiling","smug"],reddit:"1jo6vep",twitter:"1906740125050040772",heart:1,i:1336}],
 ["1139",{tags:["ina","hololive","vtuber","long_hair","shirt","pants","feet","sitting","smiling"],reddit:"1joz9ld",twitter:"1907100762062131671",heart:1,i:1337}],
 ["1140",{tags:["albino_girl","bikini","standing","spider","surprised","neutral_face"],twitter:"1907468718642430242",heart:1,i:1338}],
+["1141",{tags:["chloe","bikini","standing","smiling"],twitter:"1907824656683331608",heart:1,i:1339}],
 ]);
