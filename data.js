@@ -1355,4 +1355,5 @@ var graf_data= new Map([
 ["1141",{tags:["chloe","bikini","standing","smiling"],twitter:"1907824656683331608",heart:1,i:1339}],
 ["1142",{tags:["chloe","bunny_ears","maid","bow","dress","shoes","crouching","annoyed","angry"],reddit:"1jv9inc",twitter:"1910001427956515077",heart:1,i:1340}],
 ["1143",{tags:["chloe","bikini","ass","feet","sitting","surprised"],twitter:"1910363000885703011",heart:1,i:1341}],
+["1144",{tags:["zoe","long_hair","bikini","body_ribbon","ass","feet","lying","smiling","smug],twitter:"1910726400144744501",heart:1,i:1342}],
 ]);
